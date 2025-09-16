@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CruzeiroAcademy</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <link rel="icon" type="image/png" href="favicon.png">
 </head>
 <body>
@@ -14,8 +15,13 @@
                 <div class="container-logo">
 
                     <div class="logo">
-                        <img src="#" alt="Cruzeiro Logo">
+                        <img src="https://logodetimes.com/times/cruzeiro/logo-cruzeiro-4096.png" alt="Cruzeiro Logo">
                     </div>
+                    <button class="mobile-menu-btn" aria-label="Menu">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
                     <nav>
                         <ul class="nav-links">
                             <li><a href="#metodologia">Metodologia</a></li>
@@ -23,10 +29,11 @@
                             <li><a href="#">#CriasDaToca</a></li>
                             <li><a href="#mapa">Unidades</a></li>
                             <li><a href="#">Notícias</a></li>
+                            <button class="btn-franqueado" type="button">
+                                <a href="#">Quero ser Franqueado</a>
+                            </button>
                         </ul>
-                        <button>
-                            <a href="#">Quero ser Franqueado</a>
-                        </button>
+                        
                     </nav>
                 </div>
             </header>
@@ -35,7 +42,7 @@
                 <div class="hero">
 
                     <h1>
-                        Título principail
+                        Escolas do Cruzeiro
                     </h1>
                     <p>
                         Descrição do título principal
@@ -50,7 +57,7 @@
                     
                 </div>
                 <div class="hero-image">
-                    <img src="#" alt="Imagem de destaque">
+                    <img src="https://i.pinimg.com/736x/43/18/76/431876a4d67902e8374101ed79bd071b.jpg" alt="Imagem de destaque">
                 </div>
 
             </div>
@@ -59,41 +66,36 @@
                 <h2>Últimas Notícias</h2>
                 <div class="news-cards">
                     <div class="card">
-                        <img src="#" alt="Imagem da notícia 1">
+                        <img src="https://images.pexels.com/photos/29920213/pexels-photo-29920213.jpeg" alt="Imagem da notícia 1">
                         <h3>Título da Notícia 1</h3>
                         <p>Resumo da notícia 1...</p>
-                        <a href="#">Leia mais</a>
                     </div>
                     <div class="card">
-                        <img src="#" alt="Imagem da notícia 2">
+                        <img src="https://images.pexels.com/photos/29920213/pexels-photo-29920213.jpeg" alt="Imagem da notícia 2">
                         <h3>Título da Notícia 2</h3>
                         <p>Resumo da notícia 2...</p>
-                        <a href="#">Leia mais</a>
                     </div>
                     <div class="card">
-                        <img src="#" alt="Imagem da notícia 3">
+                        <img src="https://images.pexels.com/photos/29920213/pexels-photo-29920213.jpeg" alt="Imagem da notícia 3">
                         <h3>Título da Notícia 3</h3>
                         <p>Resumo da notícia 3...</p>
-                        <a href="#">Leia mais</a>
                     </div>
                     <div class="card">
-                        <img src="#" alt="Imagem da notícia 4">
+                        <img src="https://images.pexels.com/photos/29920213/pexels-photo-29920213.jpeg" alt="Imagem da notícia 4">
                         <h3>Título da Notícia 4</h3>
                         <p>Resumo da notícia 4...</p>
-                        <a href="#">Leia mais</a>
                     </div>
                     <div class="card">
-                        <img src="#" alt="Imagem da notícia 5">
+                        <img src="https://images.pexels.com/photos/29920213/pexels-photo-29920213.jpeg" alt="Imagem da notícia 5">
                         <h3>Título da Notícia 5</h3>
                         <p>Resumo da notícia 5...</p>
-                        <a href="#">Leia mais</a>
 
                     </div>
                 </div>
 
-                <button type="button" class="btn-next"> > </button>
-                <button type="button" class="btn-prev"> < </button>
 
+                <button type="button" class="btn-prev"> < </button>
+                <button type="button" class="btn-next"> > </button>
             </div>
 
             <div class="Metodologia" id="metodologia">
@@ -104,24 +106,20 @@
                 <div class="metodologia-text">
 
                     <div class="card-metodologia">
-                        <img src="#" alt="Imagem metodologia1"> <!-- Background -->
                         <h3>Título Metodologia 1</h3>
                         <p>Descrição da metodologia 1...</p>
 
                     </div>
                     <div class="card-metodologia">
-                        <img src="#" alt="Imagem metodologia2"> <!-- Background -->
                         <h3>Título Metodologia 2</h3>
                         <p>Descrição da metodologia 2...</p>
 
                     </div>
                     <div class="card-metodologia">
-                        <img src="#" alt="Imagem metodologia3"> <!-- Background -->
                         <h3>Título Metodologia 3</h3>
                         <p>Descrição da metodologia 3...</p>
                     </div>
                     <div class="card-metodologia">
-                        <img src="#" alt="Imagem metodologia4"> <!-- Background -->
                         <h3>Título Metodologia 4</h3>
                         <p>Descrição da metodologia 4...</p>
                     </div>
@@ -132,15 +130,43 @@
                 <img src="#" alt="" class="crias-text"> <!-- logo em formato jpeg ou png -->
 
                 <div class="crias-image">
-                    <img src="#" alt="Imagem Crias da Toca"> <!-- Background -->
+                    <img src="" alt="Imagem Crias da Toca"> <!-- Background -->
                     <div class="crias-text">
                         <h3>Título Crias da Toca</h3>
                         <p>Descrição das Crias da Toca...</p>
                     </div>
                 </div>
+            </div>
+
+
+            <section class="map-section" id="mapa">
+                <h1>Encontre uma Unidade</h1>
+                <div class="menu-map">
+                    <button data-region="brasil">Brasil</button>
+                    <button data-region="world">Mundo</button>
+
+                </div>
+                <div id="map"></div>
+            </section>
+
+            <div class="cta-2">
+                <h2>SEJA UM FRANQUEADO</h2>
+                <p>Junte-se à rede de escolas de futebol do Cruzeiro e faça parte de um projeto vencedor!</p>
+                <button type="button">
+                    <a href="#">Quero ser Franqueado</a>
+                </button>
+            </div>
+
+
+
 
 
         </section>
+
     </main>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+    <script src="script.js"></script>
+
 </body>
 </html>
