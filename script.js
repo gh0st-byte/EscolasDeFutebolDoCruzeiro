@@ -1,34 +1,60 @@
-const map = L.map('map', {
-  center: [-15.78, -47.93], 
-  zoom: 4,
-  minZoom: 2,
-  maxZoom: 18,
-  worldCopyJump: false,
-  maxBounds: [
-    [-85, -180], 
-    [85, 180]    
-  ]
-});
+document.addEventListener('DOMContentLoaded', () => {
+  const map = L.map('map', {
+    center: [-15.78, -47.93], 
+    zoom: 4,
+    minZoom: 2,
+    maxZoom: 18,
+    worldCopyJump: false,
+    maxBounds: [
+      [-85, -180], 
+      [85, 180]    
+    ]
+  });
 
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  noWrap: true,   
-  bounds: [
-    [-85, -180],
-    [85, 180]
-  ],
-  minZoom: 2,
-  maxZoom: 18
-}).addTo(map);
+  // Light basemap to better see the blue markers
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    noWrap: true,
+    bounds: [
+      [-85, -180],
+      [85, 180]
+    ],
+    minZoom: 2,
+    maxZoom: 18
+  }).addTo(map);
 
+  // Customize marker cluster appearance
+  const markers = L.markerClusterGroup({
+    maxClusterRadius: 50,
+    iconCreateFunction: function(cluster) {
+      const childCount = cluster.getChildCount();
+      let c = ' marker-cluster-';
+      let size, className;
+      
+      if (childCount < 10) {
+        c += 'small';
+        size = 40;
+      } else if (childCount < 20) {
+        c += 'medium';
+        size = 50;
+      } else {
+        c += 'large';
+        size = 60;
+      }
 
-    const markers = L.markerClusterGroup();
+      return new L.DivIcon({ 
+        html: '<div><span>' + childCount + '</span></div>', 
+        className: 'marker-cluster' + c, 
+        iconSize: new L.Point(size, size) 
+      });
+    }
+  });
 
-    const schools = [
-
+  const schools = [
     {lat: 40.71, lng: -74.00, nome: 'New York', region: 'mundo'},
     {lat: 51.50, lng: -0.12, nome: 'London', region: 'mundo'},
     {lat: 35.68, lng: 139.76, nome: 'Tokyo', region: 'mundo'},
-// Brasil
+    // Brasil
     {lat: -23.55, lng: -46.63, nome: 'São Paulo', region: 'brasil'}, 
     {lat: -22.90, lng: -43.20, nome: 'Rio de Janeiro', region: 'brasil'},
     {lat: -19.9677, lng: -44.1980, nome: 'Betim/MG', region: 'brasil'},
@@ -72,88 +98,66 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     {lat: -17.2252, lng: -46.8750, nome: 'Paracatu/MG', region: 'brasil'},
     {lat: -3.7172, lng: -38.5433, nome: 'Iracema, Fortaleza/CE', region: 'brasil'},
     {lat: -19.7668, lng: -44.0868, nome: 'Ribeirão das Neves/MG', region: 'brasil'}
-];
+  ];
 
-
-    function addMarkers(region = 'all') {
-      markers.clearLayers();
-      schools.filter(p => region === 'all' || p.region === region)
-        .forEach(p => {
-          const marker = L.marker([p.lat, p.lng]).bindPopup(p.nome);
-          markers.addLayer(marker);
-        });
-      map.addLayer(markers);
-    }
-
-    addMarkers(); 
-   
-    document.querySelectorAll('.menu-map button').forEach(btn => {
-      btn.addEventListener('click', function() {
-        document.querySelectorAll('.menu-map button').forEach(b => b.classList.remove('active-map'));
-        this.classList.add('active-map');
-        const region = this.dataset.region;
-        if(region === 'brasil') {
-          map.setView([-15.78, -47.93], 4); // Brasil
-          addMarkers('brasil');
-        } else if(region === 'world') {
-          map.setView([20, 0], 2); // Mundo
-          addMarkers('mundo');
-        } else {
-          map.setView([-15.78, -47.93], 3); // Todas
-          addMarkers('all');
-        }
-      });
+  // Create custom blue circle icon
+  function createBlueCircleIcon(intensity) {
+    const sizes = {
+      'low': [20, 20],
+      'medium': [25, 25],
+      'high': [30, 30]
+    };
+    
+    const colors = {
+      'low': '#1E90FF',      // Dodger Blue
+      'medium': '#0066CC',   // Medium Blue
+      'high': '#003399'      // Dark Blue
+    };
+    
+    const size = sizes[intensity] || sizes.medium;
+    const color = colors[intensity] || colors.medium;
+    
+    return L.divIcon({
+      className: 'custom-marker',
+      html: `<div style="background-color: \${color}; width: 100%; height: 100%; border-radius: 50%; box-shadow: 0 0 15px 5px \${color};"></div>`,
+      iconSize: size,
+      iconAnchor: [size[0]/2, size[1]/2]
     });
-
-    document.addEventListener('DOMContentLoaded', () => {
-  
-  const map = L.map('map', {
-    center: [-15.78, -47.93],
-    zoom: 3,
-    minZoom: 2,
-    maxZoom: 18,
-    worldCopyJump: false,
-    maxBounds: [
-      [-85, -180],
-      [85, 180]
-    ]
-  });
-
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    noWrap: true,
-    bounds: [
-      [-85, -180],
-      [85, 180]
-    ],
-    minZoom: 2,
-    maxZoom: 18
-  }).addTo(map);
-
-  // Cluster de marcadores
-  const markers = L.markerClusterGroup();
-
-
+  }
 
   function addMarkers(region = 'all') {
     markers.clearLayers();
-    eschools.filter(p => region === 'all' || p.region === region)
+    
+    schools.filter(p => region === 'all' || p.region === region)
       .forEach(p => {
-        const marker = L.marker([p.lat, p.lng]).bindPopup(p.nome);
+        // Determine marker intensity randomly for visual variety
+        const intensities = ['low', 'medium', 'high'];
+        const randomIntensity = intensities[Math.floor(Math.random() * intensities.length)];
+        
+        const icon = createBlueCircleIcon(randomIntensity);
+        const marker = L.marker([p.lat, p.lng], {icon: icon}).bindPopup(p.nome);
         markers.addLayer(marker);
       });
+    
     map.addLayer(markers);
   }
 
-    addMarkers('brasil'); // Inicia mostrando apenas escolinhas do Brasil  // Botões de filtro
+  
+
+  // Initialize with all markers
+  addMarkers();
+
+  // Button event handlers
   document.querySelectorAll('.menu-map button').forEach(btn => {
     btn.addEventListener('click', function() {
       document.querySelectorAll('.menu-map button').forEach(b => b.classList.remove('active-map'));
       this.classList.add('active-map');
       const region = this.dataset.region;
-      if(region === 'north') {
+      
+      if(region === 'brasil') {
         map.setView([-15.78, -47.93], 4); // Brasil
         addMarkers('brasil');
-      } else if(region === 'northeast') {
+      } else if(region === 'world') {
         map.setView([20, 0], 2); // Mundo
         addMarkers('mundo');
       } else {
@@ -161,11 +165,16 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         addMarkers('all');
       }
     });
+    
   });
 
- 
-  setTimeout(()=> map.invalidateSize(), 200);
+  
+
+  // Make sure map renders properly after DOM is fully loaded
+  setTimeout(() => map.invalidateSize(), 300);
 });
+
+
 
 
 
@@ -174,22 +183,36 @@ const prevBtn = document.querySelector('.btn-prev');
 const nextBtn = document.querySelector('.btn-next');
 const cards = document.querySelectorAll('.card');
 
-let index = 0;
-const visibleCards = 3; 
-const cardWidth = cards[0].offsetWidth + 32; // largura + gap
-const maxIndex = cards.length - visibleCards;
+
+let visibleCards = 3; // ajuste conforme layout
+let index = 0; // começa no primeiro card
+const cardWidth = cards[0].offsetWidth + 28; // largura + gap
+const maxIndex = Math.max(cards.length - visibleCards, 0);
 
 function updateCarousel() {
+  // Garante que o índice está dentro dos limites
+  index = Math.max(0, Math.min(index, maxIndex));
   track.style.transform = `translateX(${-index * cardWidth}px)`;
 }
 
+// Inicializa o carrossel mostrando o primeiro card
+updateCarousel();
+
 nextBtn.addEventListener('click', () => {
-  index = (index < maxIndex) ? index + 1 : 0; // loop
+  if (index < maxIndex) {
+    index++;
+  } else {
+    index = 0; // loop para o início
+  }
   updateCarousel();
 });
 
 prevBtn.addEventListener('click', () => {
-  index = (index > 0) ? index - 1 : maxIndex;
+  if (index > 0) {
+    index--;
+  } else {
+    index = maxIndex; // loop para o final
+  }
   updateCarousel();
 });
 
@@ -202,6 +225,7 @@ window.addEventListener('scroll', () => {
     header.classList.remove('scrolled');
   }
 });
+
 
 const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
 const nav = document.querySelector('nav');
