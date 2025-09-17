@@ -123,7 +123,7 @@ $dados = lerJSON($tab_atual);
 </head>
 <body>
     <header>
-        <h1>🏆 Sistema de Gerenciamento - Escolas Cruzeiro</h1>
+        <h1>Sistema de Gerenciamento - Escolas Cruzeiro</h1>
         <div class="user-info">
             Logado como: <?= $ADMIN_USER ?> | <a href="?logout=1">Sair</a>
         </div>
@@ -144,7 +144,7 @@ $dados = lerJSON($tab_atual);
     <main>
         <!-- Formulário de Adição -->
         <div class="form-container">
-            <h3>➕ Adicionar Novo Item</h3>
+            <h3>Adicionar Novo Item</h3>
             <form method="POST" id="addForm">
                 <input type="hidden" name="acao" value="adicionar">
                 <input type="hidden" name="arquivo" value="<?= $tab_atual ?>">
@@ -176,7 +176,7 @@ $dados = lerJSON($tab_atual);
 
         <!-- Lista de Dados -->
         <div class="data-container">
-            <h3>📋 <?= ucfirst(str_replace(['.json', '_'], ['', ' '], $tab_atual)) ?> (<?= count($dados) ?> itens)</h3>
+            <h3><?= ucfirst(str_replace(['.json', '_'], ['', ' '], $tab_atual)) ?> (<?= count($dados) ?> itens)</h3>
             
             <?php if ($tab_atual === 'failed_addresses.json'): ?>
                 <div class="failed-addresses">
@@ -184,12 +184,12 @@ $dados = lerJSON($tab_atual);
                         <div class="failed-item">
                             <span><?= htmlspecialchars($endereco) ?></span>
                             <div class="actions">
-                                <button onclick="editarFailed(<?= $index ?>, '<?= htmlspecialchars($endereco, ENT_QUOTES) ?>')">✏️</button>
+                                <button onclick="editarFailed(<?= $index ?>, '<?= htmlspecialchars($endereco, ENT_QUOTES) ?>')">Editar</button>
                                 <form method="POST" style="display:inline;" onsubmit="return confirm('Deletar?')">
                                     <input type="hidden" name="acao" value="deletar">
                                     <input type="hidden" name="arquivo" value="<?= $tab_atual ?>">
                                     <input type="hidden" name="index" value="<?= $index ?>">
-                                    <button type="submit">🗑️</button>
+                                    <button type="submit">Deletar</button>
                                 </form>
                             </div>
                         </div>
@@ -223,12 +223,12 @@ $dados = lerJSON($tab_atual);
                                 <?php endif; ?>
                                 <td class="endereco"><?= htmlspecialchars($item['endereco_encontrado']) ?></td>
                                 <td class="actions">
-                                    <button onclick="editarItem(<?= $index ?>)">✏️</button>
+                                    <button onclick="editarItem(<?= $index ?>)">Editar</button>
                                     <form method="POST" style="display:inline;" onsubmit="return confirm('Deletar?')">
                                         <input type="hidden" name="acao" value="deletar">
                                         <input type="hidden" name="arquivo" value="<?= $tab_atual ?>">
                                         <input type="hidden" name="index" value="<?= $index ?>">
-                                        <button type="submit">🗑️</button>
+                                        <button type="submit">Deletar</button>
                                     </form>
                                 </td>
                             </tr>
@@ -243,7 +243,7 @@ $dados = lerJSON($tab_atual);
     <!-- Modal de Edição -->
     <div id="editModal" class="modal">
         <div class="modal-content">
-            <h3>✏️ Editar Item</h3>
+            <h3>Editar Item</h3>
             <form method="POST" id="editForm">
                 <input type="hidden" name="acao" value="editar">
                 <input type="hidden" name="arquivo" value="<?= $tab_atual ?>">

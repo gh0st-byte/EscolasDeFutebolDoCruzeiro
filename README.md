@@ -2,7 +2,7 @@
 
 Sistema web para gerenciar os arquivos JSON das escolas de futebol do Cruzeiro.
 
-## 🚀 Funcionalidades
+## Funcionalidades
 
 - **Autenticação**: Login seguro para administradores
 - **Gerenciamento de Escolas**: CRUD completo para schools.json
@@ -11,7 +11,7 @@ Sistema web para gerenciar os arquivos JSON das escolas de futebol do Cruzeiro.
 - **Interface Responsiva**: Funciona em desktop e mobile
 - **Validação de Dados**: Campos obrigatórios e tipos corretos
 
-## 📁 Estrutura de Arquivos
+## Estrutura de Arquivos
 
 ```
 EscolasDeFutebolDoCruzeiro/
@@ -26,12 +26,12 @@ EscolasDeFutebolDoCruzeiro/
     └── failed_addresses.json  # Endereços que falharam
 ```
 
-## 🔐 Credenciais de Acesso
+## Credenciais de Acesso
 
 - **Usuário**: admin
 - **Senha**: cruzeiro2024
 
-## 🛠️ Como Usar
+## Como Usar
 
 1. Acesse `index.php` no navegador
 2. Faça login com as credenciais
@@ -42,11 +42,11 @@ EscolasDeFutebolDoCruzeiro/
 
 ### Operações Disponíveis
 
-- ➕ **Adicionar**: Novos registros
-- ✏️ **Editar**: Modificar registros existentes  
-- 🗑️ **Deletar**: Remover registros (com confirmação)
+- **Adicionar**: Novos registros
+- **Editar**: Modificar registros existentes  
+- **Deletar**: Remover registros (com confirmação)
 
-## 📊 Estrutura dos Dados
+## Estrutura dos Dados
 
 ### schools.json
 ```json
@@ -84,13 +84,13 @@ EscolasDeFutebolDoCruzeiro/
 ]
 ```
 
-## 🔧 Requisitos Técnicos
+## Requisitos Técnicos
 
 - PHP 7.4+
 - Servidor web (Apache/Nginx)
 - Permissões de escrita na pasta Json/
 
-## 🎨 Interface
+## Interface
 
 - Design moderno com cores do Cruzeiro
 - Interface responsiva para mobile
@@ -98,14 +98,14 @@ EscolasDeFutebolDoCruzeiro/
 - Confirmações para operações destrutivas
 - Modal para edição inline
 
-## 🔒 Segurança
+## Segurança
 
 - Autenticação por sessão
 - Validação de dados no servidor
 - Escape de HTML para prevenir XSS
 - Confirmação para exclusões
 
-## 📱 Responsividade
+## Responsividade
 
 O sistema se adapta automaticamente para:
 - Desktop (1200px+)

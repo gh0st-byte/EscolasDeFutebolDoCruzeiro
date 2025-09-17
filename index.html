@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CruzeiroAcademy</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="icon" type="image/png" href="favicon.png">
+</head>
+<body>
+    <main>
+        <section>
+            <header>
+                <div class="container-logo">
+
+                    <div class="logo">
+                        <img src="https://logodetimes.com/times/cruzeiro/logo-cruzeiro-4096.png" alt="Cruzeiro Logo">
+                    </div>
+                    <button class="mobile-menu-btn" aria-label="Menu">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                    <nav>
+                        <ul class="nav-links">
+                            <li><a href="#metodologia">Metodologia</a></li>
+                            <li><a href="#">Benefícios</a></li>
+                            <li><a href="#">#CriasDaToca</a></li>
+                            <li><a href="#mapa">Unidades</a></li>
+                            <li><a href="#">Notícias</a></li>
+                            <li>
+                                <button type="button" class="btn-franqueado" >Quero ser Franqueado</button>
+
+                            </li>
+                        </ul>
+                        
+                    </nav>
+                </div>
+            </header>
+            
+            <div class="container-hero">
+                <div class="hero">
+
+                    <h1>
+                        Escolas do Cruzeiro
+                    </h1>
+                    <p>
+                        Descrição do título principal
+                        conteudo descritivo do título principal
+                        conteudo descritivo do título principal
+                        conteudo descritivo do título principal
+                    </p>
+
+                    <button type="button"
+                        <a href="" class="cta-1">Matricular</a>
+                    </button>
+                
+                </div>
+                <div class="hero-image">
+                    <img class="hero-img" src="https://i.pinimg.com/736x/43/18/76/431876a4d67902e8374101ed79bd071b.jpg" alt="Imagem de destaque">
+                </div>
+
+            </div>
+            <div class="news">
+
+                <h2>Últimas Notícias</h2>
+
+                <div class="off-white-1">
+
+                </div>
+                <div class="news-cards">
+                    
+                    <div class="card">
+                        <img src="https://images.pexels.com/photos/29920213/pexels-photo-29920213.jpeg" alt="Imagem da notícia 1">
+                        <h3>Título da Notícia 1</h3>
+                        <p>Resumo da notícia 1...</p>
+                    </div>
+                    <div class="card">
+                        <img src="https://images.pexels.com/photos/29920213/pexels-photo-29920213.jpeg" alt="Imagem da notícia 2">
+                        <h3>Título da Notícia 2</h3>
+                        <p>Resumo da notícia 2...</p>
+                    </div>
+                    <div class="card">
+                        <img src="https://images.pexels.com/photos/29920213/pexels-photo-29920213.jpeg" alt="Imagem da notícia 3">
+                        <h3>Título da Notícia 3</h3>
+                        <p>Resumo da notícia 3...</p>
+                    </div>
+                    <div class="card">
+                        <img src="https://images.pexels.com/photos/29920213/pexels-photo-29920213.jpeg" alt="Imagem da notícia 4">
+                        <h3>Título da Notícia 4</h3>
+                        <p>Resumo da notícia 4...</p>
+                    </div>
+                    <div class="card">
+                        <img src="https://images.pexels.com/photos/29920213/pexels-photo-29920213.jpeg" alt="Imagem da notícia 5">
+                        <h3>Título da Notícia 5</h3>
+                        <p>Resumo da notícia 5...</p>
+
+                    </div>
+                    
+                </div>
+
+                    <div class="off-white-2">
+                    </div>
+                <button type="button" class="btn-prev"> < </button>
+                <button type="button" class="btn-next"> > </button>
+            </div>
+
+            <div class="Metodologia" id="metodologia">
+                <h1>
+                    Metodologia
+                </h1>
+
+                <div class="metodologia-text">
+
+                    <div class="card-metodologia">
+                        <h3>Título Metodologia 1</h3>
+                        <p>Descrição da metodologia 1...</p>
+
+                    </div>
+                    <div class="card-metodologia">
+                        <h3>Título Metodologia 2</h3>
+                        <p>Descrição da metodologia 2...</p>
+
+                    </div>
+                    <div class="card-metodologia">
+                        <h3>Título Metodologia 3</h3>
+                        <p>Descrição da metodologia 3...</p>
+                    </div>
+                    <div class="card-metodologia">
+                        <h3>Título Metodologia 4</h3>
+                        <p>Descrição da metodologia 4...</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="crias">
+
+                <div class="crias-image">
+                    <img src="./img/crias.png" alt="Imagem Crias da Toca"> 
+                </div>
+
+            </div>
+
+
+            <section class="map-section" id="mapa">
+                <h1>ONDE ESTAMOS?</h1>
+                <div class="menu-map">
+                    <button data-region="brasil">Brasil</button>
+                    <button data-region="world">Mundo</button>
+
+                </div>
+                <div id="map"></div>
+            </section>
+
+            <div class="cta-2">
+                <h2>SEJA UM FRANQUEADO</h2>
+                <p>Junte-se à rede de escolas de futebol do Cruzeiro e faça parte de um projeto vencedor!</p>
+                <a href="#" class="cta-1" role="button" >Quero ser Franqueado</a>
+            </div>
+
+
+
+
+
+        </section>
+
+    </main>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+    <script src="script.js"></script>
+
+</body>
+</html>
