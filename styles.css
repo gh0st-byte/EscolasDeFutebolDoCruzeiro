@@ -207,7 +207,7 @@ nav button:hover {
     width: 15vw;
     min-width: 40px;
     max-width: 120px;
-    height: 320px;
+    height: 380px;
     border-radius: 0 16px 16px 0;
     position: absolute;
     left: 0;
@@ -223,7 +223,7 @@ nav button:hover {
     width: 15vw;
     min-width: 40px;
     max-width: 120px;
-    height: 320px;
+    height: 380px;
     border-radius: 16px 0 0 16px;
     position: absolute;
     right: 0;
@@ -360,6 +360,10 @@ nav button:hover {
 .btn-next:hover, .btn-prev:hover {
     background: gold;
     color: #0033a0;
+}
+
+.btn-franqueado{
+    color:rgb(0, 255, 255)
 }
 
 /* METODOLOGIA */
@@ -687,7 +691,6 @@ body::after {
         width: 60vw;
         min-width: 40px;
         max-width: 120px;
-        height: 100%;
     }
 
     .container-logo {
@@ -794,16 +797,17 @@ body::after {
 
 
 
-    .news-cards {
-        gap: 20px;
-        padding: 0 20px;
-        overflow-x: auto;
-        scroll-behavior: smooth;
-            scrollbar-width: none; /* Firefox */
-            -ms-overflow-style: none; /* IE and Edge */
-        }
-        .news-cards::-webkit-scrollbar {
-            display: none; /* Chrome, Safari, Opera */
+   .news-cards {
+    gap: 20px;
+    padding: 0 20px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    -ms-overflow-style: none; 
+}
+
+.news-cards::-webkit-scrollbar {
+    display: none; 
+
     }
     
     .news-cards::-webkit-scrollbar {

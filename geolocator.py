@@ -1,9 +1,93 @@
-from geopy.geocoders import Nominatim
-from geopy.exc import GeocoderTimedOut
+import requests
 import time
 import json
+import re
 
-# lista com todos os 55 endereços
+def clean_address(address):
+    """Limpa e padroniza o endereço"""
+    # Remove caracteres especiais e padroniza
+    address = re.sub(r'–|—', '-', address)
+    address = re.sub(r'n°|nº', 'n', address)
+    address = re.sub(r'CEP:?\s*', '', address)
+    address = re.sub(r'\s+', ' ', address)
+    return address.strip()
+
+def get_coordinates_nominatim(address, country_code='br'):
+    """Busca coordenadas usando OpenStreetMap Nominatim"""
+    url = "https://nominatim.openstreetmap.org/search"
+    
+    # Diferentes variações para tentar
+    variations = [
+        address + f", Brasil" if country_code == 'br' else address,
+        clean_address(address) + f", Brasil" if country_code == 'br' else clean_address(address),
+    ]
+    
+    # Se for endereço brasileiro, adiciona mais variações
+    if country_code == 'br':
+        # Extrai cidade e estado se possível
+        if 'MG' in address or 'Minas Gerais' in address:
+            city_match = re.search(r'([A-Za-z\s]+)\s*[-–]\s*MG', address)
+            if city_match:
+                city = city_match.group(1).strip()
+                variations.append(f"{city}, Minas Gerais, Brasil")
+        
+        # Outras tentativas para estados específicos
+        state_mappings = {
+            'RJ': 'Rio de Janeiro', 'SP': 'São Paulo', 'CE': 'Ceará',
+            'MA': 'Maranhão', 'RS': 'Rio Grande do Sul', 'PA': 'Pará',
+            'ES': 'Espírito Santo', 'DF': 'Distrito Federal'
+        }
+        
+        for abbr, full_name in state_mappings.items():
+            if abbr in address:
+                city_match = re.search(r'([A-Za-z\s]+)\s*[-–]\s*' + abbr, address)
+                if city_match:
+                    city = city_match.group(1).strip()
+                    variations.append(f"{city}, {full_name}, Brasil")
+    
+    headers = {
+        'User-Agent': 'EscolasCruzeiro/1.0 (escolas@cruzeiro.com.br)'
+    }
+    
+    for variation in variations:
+        params = {
+            'q': variation,
+            'format': 'json',
+            'countrycodes': country_code,
+            'limit': 1,
+            'addressdetails': 1
+        }
+        
+        try:
+            response = requests.get(url, params=params, headers=headers, timeout=10)
+            if response.status_code == 200:
+                data = response.json()
+                if data and len(data) > 0:
+                    result = data[0]
+                    return float(result['lat']), float(result['lon']), result.get('display_name', variation)
+            time.sleep(0.5)  # Pequena pausa entre tentativas
+        except Exception as e:
+            print(f"Erro na variação '{variation}': {e}")
+            continue
+    
+    return None, None, None
+
+def determine_country_code(address):
+    """Determina o código do país baseado no endereço"""
+    if any(country in address.lower() for country in ['colombia', 'bogotá']):
+        return 'co'
+    elif any(country in address.lower() for country in ['japan', 'tokyo', 'bunkyo']):
+        return 'jp'
+    elif any(country in address.lower() for country in ['peru', 'lima']):
+        return 'pe'
+    elif any(country in address.lower() for country in ['thailand', 'bangkok']):
+        return 'th'
+    elif any(country in address.lower() for country in ['usa', 'boston', 'hanover', 'new jersey', 'kearny']):
+        return 'us'
+    else:
+        return 'br'
+
+# Lista com todos os endereços
 enderecos = [
     "Rua Edgard Ramos Barroso, 149 – Jd Paulista – Arinos – MG Cep.: 38.680-000",
     "Av Barão de Guaxupé 775, Bairro Alto dos Pinheiros, BH 30530-160",
@@ -62,30 +146,72 @@ enderecos = [
     "Rua Netuno, s/n, Alvorada, Vila Velha-ES CEP 29117-270"
 ]
 
-
-geolocator = Nominatim(user_agent="escolas_cruzeiro")
-
 schools = []
+failed_addresses = []
 
-for e in enderecos:
+print(f"Iniciando busca de coordenadas para {len(enderecos)} endereços...")
+print("=" * 80)
+
+for i, endereco in enumerate(enderecos, 1):
+    print(f"\n[{i}/{len(enderecos)}] Processando: {endereco[:60]}...")
+    
+    country_code = determine_country_code(endereco)
+    
     try:
-        loc = geolocator.geocode(e, timeout=10)
-        if loc:
+        lat, lng, display_name = get_coordinates_nominatim(endereco, country_code)
+        
+        if lat and lng:
             schools.append({
-                "lat": loc.latitude,
-                "lng": loc.longitude,
-                "nome": e,
-                "region": "brasil"
+                "lat": lat,
+                "lng": lng,
+                "nome": endereco,
+                "endereco_encontrado": display_name,
+                "region": "brasil" if country_code == 'br' else country_code
             })
-            print(f"OK: {e} -> {loc.latitude}, {loc.longitude}")
+            print(f"✅ SUCESSO: {lat:.6f}, {lng:.6f}")
+            print(f"   Encontrado: {display_name}")
         else:
-            print(f"Não encontrado: {e}")
-    except GeocoderTimedOut:
-        print(f"Timeout: {e}")
-    time.sleep(1)  # respeitar limite da API gratuita
+            failed_addresses.append(endereco)
+            print(f"❌ NÃO ENCONTRADO")
+            
+    except Exception as e:
+        failed_addresses.append(endereco)
+        print(f"❌ ERRO: {e}")
+    
+    # Pausa para respeitar rate limit (1 request por segundo)
+    time.sleep(1.2)
 
-# salva no arquivo
-with open("./json/schools.json", "w", encoding="utf-8") as f:
-    json.dump(schools, f, ensure_ascii=False, indent=4)
+# Salva resultados
+try:
+    with open("./Json/addressSchools.json", "w", encoding="utf-8") as f:
+        json.dump(schools, f, ensure_ascii=False, indent=4)
+    print(f"\n✅ Dados salvos em addressSchools.json")
+except:
+    # Se não conseguir salvar na pasta Json, salva na pasta atual
+    with open("addressSchools.json", "w", encoding="utf-8") as f:
+        json.dump(schools, f, ensure_ascii=False, indent=4)
+    print(f"\n✅ Dados salvos em addressSchools.json (pasta atual)")
 
-print("Finalizado. Dados salvos em schools.json")
+# Salva endereços que falharam para reprocessamento manual
+if failed_addresses:
+    try:
+        with open("./Json/failed_addresses.json", "w", encoding="utf-8") as f:
+            json.dump(failed_addresses, f, ensure_ascii=False, indent=4)
+    except:
+        with open("failed_addresses.json", "w", encoding="utf-8") as f:
+            json.dump(failed_addresses, f, ensure_ascii=False, indent=4)
+
+# Estatísticas finais
+print("\n" + "=" * 80)
+print("📊 ESTATÍSTICAS FINAIS:")
+print(f"✅ Sucessos: {len(schools)}")
+print(f"❌ Falhas: {len(failed_addresses)}")
+print(f"📈 Taxa de sucesso: {len(schools)/len(enderecos)*100:.1f}%")
+
+if failed_addresses:
+    print(f"\n❌ Endereços que falharam:")
+    for addr in failed_addresses:
+        print(f"   - {addr}")
+    print(f"\n💡 Dica: Verifique o arquivo 'failed_addresses.json' para reprocessar manualmente")
+
+print("\n🎉 Finalizado!")

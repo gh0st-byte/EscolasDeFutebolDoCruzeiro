@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 let schools = [];
 
-fetch("./json/schools.json")
+fetch("./Json/schools.json")
   .then(res => res.json())
   .then(data => {
     schools = data;
