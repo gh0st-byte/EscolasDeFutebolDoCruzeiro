@@ -2,12 +2,12 @@
 session_start();
 
 // Configurações
-$ADMIN_EMAIL = 'marco.repoles@cruzeiro.com.br';
+$ADMIN_USER = 'admin';
 $ADMIN_PASSWORD = 'cruzeiro2024';
 
 // Verificar login
-if (!isset($_SESSION['logged_in']) && $_POST['email'] ?? '' !== $ADMIN_EMAIL) {
-    if ($_POST['email'] ?? '' === $ADMIN_EMAIL && $_POST['password'] ?? '' === $ADMIN_PASSWORD) {
+if (isset($_POST['username']) && isset($_POST['password'])) {
+    if ($_POST['username'] === $ADMIN_USER && $_POST['password'] === $ADMIN_PASSWORD) {
         $_SESSION['logged_in'] = true;
     }
 }
@@ -125,7 +125,7 @@ $dados = lerJSON($tab_atual);
     <header>
         <h1>🏆 Sistema de Gerenciamento - Escolas Cruzeiro</h1>
         <div class="user-info">
-            Logado como: <?= $ADMIN_EMAIL ?> | <a href="?logout=1">Sair</a>
+            Logado como: <?= $ADMIN_USER ?> | <a href="?logout=1">Sair</a>
         </div>
     </header>
 

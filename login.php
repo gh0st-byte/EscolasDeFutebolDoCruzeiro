@@ -14,14 +14,14 @@
                 <p>Sistema de Gerenciamento</p>
             </div>
             
-            <?php if (isset($_POST['email'])): ?>
+            <?php if (isset($_POST['username'])): ?>
                 <div class="error">❌ Credenciais inválidas</div>
             <?php endif; ?>
             
             <form method="POST">
                 <div class="form-group">
-                    <label>📧 Email:</label>
-                    <input type="email" name="email" required value="<?= $_POST['email'] ?? '' ?>">
+                    <label>👤 Usuário:</label>
+                    <input type="text" name="username" required value="<?= $_POST['username'] ?? '' ?>">
                 </div>
                 
                 <div class="form-group">

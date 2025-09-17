@@ -28,7 +28,7 @@ EscolasDeFutebolDoCruzeiro/
 
 ## 🔐 Credenciais de Acesso
 
-- **Email**: marco.repoles@cruzeiro.com.br
+- **Usuário**: admin
 - **Senha**: cruzeiro2024
 
 ## 🛠️ Como Usar
