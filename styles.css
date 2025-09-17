@@ -103,12 +103,12 @@ nav button:hover {
 /* HERO */
 .container-hero {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 2fr;
     align-items: center;
-    background: linear-gradient(135deg, #0a1e5c 0%, #1e3a8a 100%);
-    color: #fff;
+    background: linear-gradient(135deg, #052688 10%, #163077c6 100%);
+    color: #ffffff;
     padding: 64px 0;
-    max-height: 580px;
+    max-height: 645px;
     width: 100%;
     overflow: hidden;
     position: relative;
@@ -158,6 +158,7 @@ nav button:hover {
     overflow: cover;
     width: 600px;
     height: auto;
+    flex-shrink: 100;
 
 }
 .cta-1 {
@@ -210,7 +211,6 @@ nav button:hover {
     border-radius: 0 16px 16px 0;
     position: absolute;
     left: 0;
-    top: 975px;
     transform: translateY(-50%);
     z-index: 2;
     pointer-events: none;
@@ -227,20 +227,25 @@ nav button:hover {
     border-radius: 16px 0 0 16px;
     position: absolute;
     right: 0;
-    top: 975px;
     transform: translateY(-50%);
     z-index: 2;
     pointer-events: none;
     display: block;
     transition: width 0.3s, height 0.3s;
 }
-
+.off-white-1, .off-white-2 {
+    display: block;
+    transition: width 0.3s, height 0.3s;
+    top: 56%;
+}
 
 .news {
     background: #fff;
     padding: 60px 0 48px 0;
     text-align: center;
     flex-direction: column;
+    position: relative;
+    overflow: hidden;
 }
 .news h2 {
     margin-bottom: 40px;
@@ -259,6 +264,7 @@ nav button:hover {
     overflow: hidden;
     padding: 0 20px;
     align-items: center;
+    position: relative;
 }
 .news-cards {
     display: flex;
@@ -657,15 +663,16 @@ body::after {
 
 /* RESPONSIVO */
 @media (max-width: 1200px) {
-    .news h2 > *{
+    .news h2 > * {
         z-index: 2005;
     }
     .off-white-1, .off-white-2 {
         min-width: 30px;
         max-width: 80px;
-        max-height: 450px;
-        top: 900px;
-        display: block;
+        height: 320px;
+    }
+    .news-carousel {
+        position: relative;
     }
 }
 @media (max-width: 700px) {
