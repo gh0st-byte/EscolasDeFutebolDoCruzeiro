@@ -1,0 +1,59 @@
+/* Estilos para as escolas */
+.escolas {
+    padding: 4rem 2rem;
+    background: #f8f9fa;
+}
+
+.escolas h2 {
+    text-align: center;
+    color: #0033a0;
+    margin-bottom: 3rem;
+    font-size: 2.5rem;
+}
+
+.escolas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.escola-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s;
+}
+
+.escola-card:hover {
+    transform: translateY(-5px);
+}
+
+.escola-card h3 {
+    color: #0033a0;
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+}
+
+.escola-card p {
+    margin-bottom: 0.8rem;
+    color: #666;
+}
+
+.escola-card a {
+    display: inline-block;
+    margin: 0.5rem 1rem 0.5rem 0;
+    padding: 0.5rem 1rem;
+    background: #0033a0;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    transition: background 0.3s;
+}
+
+.escola-card a:hover {
+    background: #002080;
+}
