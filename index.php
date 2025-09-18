@@ -1,14 +1,20 @@
 <?php
 session_start();
 
-// Configurações
-$ADMIN_USER = 'admin';
-$ADMIN_PASSWORD = 'cruzeiro2024';
-
 // Verificar login
 if (isset($_POST['username']) && isset($_POST['password'])) {
-    if ($_POST['username'] === $ADMIN_USER && $_POST['password'] === $ADMIN_PASSWORD) {
-        $_SESSION['logged_in'] = true;
+    $usuarios = [
+        ['username' => 'admin', 'password' => 'cruzeiro2024'],
+        ['username' => 'Marco', 'password' => '12345678']
+    ];
+    
+    foreach ($usuarios as $usuario) {
+        if ($_POST['username'] === $usuario['username'] && 
+            $_POST['password'] === $usuario['password']) {
+            $_SESSION['logged_in'] = true;
+            $_SESSION['username'] = $usuario['username'];
+            break;
+        }
     }
 }
 
@@ -53,7 +59,9 @@ if ($_POST) {
                 $novo = [
                     'lat' => (float)$_POST['lat'],
                     'lng' => (float)$_POST['lng'],
-                    'nome' => $_POST['nome'],
+                    'nome' => $_POST['nome'] ?? null,
+                    'cidade' => $_POST['cidade'] ?? null,
+                    'imagem_URL' => $_POST['imagem_URL'] ?? null,
                     'endereco_encontrado' => $_POST['endereco_encontrado'],
                     'region' => $_POST['region'] ?? 'brasil'
                 ];
@@ -64,6 +72,14 @@ if ($_POST) {
                     $novo['instagram'] = $_POST['instagram'] ?? null;
                     $novo['instagram_url'] = $_POST['instagram_url'] ?? null;
                     $novo['estado'] = $_POST['estado'] ?? '';
+                } elseif ($arquivo === 'news.json') {
+                    $novo = [
+                        'title' => $_POST['title'],
+                        'date' => $_POST['date'],
+                        'content' => $_POST['content'],
+                        'image_URL' => $_POST['image_URL'] ?? null,
+                        'category' => $_POST['category'] ?? 'Esporte'
+                    ];
                 }
                 $dados[] = $novo;
             }
@@ -76,10 +92,20 @@ if ($_POST) {
             if (isset($dados[$index])) {
                 if ($arquivo === 'failed_addresses.json') {
                     $dados[$index] = $_POST['endereco'];
+                } elseif ($arquivo === 'news.json') {
+                    $dados[$index] = [
+                        'title' => $_POST['title'],
+                        'date' => $_POST['date'],
+                        'content' => $_POST['content'],
+                        'image_URL' => $_POST['image_URL'] ?: null,
+                        'category' => $_POST['category'] ?? 'Esporte'
+                    ];
                 } else {
                     $dados[$index]['lat'] = (float)$_POST['lat'];
                     $dados[$index]['lng'] = (float)$_POST['lng'];
-                    $dados[$index]['nome'] = $_POST['nome'];
+                    $dados[$index]['nome'] = $_POST['nome'] ?: null;
+                    $dados[$index]['cidade'] = $_POST['cidade'] ?: null;
+                    $dados[$index]['imagem_URL'] = $_POST['imagem_URL'] ?: null;
                     $dados[$index]['endereco_encontrado'] = $_POST['endereco_encontrado'];
                     $dados[$index]['region'] = $_POST['region'] ?? 'brasil';
                     if ($arquivo === 'schools.json') {
@@ -125,7 +151,7 @@ $dados = lerJSON($tab_atual);
     <header>
         <h1>Sistema de Gerenciamento - Escolas Cruzeiro</h1>
         <div class="user-info">
-            Logado como: <?= $ADMIN_USER ?> | <a href="?logout=1">Sair</a>
+            Logado como: <?= $_SESSION['username'] ?> | <a href="?logout=1">Sair</a>
         </div>
     </header>
 
@@ -139,6 +165,9 @@ $dados = lerJSON($tab_atual);
         <a href="?tab=failed_addresses.json" class="<?= $tab_atual === 'failed_addresses.json' ? 'active' : '' ?>">
             Falhas (<?= count(lerJSON('failed_addresses.json')) ?>)
         </a>
+        <a href="?tab=news.json" class="<?= $tab_atual === 'news.json' ? 'active' : '' ?>">
+            Notícias (<?= count(lerJSON('news.json')) ?>)
+        </a>
     </nav>
 
     <main>
@@ -151,9 +180,19 @@ $dados = lerJSON($tab_atual);
                 
                 <?php if ($tab_atual === 'failed_addresses.json'): ?>
                     <input type="text" name="endereco" placeholder="Endereço que falhou" required>
+                <?php elseif ($tab_atual === 'news.json'): ?>
+                    <div class="form-grid">
+                        <input type="text" name="title" placeholder="Título" required>
+                        <input type="date" name="date" placeholder="Data" required>
+                        <input type="url" name="image_URL" placeholder="URL da Imagem">
+                        <input type="text" name="category" placeholder="Categoria" value="Esporte">
+                        <textarea name="content" placeholder="Conteúdo da notícia" required></textarea>
+                    </div>
                 <?php else: ?>
                     <div class="form-grid">
-                        <input type="text" name="nome" placeholder="Nome" required>
+                        <input type="text" name="nome" placeholder="Nome">
+                        <input type="text" name="cidade" placeholder="Cidade" required>
+                        <input type="url" name="imagem_URL" placeholder="URL da Imagem">
                         <input type="number" step="any" name="lat" placeholder="Latitude" required>
                         <input type="number" step="any" name="lng" placeholder="Longitude" required>
                         <input type="text" name="region" placeholder="Região" value="brasil">
@@ -178,7 +217,40 @@ $dados = lerJSON($tab_atual);
         <div class="data-container">
             <h3><?= ucfirst(str_replace(['.json', '_'], ['', ' '], $tab_atual)) ?> (<?= count($dados) ?> itens)</h3>
             
-            <?php if ($tab_atual === 'failed_addresses.json'): ?>
+            <?php if ($tab_atual === 'news.json'): ?>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Título</th>
+                                <th>Data</th>
+                                <th>Categoria</th>
+                                <th>Conteúdo</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach($dados as $index => $item): ?>
+                            <tr>
+                                <td><?= htmlspecialchars($item['title']) ?></td>
+                                <td><?= htmlspecialchars($item['date']) ?></td>
+                                <td><?= htmlspecialchars($item['category']) ?></td>
+                                <td class="endereco"><?= htmlspecialchars(substr($item['content'], 0, 100)) ?>...</td>
+                                <td class="actions">
+                                    <button onclick="editarItem(<?= $index ?>)">Editar</button>
+                                    <form method="POST" style="display:inline;" onsubmit="return confirm('Deletar?')">
+                                        <input type="hidden" name="acao" value="deletar">
+                                        <input type="hidden" name="arquivo" value="<?= $tab_atual ?>">
+                                        <input type="hidden" name="index" value="<?= $index ?>">
+                                        <button type="submit">Deletar</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            <?php elseif ($tab_atual === 'failed_addresses.json'): ?>
                 <div class="failed-addresses">
                     <?php foreach($dados as $index => $endereco): ?>
                         <div class="failed-item">
@@ -200,7 +272,7 @@ $dados = lerJSON($tab_atual);
                     <table>
                         <thead>
                             <tr>
-                                <th>Nome</th>
+                                <th>Cidade</th>
                                 <th>Coordenadas</th>
                                 <?php if ($tab_atual === 'schools.json'): ?>
                                     <th>Telefone</th>
@@ -214,7 +286,7 @@ $dados = lerJSON($tab_atual);
                         <tbody>
                             <?php foreach($dados as $index => $item): ?>
                             <tr>
-                                <td><?= htmlspecialchars($item['nome']) ?></td>
+                                <td><?= htmlspecialchars($item['cidade'] ?? $item['nome']) ?></td>
                                 <td><?= $item['lat'] ?>, <?= $item['lng'] ?></td>
                                 <?php if ($tab_atual === 'schools.json'): ?>
                                     <td><?= htmlspecialchars($item['telefone'] ?? '') ?></td>
@@ -268,10 +340,22 @@ $dados = lerJSON($tab_atual);
             let fields = '';
             if (tabAtual === 'failed_addresses.json') {
                 fields = `<input type="text" name="endereco" value="${item}" required>`;
+            } else if (tabAtual === 'news.json') {
+                fields = `
+                    <div class="form-grid">
+                        <input type="text" name="title" value="${item.title}" required>
+                        <input type="date" name="date" value="${item.date}" required>
+                        <input type="url" name="image_URL" value="${item.image_URL || ''}">
+                        <input type="text" name="category" value="${item.category}">
+                        <textarea name="content" required>${item.content}</textarea>
+                    </div>
+                `;
             } else {
                 fields = `
                     <div class="form-grid">
-                        <input type="text" name="nome" value="${item.nome}" required>
+                        <input type="text" name="nome" value="${item.nome || ''}">
+                        <input type="text" name="cidade" value="${item.cidade || ''}" required>
+                        <input type="url" name="imagem_URL" value="${item.imagem_URL || ''}">
                         <input type="number" step="any" name="lat" value="${item.lat}" required>
                         <input type="number" step="any" name="lng" value="${item.lng}" required>
                         <input type="text" name="region" value="${item.region || 'brasil'}">

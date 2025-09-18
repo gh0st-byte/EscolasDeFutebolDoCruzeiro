@@ -7,8 +7,47 @@
 .escolas h2 {
     text-align: center;
     color: #0033a0;
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
     font-size: 2.5rem;
+}
+
+.filtros {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+}
+
+.filtros select, .filtros button {
+    padding: 0.8rem 1.2rem;
+    border: 2px solid #0033a0;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: 600;
+    background: white;
+    color: #0033a0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 180px;
+}
+
+.filtros select:focus, .filtros button:hover {
+    outline: none;
+    background: linear-gradient(135deg, #0033a0, #1e5bb8);
+    color: rgb(0, 46, 92);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,51,160,0.3);
+}
+
+.filtros button {
+    background: linear-gradient(135deg, #0033a0, #1e5bb8);
+    color: rgb(0, 157, 255);
+    min-width: 140px;
+}
+
+.filtros button:hover {
+    background: linear-gradient(135deg, #002080, #1a4fa0);
 }
 
 .escolas-grid {
@@ -25,6 +64,18 @@
     border-radius: 10px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     transition: transform 0.3s;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.escola-imagem {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 1rem;
 }
 
 .escola-card:hover {
@@ -42,18 +93,94 @@
     color: #666;
 }
 
-.escola-card a {
-    display: inline-block;
-    margin: 0.5rem 1rem 0.5rem 0;
-    padding: 0.5rem 1rem;
-    background: #0033a0;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-    font-size: 0.9rem;
-    transition: background 0.3s;
+/* Container dos botões lado a lado na base do card */
+.btn-container {
+    display: flex;
+    gap: 1rem;
+    margin-top: auto;
+    justify-content: flex-end;
 }
 
-.escola-card a:hover {
-    background: #002080;
+.btn-whatsapp, .btn-instagram {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.6rem 1.2rem;
+    border-radius: 25px;
+    color: white;
+    font-weight: 600;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+.escola-card .btn-whatsapp {
+    background: linear-gradient(135deg, #25D366, #128C7E);
+}
+
+.escola-card .btn-whatsapp::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgb(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+    z-index: 1;
+}
+
+.escola-card .btn-whatsapp:hover {
+    background: linear-gradient(135deg, #008004, #1aa01e);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,51,160,0.4);
+}
+
+.escola-card .btn-instagram:hover::before {
+    left: 100%;
+}
+
+.escola-card .btn-instagram {
+    background: linear-gradient(135deg, #AD1457, #E1306C, #fa008e);
+}
+
+.escola-card .btn-instagram::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 10, 10, 0.2), transparent);
+    transition: left 0.5s;
+    z-index: 1;
+}
+
+.escola-card .btn-instagram:hover {
+    background: linear-gradient(135deg, #AD1457, #9B174D);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgb(125, 0, 160);
+}
+
+.escola-card img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    object-fit: cover;
+    margin: 0 0 1rem 0;
+}
+
+@media (max-width: 768px) {
+    .filtros {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.8rem;
+    }
+    
+    .filtros select, .filtros button {
+        width: 100%;
+        max-width: 300px;
+    }
 }
