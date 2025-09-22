@@ -112,8 +112,8 @@
         "region": "brasil"
     },
     {
-        "lat": -31.6933155,
-        "lng": -52.3567554,
+        "lat": -31.6903967,
+        "lng": -52.3577381,
         "nome": "Rua Arthur Raubach, 241, Sítio Floresta, Pelotas-RS CEP 96070-510",
         "endereco_encontrado": "Rua Arthur Raubach, Sitio Floresta, Sede, Pelotas, Região Geográfica Imediata de Pelotas, Aglomeração Urbana do Sul, Região Geográfica Intermediária de Pelotas, Rio Grande do Sul, Região Sul, 96070-340, Brasil",
         "region": "brasil"
@@ -133,6 +133,13 @@
         "region": "brasil"
     },
     {
+        "lat": -7.863646,
+        "lng": -36.3674541,
+        "nome": "R. Couto Magalhães, 310B – Aeroporto Velho, Santarém – PA, 68020-010",
+        "endereco_encontrado": "Pará, Santa Cruz do Capibaribe, Região Geográfica Imediata de Caruaru, Região Geográfica Intermediária de Caruaru, Pernambuco, Região Nordeste, Brasil",
+        "region": "brasil"
+    },
+    {
         "lat": -3.5791962,
         "lng": -42.6153992,
         "nome": "Rua Sessenta e Sete, 24 – Conj. Hab. Vinhais, São Luis – MA, CEP 65074-525",
@@ -147,8 +154,8 @@
         "region": "brasil"
     },
     {
-        "lat": -17.4023502,
-        "lng": -41.6789532,
+        "lat": -17.4022974,
+        "lng": -41.6789631,
         "nome": "Rua Hélio Ottoni, s/n, São Diego, Teófilo Otoni-MG CEP 39803-006",
         "endereco_encontrado": "Rua Maria de Filó, Itaipé, Região Geográfica Imediata de Teófilo Otoni, Região Geográfica Intermediária de Teófilo Otoni, Minas Gerais, Região Sudeste, 39815-000, Brasil",
         "region": "brasil"
@@ -168,8 +175,8 @@
         "region": "brasil"
     },
     {
-        "lat": -20.3431218,
-        "lng": -40.3502507,
+        "lat": -20.343163,
+        "lng": -40.3503605,
         "nome": "Rua Netuno, s/n, Alvorada, Vila Velha-ES CEP 29117-270",
         "endereco_encontrado": "Rua Netuno, Bosque, Região 04 - Grande Cobilândia, São Torquato, Vila Velha, Região Geográfica Imediata de Vitória, Região Metropolitana da Grande Vitória, Região Geográfica Intermediária de Vitória, Espírito Santo, Região Sudeste, 29117-120, Brasil",
         "region": "brasil"

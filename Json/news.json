@@ -1,9 +1,38 @@
 [
-    {
-        "title": "Cruzeiro lança programa de sócio-torcedor digital",
-        "date": "2024-06-15",
-        "content": "O Cruzeiro lançou um novo programa de sócio-torcedor digital que oferece benefícios exclusivos para os fãs do clube. Com uma taxa mensal acessível, os sócios terão acesso a conteúdos exclusivos, descontos em produtos oficiais e prioridade na compra de ingressos para jogos importantes.",
-        "image_URL": "https://example.com/images/socio-torcedor.jpg",  
-        "category": "Esporte"
-    }
+  {
+    "title": "Nova Temporada das Escolas do Cruzeiro",
+    "subtitle": "Metodologia renovada e novos profissionais",
+    "content": "As escolas de futebol do Cruzeiro iniciam uma nova temporada com metodologia renovada e novos profissionais qualificados para formar os futuros talentos do clube.",
+    "dayWeek": "Segunda-feira",
+    "date": "15",
+    "month": "Janeiro",
+    "1-image_URL": "https://images.pexels.com/photos/29920213/pexels-photo-29920213.jpeg"
+  },
+  {
+    "title": "Treino Especial com Ex-Jogadores",
+    "subtitle": "Experiência única para os alunos",
+    "content": "Crianças das escolas participaram de treino especial com ex-jogadores do Cruzeiro, aprendendo técnicas avançadas e recebendo dicas valiosas dos ídolos do clube.",
+    "dayWeek": "Quarta-feira",
+    "date": "10",
+    "month": "Janeiro",
+    "1-image_URL": "https://images.pexels.com/photos/29920213/pexels-photo-29920213.jpeg"
+  },
+  {
+    "title": "Torneio Interno das Escolas",
+    "subtitle": "Competição saudável entre unidades",
+    "content": "Grande torneio entre as unidades das escolas do Cruzeiro promove integração e competição saudável, desenvolvendo o espírito esportivo dos jovens atletas.",
+    "dayWeek": "Sábado",
+    "date": "05",
+    "month": "Janeiro",
+    "1-image_URL": "https://images.pexels.com/photos/29920213/pexels-photo-29920213.jpeg"
+  },
+  {
+    "title": "Inauguração de Nova Unidade",
+    "subtitle": "Expansão das Escolas do Cruzeiro",
+    "content": "Nova unidade das Escolas do Cruzeiro é inaugurada em Belo Horizonte com estrutura moderna e completa para atender mais jovens talentos da região.",
+    "dayWeek": "Domingo",
+    "date": "01",
+    "month": "Janeiro",
+    "1-image_URL": "https://images.pexels.com/photos/29920213/pexels-photo-29920213.jpeg"
+  }
 ]

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CruzeiroAcademy</title>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <link rel="icon" type="image/png" href="favicon.png">
 </head>
@@ -17,12 +18,21 @@
                     <div class="logo">
                         <img src="https://logodetimes.com/times/cruzeiro/logo-cruzeiro-4096.png" alt="Cruzeiro Logo">
                     </div>
-                    <button class="mobile-menu-btn" aria-label="Menu">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </button>
-                    <nav>
+                    <div class="dropdown d-md-none">
+                        <button class="btn btn-link dropdown-toggle custom-dropdown-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            ☰
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#metodologia">Metodologia</a></li>
+                            <li><a class="dropdown-item" href="#">Benefícios</a></li>
+                            <li><a class="dropdown-item" href="#">#CriasDaToca</a></li>
+                            <li><a class="dropdown-item" href="schools.html">Unidades</a></li>
+                            <li><a class="dropdown-item" href="news.html">Notícias</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#">Quero ser Franqueado</a></li>
+                        </ul>
+                    </div>
+                    <nav class="d-none d-md-flex">
                         <ul class="nav-links">
                             <li><a href="#metodologia" class="nav-item">Metodologia</a></li>
                             <li><a href="#" class="nav-item">Benefícios</a></li>
@@ -31,7 +41,6 @@
                             <li><a href="news.html" class="nav-item">Notícias</a></li>
                             <li><a href="#" class="btn-franqueado nav-franqueado"><button>Quero ser Franqueado</button></a></li>
                         </ul>
-                        
                     </nav>
                 </div>
             </header>
@@ -162,6 +171,7 @@
     </main>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="script.js"></script>
 
 </body>

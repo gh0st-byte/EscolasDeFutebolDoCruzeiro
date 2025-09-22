@@ -1,40 +1,57 @@
 let todasEscolas = [];
+let filtrosDisponiveis = {};
 
-// Carregar dados das escolas
+// Carregar dados das escolas e filtros
 async function carregarEscolas() {
     try {
-        const response = await fetch('Json/schools.json');
-        todasEscolas = await response.json();
+        const [escolasResponse, filtrosResponse] = await Promise.all([
+            fetch('Json/schools.json'),
+            fetch('Json/filters.json')
+        ]);
+        
+        todasEscolas = await escolasResponse.json();
+        filtrosDisponiveis = await filtrosResponse.json();
         
         preencherFiltros();
         renderizarEscolas(todasEscolas);
         configurarFiltros();
     } catch (error) {
-        console.error('Erro ao carregar escolas:', error);
+        console.error('Erro ao carregar dados:', error);
     }
 }
 
-// Preencher opções dos filtros
+// Preencher opções dos filtros usando filters.json
 function preencherFiltros() {
-    const regioes = [...new Set(todasEscolas.map(e => e.region).filter(Boolean))];
-    const estados = [...new Set(todasEscolas.map(e => e.estado).filter(Boolean))];
-    const cidades = [...new Set(todasEscolas.map(e => e.cidade ? e.cidade.split('/')[0].split('–')[0].trim() : '').filter(Boolean))];
-    
     const filtroRegiao = document.getElementById('filtroRegiao');
     const filtroEstado = document.getElementById('filtroEstado');
     const filtroCidade = document.getElementById('filtroCidade');
     
-    regioes.forEach(regiao => {
-        filtroRegiao.innerHTML += `<option value="${regiao}">${regiao}</option>`;
+    // Preencher regiões
+    filtroRegiao.innerHTML += `<option value="brasil">Brasil</option>`;
+    
+    // Preencher estados usando filters.json
+    Object.keys(filtrosDisponiveis).forEach(siglaEstado => {
+        const estado = filtrosDisponiveis[siglaEstado];
+        filtroEstado.innerHTML += `<option value="${siglaEstado}">${estado.name}</option>`;
     });
     
-    estados.sort().forEach(estado => {
-        filtroEstado.innerHTML += `<option value="${estado}">${estado}</option>`;
-    });
+    // Event listener para atualizar cidades quando estado mudar
+    filtroEstado.addEventListener('change', atualizarCidades);
+}
+
+// Atualizar cidades baseado no estado selecionado
+function atualizarCidades() {
+    const estadoSelecionado = document.getElementById('filtroEstado').value;
+    const filtroCidade = document.getElementById('filtroCidade');
     
-    cidades.sort().forEach(cidade => {
-        filtroCidade.innerHTML += `<option value="${cidade}">${cidade}</option>`;
-    });
+    filtroCidade.innerHTML = '<option value="">Todas as Cidades</option>';
+    
+    if (estadoSelecionado && filtrosDisponiveis[estadoSelecionado]) {
+        const cidades = Object.keys(filtrosDisponiveis[estadoSelecionado].cities);
+        cidades.sort().forEach(cidade => {
+            filtroCidade.innerHTML += `<option value="${cidade}">${cidade}</option>`;
+        });
+    }
 }
 
 // Configurar eventos dos filtros
@@ -45,17 +62,21 @@ function configurarFiltros() {
     const limparFiltros = document.getElementById('limparFiltros');
     
     filtroRegiao.addEventListener('change', aplicarFiltros);
-    filtroEstado.addEventListener('change', aplicarFiltros);
+    filtroEstado.addEventListener('change', () => {
+        atualizarCidades();
+        aplicarFiltros();
+    });
     filtroCidade.addEventListener('change', aplicarFiltros);
     limparFiltros.addEventListener('click', () => {
         filtroRegiao.value = '';
         filtroEstado.value = '';
         filtroCidade.value = '';
+        filtroCidade.innerHTML = '<option value="">Todas as Cidades</option>';
         renderizarEscolas(todasEscolas);
     });
 }
 
-// Aplicar filtros
+// Aplicar filtros usando filters.json como referência
 function aplicarFiltros() {
     const regiaoSelecionada = document.getElementById('filtroRegiao').value;
     const estadoSelecionado = document.getElementById('filtroEstado').value;
@@ -72,13 +93,32 @@ function aplicarFiltros() {
     }
     
     if (cidadeSelecionada) {
-        escolasFiltradas = escolasFiltradas.filter(e => {
-            const cidade = e.cidade ? e.cidade.split('/')[0].split('–')[0].trim() : '';
-            return cidade === cidadeSelecionada;
-        });
+        // Usar filters.json para validar se a cidade existe no estado
+        if (filtrosDisponiveis[estadoSelecionado] && 
+            filtrosDisponiveis[estadoSelecionado].cities[cidadeSelecionada]) {
+            escolasFiltradas = escolasFiltradas.filter(e => {
+                const cidadeEscola = extrairCidade(e.endereco_encontrado || e.nome);
+                return cidadeEscola === cidadeSelecionada;
+            });
+        }
     }
     
     renderizarEscolas(escolasFiltradas);
+}
+
+// Função auxiliar para extrair cidade do endereço
+function extrairCidade(endereco) {
+    // Buscar por padrões de cidade nos endereços
+    const cidades = Object.values(filtrosDisponiveis).flatMap(estado => 
+        Object.keys(estado.cities)
+    );
+    
+    for (const cidade of cidades) {
+        if (endereco.includes(cidade)) {
+            return cidade;
+        }
+    }
+    return '';
 }
 
 // Renderizar escolas na página
