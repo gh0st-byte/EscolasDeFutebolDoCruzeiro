@@ -183,6 +183,58 @@ fetch("./Json/schools.json")
   // Make sure map renders properly after DOM is fully loaded
   setTimeout(() => map.invalidateSize(), 300);
 
+  // Carousel and menu-map button logic moved inside DOMContentLoaded to avoid timing issues
+  const track = document.querySelector('.news-cards');
+  const prevBtn = document.querySelector('.btn-prev');
+  const nextBtn = document.querySelector('.btn-next');
+  const cards = document.querySelectorAll('.card');
+
+  let visibleCards = 3; // ajuste conforme layout
+  let index = 0; // começa no primeiro card
+  const cardWidth = cards.length > 0 ? cards[0].offsetWidth + 28 : 0; // largura + gap
+  const maxIndex = Math.max(cards.length - visibleCards, 0);
+
+  function updateCarousel() {
+    // Garante que o índice está dentro dos limites
+    index = Math.max(0, Math.min(index, maxIndex));
+    if (track) {
+      track.style.transform = `translateX(${-index * cardWidth}px)`;
+    }
+  }
+
+  // Inicializa o carrossel mostrando o primeiro card
+  updateCarousel();
+
+  if (nextBtn) {
+    nextBtn.addEventListener('click', () => {
+      if (index < maxIndex) {
+        index++;
+      } else {
+        index = 0; // loop para o início
+      }
+      updateCarousel();
+    });
+  }
+
+  if (prevBtn) {
+    prevBtn.addEventListener('click', () => {
+      if (index > 0) {
+        index--;
+      } else {
+        index = maxIndex; // loop para o final
+      }
+      updateCarousel();
+    });
+  }
+
+  window.addEventListener('scroll', () => {
+    const header = document.querySelector('header');
+    if (window.scrollY > 0) {
+      header.classList.add('scrolled');
+    } else {
+      header.classList.remove('scrolled');
+    }
+  });
 
 });
 
@@ -190,10 +242,46 @@ fetch("./Json/schools.json")
 
 
 
-const track = document.querySelector('.news-cards');
-const prevBtn = document.querySelector('.btn-prev');
-const nextBtn = document.querySelector('.btn-next');
-const cards = document.querySelectorAll('.card');
+// news.html
+document.addEventListener('DOMContentLoaded', () => {
+  if (document.querySelector('.news-letter')) {
+    fetch('./Json/news.json')
+      .then(response => response.json())
+      .then(data => {
+        const newsContainer = document.querySelector('.news-letter');
+        
+        data.forEach(item => {
+          const newsItem = document.createElement('div');
+          newsItem.classList.add('news-item');
+          newsItem.innerHTML = `
+            <h2>${item.title}</h2>
+            <p class="date">${item.dayWeek}, ${item.date} de ${item.month}</p>
+            <p>${item.content.substring(0, 80)}...</p>
+            <button class="read-more-btn">Leia mais</button>
+          `;
+          
+          const newsItemOpen = document.createElement('div');
+          newsItemOpen.classList.add('news-item-open');
+          newsItem.appendChild(newsItemOpen);
+          newsItemOpen.innerHTML = `
+            <h3>${item.subtitle || ''}</h3>
+            <p>${item.content}</p>
+            ${item["1-image_URL"] ? `<img src="${item["1-image_URL"]}" alt="${item.title}">` : ''}
+          `;
+          
+          const readMoreBtn = newsItem.querySelector('.read-more-btn');
+          readMoreBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            newsItemOpen.classList.toggle('active');
+            readMoreBtn.textContent = newsItemOpen.classList.contains('active') ? 'Leia menos' : 'Leia mais';
+          });
+          
+          newsContainer.appendChild(newsItem);
+        });
+      })
+      .catch(error => console.error('Error loading news:', error));
+  }
+});
 
 
 let visibleCards = 3; // ajuste conforme layout
