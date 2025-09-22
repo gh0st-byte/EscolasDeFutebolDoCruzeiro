@@ -1,0 +1,67 @@
+{
+    "MG": {
+        "name": "Minas Gerais",
+        "cities": {
+            "Arinos": {},
+            "Belo Horizonte": {},
+            "Carmo do Cajuru": {},
+            "Congonhas": {},
+            "Contagem": {},
+            "Ipatinga": {},
+            "Itabira": {},
+            "Lagoa Santa": {},
+            "Montes Claros": {},
+            "Pará de Minas": {},
+            "Porteirinha": {},
+            "Santa Luzia": {},
+            "Sarzedo": {},
+            "Teófilo Otoni": {},
+            "Unaí": {},
+            "Betim": {}
+        }
+    },
+    "SP": {
+        "name": "São Paulo",
+        "cities": {
+            "Caieiras": {}
+        }
+    },
+    "CE": {
+        "name": "Ceará",
+        "cities": {
+            "Limoeiro do Norte": {},
+            "Umirim": {},
+            "Iracema": {}
+        }
+    },
+    "SC": {
+        "name": "Santa Catarina",
+        "cities": {
+            "Criciúma": {}
+        }
+    },
+    "RS": {
+        "name": "Rio Grande do Sul",
+        "cities": {
+            "Pelotas": {}
+        }
+    },
+    "ES": {
+        "name": "Espírito Santo",
+        "cities": {
+            "Vila Velha": {}
+        }
+    },
+    "PE": {
+        "name": "Pernambuco",
+        "cities": {
+            "Santa Cruz do Capibaribe": {}
+        }
+    },
+    "MA": {
+        "name": "Maranhão",
+        "cities": {
+            "Milagres do Maranhão": {}
+        }
+    }
+}

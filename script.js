@@ -182,6 +182,8 @@ fetch("./Json/schools.json")
 
   // Make sure map renders properly after DOM is fully loaded
   setTimeout(() => map.invalidateSize(), 300);
+
+
 });
 
 
@@ -237,10 +239,47 @@ window.addEventListener('scroll', () => {
 });
 
 
-const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-const nav = document.querySelector('nav');
 
-mobileMenuBtn.addEventListener('click', () => {
-    mobileMenuBtn.classList.toggle('active'); // anima o botão
-    nav.classList.toggle('active'); // mostra/esconde o menu
+
+
+
+// news.html
+document.addEventListener('DOMContentLoaded', () => {
+  if (document.querySelector('.news-letter')) {
+    fetch('./Json/news.json')
+      .then(response => response.json())
+      .then(data => {
+        const newsContainer = document.querySelector('.news-letter');
+        
+        data.forEach(item => {
+          const newsItem = document.createElement('div');
+          newsItem.classList.add('news-item');
+          newsItem.innerHTML = `
+            <h2>${item.title}</h2>
+            <p class="date">${item.dayWeek}, ${item.date} de ${item.month}</p>
+            <p>${item.content.substring(0, 80)}...</p>
+            <button class="read-more-btn">Leia mais</button>
+          `;
+          
+          const newsItemOpen = document.createElement('div');
+          newsItemOpen.classList.add('news-item-open');
+          newsItem.appendChild(newsItemOpen);
+          newsItemOpen.innerHTML = `
+            <h3>${item.subtitle || ''}</h3>
+            <p>${item.content}</p>
+            ${item["1-image_URL"] ? `<img src="${item["1-image_URL"]}" alt="${item.title}">` : ''}
+          `;
+          
+          const readMoreBtn = newsItem.querySelector('.read-more-btn');
+          readMoreBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            newsItemOpen.classList.toggle('active');
+            readMoreBtn.textContent = newsItemOpen.classList.contains('active') ? 'Leia menos' : 'Leia mais';
+          });
+          
+          newsContainer.appendChild(newsItem);
+        });
+      })
+      .catch(error => console.error('Error loading news:', error));
+  }
 });
