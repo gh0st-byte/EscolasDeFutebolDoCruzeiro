@@ -6,7 +6,7 @@ async function carregarEscolas() {
     try {
         const [escolasResponse, filtrosResponse] = await Promise.all([
             fetch('Json/schools.json'),
-            fetch('Json/filters.json')
+            fetch('Json/BRfilters.json')
         ]);
         
         todasEscolas = await escolasResponse.json();
@@ -20,7 +20,7 @@ async function carregarEscolas() {
     }
 }
 
-// Preencher opções dos filtros usando filters.json
+// Preencher opções dos filtros usando BRfilters.json
 function preencherFiltros() {
     const filtroRegiao = document.getElementById('filtroRegiao');
     const filtroEstado = document.getElementById('filtroEstado');
@@ -29,7 +29,7 @@ function preencherFiltros() {
     // Preencher regiões
     filtroRegiao.innerHTML += `<option value="brasil">Brasil</option>`;
     
-    // Preencher estados usando filters.json
+    // Preencher estados usando BRfilters.json
     Object.keys(filtrosDisponiveis).forEach(siglaEstado => {
         const estado = filtrosDisponiveis[siglaEstado];
         filtroEstado.innerHTML += `<option value="${siglaEstado}">${estado.name}</option>`;
@@ -76,7 +76,7 @@ function configurarFiltros() {
     });
 }
 
-// Aplicar filtros usando filters.json como referência
+// Aplicar filtros usando BRfilters.json como referência
 function aplicarFiltros() {
     const regiaoSelecionada = document.getElementById('filtroRegiao').value;
     const estadoSelecionado = document.getElementById('filtroEstado').value;
@@ -93,7 +93,7 @@ function aplicarFiltros() {
     }
     
     if (cidadeSelecionada) {
-        // Usar filters.json para validar se a cidade existe no estado
+        // Usar BRfilters.json para validar se a cidade existe no estado
         if (filtrosDisponiveis[estadoSelecionado] && 
             filtrosDisponiveis[estadoSelecionado].cities[cidadeSelecionada]) {
             escolasFiltradas = escolasFiltradas.filter(e => {

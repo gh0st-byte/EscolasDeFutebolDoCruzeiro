@@ -652,6 +652,11 @@ a button {
     height: 60px !important;
     font-size: xx-large !important;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    cursor: pointer !important;
+    display: flex !important;
+    justify-content: center !important;
+    margin-bottom: 200px !important;
+    position: fixed !important;
 }
 .fechar-noticia:hover {
     background: #ff4d4d !important;
