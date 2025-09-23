@@ -10,7 +10,7 @@
     <div class="login-container">
         <div class="login-box">
             <div class="logo">
-                <h1>🏆 Cruzeiro</h1>
+                <h1> Cruzeiro</h1>
                 <p>Sistema de Gerenciamento</p>
             </div>
             
@@ -20,12 +20,12 @@
             
             <form method="POST">
                 <div class="form-group">
-                    <label>👤 Usuário:</label>
+                    <label> Usuário:</label>
                     <input type="text" name="username" required value="<?= htmlspecialchars($_POST['username'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
                 </div>
                 
                 <div class="form-group">
-                    <label>🔒 Senha:</label>
+                    <label> Senha:</label>
                     <input type="password" name="password" required>
                 </div>
                 

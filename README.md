@@ -2,11 +2,16 @@
 
 Sistema web para gerenciar os arquivos JSON das escolas de futebol do Cruzeiro.
 
+Para iniciar o cms:
+```Bash
+php -S localhost:8000
+```
+
 ## Funcionalidades
 
 - **Autenticação**: Login seguro para administradores
 - **Gerenciamento de Escolas**: CRUD completo para schools.json
-- **Gerenciamento de Endereços**: CRUD para addressSchools.json  
+- **Gerenciamento de Endereços**: CRUD para addressSchools.json
 - **Gerenciamento de Falhas**: CRUD para failed_addresses.json
 - **Interface Responsiva**: Funciona em desktop e mobile
 - **Validação de Dados**: Campos obrigatórios e tipos corretos
@@ -43,12 +48,13 @@ EscolasDeFutebolDoCruzeiro/
 ### Operações Disponíveis
 
 - **Adicionar**: Novos registros
-- **Editar**: Modificar registros existentes  
+- **Editar**: Modificar registros existentes
 - **Deletar**: Remover registros (com confirmação)
 
 ## Estrutura dos Dados
 
 ### schools.json
+
 ```json
 {
   "lat": -19.9227318,
@@ -66,6 +72,7 @@ EscolasDeFutebolDoCruzeiro/
 ```
 
 ### addressSchools.json
+
 ```json
 {
   "lat": -19.9227318,
@@ -77,6 +84,7 @@ EscolasDeFutebolDoCruzeiro/
 ```
 
 ### failed_addresses.json
+
 ```json
 [
   "Endereço que falhou no processamento",
@@ -108,6 +116,7 @@ EscolasDeFutebolDoCruzeiro/
 ## Responsividade
 
 O sistema se adapta automaticamente para:
+
 - Desktop (1200px+)
-- Tablet (768px - 1199px)  
+- Tablet (768px - 1199px)
 - Mobile (< 768px)
