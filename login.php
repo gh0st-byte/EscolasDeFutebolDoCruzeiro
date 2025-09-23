@@ -21,7 +21,7 @@
             <form method="POST">
                 <div class="form-group">
                     <label>👤 Usuário:</label>
-                    <input type="text" name="username" required value="<?= $_POST['username'] ?? '' ?>">
+                    <input type="text" name="username" required value="<?= htmlspecialchars($_POST['username'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
                 </div>
                 
                 <div class="form-group">

@@ -180,5 +180,50 @@
         "nome": "Rua Netuno, s/n, Alvorada, Vila Velha-ES CEP 29117-270",
         "endereco_encontrado": "Rua Netuno, Bosque, Região 04 - Grande Cobilândia, São Torquato, Vila Velha, Região Geográfica Imediata de Vitória, Região Metropolitana da Grande Vitória, Região Geográfica Intermediária de Vitória, Espírito Santo, Região Sudeste, 29117-120, Brasil",
         "region": "brasil"
+    },
+    {
+        "lat": -19.93234,
+        "lng": -44.00158,
+        "nome": "",
+        "cidade": "Belo Horizonte",
+        "imagem_URL": "",
+        "endereco_encontrado": "Av Barão de Guaxupé 775, Bairro Alto dos Pinheiros, BH 30530-160",
+        "region": "brasil"
+    },
+    {
+        "lat": -19.84101,
+        "lng": -43.96979,
+        "nome": "Cruzeiro Esporte Clube - Clube Pampulha",
+        "cidade": "Belo Horizonte",
+        "imagem_URL": null,
+        "endereco_encontrado": "Clube Social do Cruzeiro situado à Rua das Canárias, 254 – Santa Branca – Região Pampulha – Cep: 31560-050",
+        "region": "brasil"
+    },
+    {
+        "lat": -20.65551,
+        "lng": -43.78077,
+        "nome": "Escolinha de Futebol Oficial do Cruzeiro - Conselheiro Lafaiete MG",
+        "cidade": "Conselheiro Lafaiete",
+        "imagem_URL": "https://lh3.googleusercontent.com/p/AF1QipMtC8NVgn9tHbypC66MSKI16jOOJ0WekLE8nvm0=w408-h306-k-no",
+        "endereco_encontrado": "R. Sebastião Marques, 110 - Chapada, Conselheiro Lafaiete - MG, 36401-163",
+        "region": "brasil"
+    },
+    {
+        "lat": -19.97053,
+        "lng": -44.05963,
+        "nome": "Escola Licenciada Cruzeiro - Un. JD Riacho / Quadra Goool",
+        "cidade": "Jardim Riacho das Pedras",
+        "imagem_URL": "https://lh3.googleusercontent.com/gps-cs-s/AC9h4nphKynzc_bpkqHpqmITRQxJIG_-s779XpWoZyIAydlXrZ52fJGncLDqG8YwNbAWjPFROXcvoJZrf64tsYPP6X5YtckM4AZexE2B9unP0TeDvgSb8w2fuDMhQhFMrKD5npggNMX9yQ=w408-h306-k-no",
+        "endereco_encontrado": "R. Beta, 125 - Jardim Riacho das Pedras, Contagem - MG, 32241-240",
+        "region": "brasil"
+    },
+    {
+        "lat": 4.77032,
+        "lng": -74.03762,
+        "nome": "Cruzeiro EC Academy Colombia ( Escritório )",
+        "cidade": "Bogotá",
+        "imagem_URL": "",
+        "endereco_encontrado": "Cl. 193 #9-79, Usaquén, Bogotá, Cundinamarca, Colômbia",
+        "region": "Colômbia"
     }
 ]

@@ -7,17 +7,26 @@
             "Carmo do Cajuru": {},
             "Congonhas": {},
             "Contagem": {},
+            "Divinópolis": {},
             "Ipatinga": {},
             "Itabira": {},
+            "João Monlevade": {},
+            "Juiz de Fora": {},
             "Lagoa Santa": {},
             "Montes Claros": {},
+            "Nova Lima": {},
+            "Nova Serrana": {},
             "Pará de Minas": {},
+            "Paracatu": {},
             "Porteirinha": {},
+            "Ribeirão das Neves": {},
             "Santa Luzia": {},
             "Sarzedo": {},
             "Teófilo Otoni": {},
             "Unaí": {},
-            "Betim": {}
+            "Betim": {},
+            "Conselheiro Lafaiete": {},
+            "Jardim Riacho das Pedras": {}
         }
     },
     "SP": {
@@ -26,18 +35,16 @@
             "Caieiras": {}
         }
     },
+    "DF": {
+        "name": "Distrito Federal",
+        "cities": {
+            "Brasília": {}
+        }
+    },
     "CE": {
         "name": "Ceará",
         "cities": {
-            "Limoeiro do Norte": {},
-            "Umirim": {},
-            "Iracema": {}
-        }
-    },
-    "SC": {
-        "name": "Santa Catarina",
-        "cities": {
-            "Criciúma": {}
+            "Fortaleza": {}
         }
     },
     "RS": {
@@ -52,16 +59,16 @@
             "Vila Velha": {}
         }
     },
-    "PE": {
-        "name": "Pernambuco",
-        "cities": {
-            "Santa Cruz do Capibaribe": {}
-        }
-    },
     "MA": {
         "name": "Maranhão",
         "cities": {
-            "Milagres do Maranhão": {}
+            "São Luís": {}
+        }
+    },
+    "RJ": {
+        "name": "Rio de Janeiro",
+        "cities": {
+            "Japeri": {}
         }
     }
 }
