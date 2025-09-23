@@ -28,23 +28,19 @@ document.addEventListener('DOMContentLoaded', () => {
     maxClusterRadius: 50,
     iconCreateFunction: function(cluster) {
       const childCount = cluster.getChildCount();
-      let c = ' marker-cluster-';
-      let size, className;
+      let size = 40;
       
       if (childCount < 10) {
-        c += 'small';
         size = 40;
       } else if (childCount < 20) {
-        c += 'medium';
         size = 50;
       } else {
-        c += 'large';
         size = 60;
       }
 
       return new L.DivIcon({ 
-        html: '<div><span>' + childCount + '</span></div>', 
-        className: 'marker-cluster' + c, 
+        html: `<div style="background-color: #0033a0; width: ${size}px; height: ${size}px; border-radius: 50%; border: 2px solid white; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 14px;">${childCount}</div>`, 
+        className: 'custom-cluster', 
         iconSize: new L.Point(size, size) 
       });
     }
@@ -103,59 +99,88 @@ document.addEventListener('DOMContentLoaded', () => {
 let schools = [];
 
 fetch("./Json/schools.json")
-  .then(res => res.json())
+  .then(res => {
+    console.log('Response status:', res.status);
+    if (!res.ok) {
+      throw new Error(`HTTP error! status: ${res.status}`);
+    }
+    return res.json();
+  })
   .then(data => {
+    console.log('Escolas carregadas:', data.length);
+    console.log('Primeira escola:', data[0]);
     schools = data;
-    addMarkers();
+    addMarkers('brasil');
+  })
+  .catch(error => {
+    console.error('Erro ao carregar escolas:', error);
   });
 
 
+  // Função para escapar HTML
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
   // Create custom blue circle icon
-  function createBlueCircleIcon(intensity) {
-    const sizes = {
-      'low': [20, 20],
-      'medium': [25, 25],
-      'high': [30, 30]
-    };
-    
-    const colors = {
-      'low': '#1E90FF',      // Dodger Blue
-      'medium': '#0066CC',   // Medium Blue
-      'high': '#003399'      // Dark Blue
-    };
-    
-    const size = sizes[intensity] || sizes.medium;
-    const color = colors[intensity] || colors.medium;
-    
+  function createBlueCircleIcon() {
     return L.divIcon({
       className: 'custom-marker',
-      html: `<div style="background-color: \${color}; width: 100%; height: 100%; border-radius: 50%; box-shadow: 0 0 15px 5px \${color};"></div>`,
-      iconSize: size,
-      iconAnchor: [size[0]/2, size[1]/2]
+      html: `<div style="background-color: #0033a0; width: 100%; height: 100%; border-radius: 50%; box-shadow: 0 0 10px 3px #0033a0;"></div>`,
+      iconSize: [20, 20],
+      iconAnchor: [10, 10]
     });
   }
 
   function addMarkers(region = 'all') {
+    console.log('addMarkers chamado com região:', region);
     markers.clearLayers();
     
-    schools.filter(p => region === 'all' || p.region === region)
-      .forEach(p => {
-        // Determine marker intensity randomly for visual variety
-        const intensities = ['low', 'medium', 'high'];
-        const randomIntensity = intensities[Math.floor(Math.random() * intensities.length)];
-        
-        const icon = createBlueCircleIcon(randomIntensity);
-        const marker = L.marker([p.lat, p.lng], {icon: icon}).bindPopup(p.nome);
-        markers.addLayer(marker);
-      });
+    const filteredSchools = schools.filter(p => {
+      if (region === 'all') return true;
+      if (region === 'brasil') return p.region && (p.region.toLowerCase() === 'brasil' || p.region.toLowerCase() === 'brazil');
+      if (region === 'world') return p.region && p.region.toLowerCase() !== 'brasil' && p.region.toLowerCase() !== 'brazil';
+      return p.region && p.region.toLowerCase() === region.toLowerCase();
+    });
     
+    console.log(`Filtro: ${region}, Escolas encontradas: ${filteredSchools.length}`);
+    
+    if (filteredSchools.length === 0) {
+      console.warn('Nenhuma escola encontrada para o filtro:', region);
+      return;
+    }
+    
+    filteredSchools.forEach((p, index) => {
+      console.log(`Adicionando marcador ${index + 1}:`, p.nome || p.cidade, 'lat:', p.lat, 'lng:', p.lng);
+      
+      if (!p.lat || !p.lng || isNaN(p.lat) || isNaN(p.lng)) {
+        console.error('Coordenadas inválidas para:', p.nome || p.cidade, p.lat, p.lng);
+        return;
+      }
+      
+      const icon = createBlueCircleIcon();
+      const popupContent = `
+        <div style="text-align: center;">
+          <h4>${escapeHtml(p.nome || p.cidade)}</h4>
+          <p><strong>Endereço:</strong> ${escapeHtml(p.endereco_encontrado)}</p>
+          ${p.telefone ? `<p><strong>Telefone:</strong> ${escapeHtml(p.telefone)}</p>` : ''}
+          ${p.instagram ? `<p><strong>Instagram:</strong> ${escapeHtml(p.instagram)}</p>` : ''}
+        </div>
+      `;
+      const marker = L.marker([p.lat, p.lng], {icon: icon}).bindPopup(popupContent);
+      markers.addLayer(marker);
+    });
+    
+    console.log('Total de marcadores adicionados:', markers.getLayers().length);
     map.addLayer(markers);
   }
 
   
 
   // Initialize with all markers
-  addMarkers();
+  // addMarkers(); // Removido pois será chamado após carregar JSON
 
   // Button event handlers
   document.querySelectorAll('.menu-map button').forEach(btn => {
@@ -164,15 +189,13 @@ fetch("./Json/schools.json")
       this.classList.add('active-map');
       const region = this.dataset.region;
       
+      console.log('Botão clicado, região:', region);
       if(region === 'brasil') {
-        map.setView([-15.78, -47.93], 4); // Brasil
+        map.setView([-15.78, -47.93], 4);
         addMarkers('brasil');
       } else if(region === 'world') {
-        map.setView([20, 0], 2); // Mundo
-        addMarkers('mundo');
-      } else {
-        map.setView([-15.78, -47.93], 3); // Todas
-        addMarkers('all');
+        map.setView([20, 0], 2);
+        addMarkers('world');
       }
     });
     
@@ -181,7 +204,10 @@ fetch("./Json/schools.json")
   
 
   // Make sure map renders properly after DOM is fully loaded
-  setTimeout(() => map.invalidateSize(), 300);
+  setTimeout(() => {
+    map.invalidateSize();
+    console.log('Mapa invalidado e redimensionado');
+  }, 300);
 
   // Carousel and menu-map button logic moved inside DOMContentLoaded to avoid timing issues
   const track = document.querySelector('.news-cards');
@@ -254,9 +280,9 @@ document.addEventListener('DOMContentLoaded', () => {
           const newsItem = document.createElement('div');
           newsItem.classList.add('news-item');
           newsItem.innerHTML = `
-            <h2>${item.title}</h2>
-            <p class="date">${item.dayWeek}, ${item.date} de ${item.month}</p>
-            <p>${item.content.substring(0, 80)}...</p>
+            <h2>${escapeHtml(item.title)}</h2>
+            <p class="date">${escapeHtml(item.dayWeek)}, ${escapeHtml(item.date)} de ${escapeHtml(item.month)}</p>
+            <p>${escapeHtml(item.content.substring(0, 80))}...</p>
             <button class="read-more-btn">Leia mais</button>
           `;
           
@@ -264,9 +290,9 @@ document.addEventListener('DOMContentLoaded', () => {
           newsItemOpen.classList.add('news-item-open');
           newsItem.appendChild(newsItemOpen);
           newsItemOpen.innerHTML = `
-            <h3>${item.subtitle || ''}</h3>
-            <p>${item.content}</p>
-            ${item["1-image_URL"] ? `<img src="${item["1-image_URL"]}" alt="${item.title}">` : ''}
+            <h3>${escapeHtml(item.subtitle || '')}</h3>
+            <p>${escapeHtml(item.content)}</p>
+            ${item["1-image_URL"] ? `<img src="${escapeHtml(item["1-image_URL"])}" alt="${escapeHtml(item.title)}">` : ''}
           `;
           
           const readMoreBtn = newsItem.querySelector('.read-more-btn');
@@ -284,90 +310,4 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-let visibleCards = 3; // ajuste conforme layout
-let index = 0; // começa no primeiro card
-const cardWidth = cards[0].offsetWidth + 28; // largura + gap
-const maxIndex = Math.max(cards.length - visibleCards, 0);
 
-function updateCarousel() {
-  // Garante que o índice está dentro dos limites
-  index = Math.max(0, Math.min(index, maxIndex));
-  track.style.transform = `translateX(${-index * cardWidth}px)`;
-}
-
-// Inicializa o carrossel mostrando o primeiro card
-updateCarousel();
-
-nextBtn.addEventListener('click', () => {
-  if (index < maxIndex) {
-    index++;
-  } else {
-    index = 0; // loop para o início
-  }
-  updateCarousel();
-});
-
-prevBtn.addEventListener('click', () => {
-  if (index > 0) {
-    index--;
-  } else {
-    index = maxIndex; // loop para o final
-  }
-  updateCarousel();
-});
-
-
-window.addEventListener('scroll', () => {
-  const header = document.querySelector('header');
-  if (window.scrollY > 0) {
-    header.classList.add('scrolled');
-  } else {
-    header.classList.remove('scrolled');
-  }
-});
-
-
-
-
-
-
-// news.html
-document.addEventListener('DOMContentLoaded', () => {
-  if (document.querySelector('.news-letter')) {
-    fetch('./Json/news.json')
-      .then(response => response.json())
-      .then(data => {
-        const newsContainer = document.querySelector('.news-letter');
-        
-        data.forEach(item => {
-          const newsItem = document.createElement('div');
-          newsItem.classList.add('news-item');
-          newsItem.innerHTML = `
-            <h2>${item.title}</h2>
-            <p class="date">${item.dayWeek}, ${item.date} de ${item.month}</p>
-            <p>${item.content.substring(0, 80)}...</p>
-            <button class="read-more-btn">Leia mais</button>
-          `;
-          
-          const newsItemOpen = document.createElement('div');
-          newsItemOpen.classList.add('news-item-open');
-          newsItem.appendChild(newsItemOpen);
-          newsItemOpen.innerHTML = `
-            <h3>${item.subtitle || ''}</h3>
-            <p>${item.content}</p>
-            ${item["1-image_URL"] ? `<img src="${item["1-image_URL"]}" alt="${item.title}">` : ''}
-          `;
-          
-          const readMoreBtn = newsItem.querySelector('.read-more-btn');
-          readMoreBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            newsItemOpen.classList.toggle('active');
-            readMoreBtn.textContent = newsItemOpen.classList.contains('active') ? 'Leia menos' : 'Leia mais';
-          });
-          
-          newsContainer.appendChild(newsItem);
-        });
-      })
-      .catch(error => console.error('Error loading news:', error));
-  }
-});
