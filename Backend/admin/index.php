@@ -54,11 +54,11 @@ function salvarJSON($arquivo, $dados) {
 }
 
 // Processar ações
-if ($_POST) {
+if ($_POST && !isset($_POST['username'])) {
     $acao = $_POST['acao'] ?? '';
     $arquivo = $_POST['arquivo'] ?? '';
     
-    // Validar CSRF token
+    // Validar CSRF token para ações administrativas
     if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
         die('Token CSRF inválido');
     }
@@ -307,6 +307,7 @@ $dados = lerJSON($tab_atual);
                                         <input type="hidden" name="acao" value="deletar">
                                         <input type="hidden" name="arquivo" value="<?= $tab_atual ?>">
                                         <input type="hidden" name="index" value="<?= $index ?>">
+                                        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                                         <button type="submit">Deletar</button>
                                     </form>
                                 </td>
@@ -336,6 +337,7 @@ $dados = lerJSON($tab_atual);
                                         <input type="hidden" name="acao" value="deletar">
                                         <input type="hidden" name="arquivo" value="<?= $tab_atual ?>">
                                         <input type="hidden" name="index" value="<?= $index ?>">
+                                        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                                         <button type="submit">Deletar</button>
                                     </form>
                                 </td>
@@ -355,6 +357,7 @@ $dados = lerJSON($tab_atual);
                                     <input type="hidden" name="acao" value="deletar">
                                     <input type="hidden" name="arquivo" value="<?= $tab_atual ?>">
                                     <input type="hidden" name="index" value="<?= $index ?>">
+                                    <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                                     <button type="submit">Deletar</button>
                                 </form>
                             </div>
@@ -394,6 +397,7 @@ $dados = lerJSON($tab_atual);
                                         <input type="hidden" name="acao" value="deletar">
                                         <input type="hidden" name="arquivo" value="<?= $tab_atual ?>">
                                         <input type="hidden" name="index" value="<?= $index ?>">
+                                        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                                         <button type="submit">Deletar</button>
                                     </form>
                                 </td>
@@ -426,7 +430,7 @@ $dados = lerJSON($tab_atual);
 
     <script>
         const dados = <?= json_encode($dados) ?>;
-        const tabAtual = '<?= htmlspecialchars($tab_atual, ENT_QUOTES, 'UTF-8') ?>';
+        const tabAtual = <?= json_encode($tab_atual) ?>;
         
         function editarItem(index) {
             const item = dados[index];

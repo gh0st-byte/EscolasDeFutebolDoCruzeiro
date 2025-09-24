@@ -1,0 +1,7 @@
+RewriteEngine On
+
+# Redirecionar para Frontend
+RewriteRule ^Frontend/(.*)$ ../Frontend/$1 [L]
+
+# Redirecionar raiz para Frontend
+RewriteRule ^$ ../Frontend/index.html [L]

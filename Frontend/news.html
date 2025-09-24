@@ -47,7 +47,7 @@
             
            <div class="container-hero">
                 <div class="hero">
-                    <h1>Escolas do Cruzeiro</h1>
+                    <h1>Notícias das Escolas do Cruzeiro</h1>
                     <p>Descrição do título principal conteudo descritivo do título principal conteudo descritivo do título principal conteudo descritivo do título principal</p>
                     <a href="" class="cta-1"><button>Matricular</button></a>
                 </div>
@@ -66,178 +66,23 @@
     <div class="modal fade" id="newsModal" tabindex="-1" aria-labelledby="newsModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-fullscreen">
             <div class="modal-content news-modal-wireframe">
-                
                 <div class="news-modal-container">
-                    <div class="news-modal-header">
-                        <h1 class="news-modal-title" id="newsModalLabel">Título da Notícia</h1>
-                    </div>
-                    <div class="news-modal-content">
-                        <div class="news-modal-image" id="newsModalImage"></div>
-                        <div class="news-modal-text" id="newsModalBody"></div>
-                    </div>
+                    <h1 class="news-modal-title" id="newsModalLabel">Título da Notícia</h1>
+                    <div class="news-modal-image" id="newsModalImage"></div>
+                    <div class="news-modal-text" id="newsModalBody"></div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn fechar-noticia" data-bs-dismiss="modal" aria-label="Close">X</button>
+                    <button type="button" class="btn-close fechar-noticia" data-bs-dismiss="modal" aria-label="Close">X</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Mobile menu
-            const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-            const navLinks = document.querySelector('.nav-links');
-            
-            if (mobileMenuBtn && navLinks) {
-                mobileMenuBtn.addEventListener('click', () => {
-                    mobileMenuBtn.classList.toggle('active');
-                    navLinks.classList.toggle('active');
-                });
-            }
-            
-            // News loading
-            const newsContainer = document.querySelector('.news-letter');
-            
-            fetch('../Backend/api/data.php?file=news.json')
-                .then(response => response.json())
-                .then(data => {
-                    data.forEach(item => {
-                        const newsItem = document.createElement('div');
-                        newsItem.classList.add('news-item');
-                        newsItem.innerHTML = `
-                            <h2>${item.title}</h2>
-                            <p class="date">${item.dayWeek}, ${item.date} de ${item.month}</p>
-                            <p>${item.content.substring(0, 80)}...</p>
-                            <button class="btn btn-primary read-more-btn" data-bs-toggle="modal" data-bs-target="#newsModal">Leia mais</button>
-                        `;
-                        
-                        const readMoreBtn = newsItem.querySelector('.read-more-btn');
-                        readMoreBtn.addEventListener('click', () => {
-                            document.getElementById('newsModalLabel').textContent = item.title;
-                            
-                            const imageContainer = document.getElementById('newsModalImage');
-                            if (item["1-image_URL"]) {
-                                imageContainer.innerHTML = `<img src="${item["1-image_URL"]}" alt="${item.title}">`;
-                            } else {
-                                imageContainer.innerHTML = '';
-                            }
-                            
-                            document.getElementById('newsModalBody').innerHTML = `
-                                <div class="news-meta">
-                                    <span class="news-date">${item.dayWeek}, ${item.date} de ${item.month}</span>
-                                </div>
-                                <div class="news-content">
-                                    ${item.subtitle ? `<h3>${item.subtitle}</h3>` : ''}
-                                    <p>${item.content}</p>
-                                </div>
-                            `;
-                        });
-                        
-                        newsContainer.appendChild(newsItem);
-                    });
-                })
-                .catch(error => console.error('Error loading news:', error));
-        });
-    </script>
+
+    <script src="js/script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <style>
-        /* MODAL WIREFRAME DESIGN */
-        .news-modal-wireframe {
-            background: linear-gradient(135deg, #0033a0 0%, #1e5bb8 100%);
-            border: none;
-            border-radius: 0;
-            position: relative;
-            overflow: hidden;
-        }
-
-
-
-        .news-modal-container {
-            padding: 40px;
-            height: 100vh;
-            overflow-y: auto;
-        }
-
-        .news-modal-header {
-            margin-bottom: 30px;
-        }
-
-        .news-modal-title {
-            color: white;
-            font-size: 2.5rem;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            line-height: 1.2;
-            margin: 0;
-        }
-
-        .news-modal-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            align-items: start;
-        }
-
-        .news-modal-image img {
-            width: 100%;
-            height: auto;
-            border-radius: 12px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-        }
-
-        .news-modal-text {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-        }
-
-        .news-meta {
-            margin-bottom: 20px;
-        }
-
-        .news-date {
-            color: #666;
-            font-size: 0.9rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .news-content h3 {
-            color: #0033a0;
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-bottom: 15px;
-        }
-
-        .news-content p {
-            color: #333;
-            font-size: 1.1rem;
-            line-height: 1.7;
-            margin: 0;
-        }
-
-        @media (max-width: 768px) {
-            .news-modal-container {
-                padding: 20px;
-            }
-            
-            .news-modal-title {
-                font-size: 1.8rem;
-            }
-            
-            .news-modal-content {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-            
-            .news-modal-text {
-                padding: 20px;
-            }
-        }
+        
     </style>
 </body>
 </html>
