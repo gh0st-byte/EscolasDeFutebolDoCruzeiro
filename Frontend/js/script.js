@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 let schools = [];
 
-fetch("./Json/schools.json")
+fetch("../Backend/api/data.php?file=schools.json")
   .then(res => {
     console.log('Response status:', res.status);
     if (!res.ok) {
@@ -271,7 +271,7 @@ fetch("./Json/schools.json")
 // news.html
 document.addEventListener('DOMContentLoaded', () => {
   if (document.querySelector('.news-letter')) {
-    fetch('./Json/news.json')
+    fetch('../Backend/api/data.php?file=news.json')
       .then(response => response.json())
       .then(data => {
         const newsContainer = document.querySelector('.news-letter');
