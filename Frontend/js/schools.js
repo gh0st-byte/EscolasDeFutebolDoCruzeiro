@@ -1,22 +1,45 @@
 let todasEscolas = [];
 let filtrosDisponiveis = {};
 
+// Função para escapar HTML
+function escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
 // Carregar dados das escolas e filtros
 async function carregarEscolas() {
     try {
         const [escolasResponse, filtrosResponse] = await Promise.all([
-            fetch('../Backend/api/data.php?file=schools.json'),
-            fetch('../Backend/api/data.php?file=BRfilters.json')
+            fetch('/Backend/api/data.php?file=schools.json'),
+            fetch('/Backend/api/data.php?file=BRfilters.json')
         ]);
+        
+        if (!escolasResponse.ok) {
+            throw new Error(`Erro ao carregar escolas: ${escolasResponse.status}`);
+        }
+        if (!filtrosResponse.ok) {
+            throw new Error(`Erro ao carregar filtros: ${filtrosResponse.status}`);
+        }
         
         todasEscolas = await escolasResponse.json();
         filtrosDisponiveis = await filtrosResponse.json();
+        
+        if (!Array.isArray(todasEscolas)) {
+            throw new Error('Dados de escolas inválidos');
+        }
         
         preencherFiltros();
         renderizarEscolas(todasEscolas);
         configurarFiltros();
     } catch (error) {
         console.error('Erro ao carregar dados:', error);
+        const container = document.querySelector('.escolas-grid');
+        if (container) {
+            container.innerHTML = '<p style="text-align: center; color: #ff0000; grid-column: 1/-1;">Erro ao carregar escolas. Verifique se o servidor está rodando.</p>';
+        }
     }
 }
 
@@ -125,24 +148,39 @@ function extrairCidade(endereco) {
 function renderizarEscolas(escolas) {
     const container = document.querySelector('.escolas-grid');
     
-    if (escolas.length === 0) {
+    if (!container) {
+        console.error('Container .escolas-grid não encontrado');
+        return;
+    }
+    
+    if (!escolas || escolas.length === 0) {
         container.innerHTML = '<p style="text-align: center; color: #666; grid-column: 1/-1;">Nenhuma escola encontrada com os filtros selecionados.</p>';
         return;
     }
     
-    container.innerHTML = escolas.map(escola => `
-        <div class="escola-card">
-            ${escola.imagem_URL ? `<img src="${escola.imagem_URL}" alt="${escola.nome}" class="escola-imagem">` : ''}
-            <h3>${escola.cidade || escola.nome}</h3>
-            <p><strong>Endereço:</strong> ${escola.endereco_encontrado}</p>
-            <p><strong>Telefone:</strong> ${escola.telefone || 'N/A'}</p>
-            <p><strong>Estado:</strong> ${escola.estado}</p>
-            <div class="btn-container">
-                ${escola.whatsapp ? `<a href="${escola.whatsapp}" target="_blank" class="btn-whatsapp">WhatsApp</a>` : ''}
-                ${escola.instagram ? `<a href="${escola.instagram_url}" target="_blank" class="btn-instagram">Instagram</a>` : ''}
+    container.innerHTML = escolas.map(escola => {
+        const nome = escapeHtml(escola.nome || escola.cidade || 'Escola do Cruzeiro');
+        const endereco = escapeHtml(escola.endereco_encontrado || escola.endereco || 'Endereço não informado');
+        const telefone = escapeHtml(escola.telefone || 'N/A');
+        const estado = escapeHtml(escola.estado || 'N/A');
+        const imagemUrl = escapeHtml(escola.imagem_URL || '');
+        const whatsappUrl = escapeHtml(escola.whatsapp || '');
+        const instagramUrl = escapeHtml(escola.instagram_url || '');
+        
+        return `
+            <div class="escola-card">
+                ${imagemUrl ? `<img src="${imagemUrl}" alt="${nome}" class="escola-imagem" onerror="this.style.display='none'">` : ''}
+                <h3>${nome}</h3>
+                <p><strong>Endereço:</strong> ${endereco}</p>
+                <p><strong>Telefone:</strong> ${telefone}</p>
+                <p><strong>Estado:</strong> ${estado}</p>
+                <div class="btn-container">
+                    ${whatsappUrl ? `<a href="${whatsappUrl}" target="_blank" class="btn-whatsapp">WhatsApp</a>` : ''}
+                    ${instagramUrl ? `<a href="${instagramUrl}" target="_blank" class="btn-instagram">Instagram</a>` : ''}
+                </div>
             </div>
-        </div>
-    `).join('');
+        `;
+    }).join('');
 }
 
 // Carregar quando a página estiver pronta

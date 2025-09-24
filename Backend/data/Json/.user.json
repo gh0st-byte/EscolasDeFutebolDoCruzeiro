@@ -1,10 +1,6 @@
 [
     {
-        "username": "admin",
-        "password": "12345678"
-    },
-    {
-        "username": "Marco",
-        "password": "12345678"
+        "username": "marco.repoles@cruzeiro.com.br",
+        "password": "$2y$10$JQHYn7K0jzwiydz2VyJhhuu8aAjhjBbcrM.RpdwzdzouQiLoZnr5a"
     }
 ]

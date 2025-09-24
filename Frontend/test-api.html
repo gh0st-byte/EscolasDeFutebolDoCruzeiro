@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste API</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .result { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .error { background: #ffebee; border-color: #f44336; }
+        .success { background: #e8f5e8; border-color: #4caf50; }
+    </style>
+</head>
+<body>
+    <h1>Teste da API</h1>
+    
+    <button onclick="testarEscolas()">Testar Escolas</button>
+    <button onclick="testarNoticias()">Testar Notícias</button>
+    <button onclick="testarFiltros()">Testar Filtros</button>
+    
+    <div id="resultados"></div>
+
+    <script>
+        const resultados = document.getElementById('resultados');
+        
+        async function testarEscolas() {
+            try {
+                const response = await fetch('../Backend/api/data.php?file=schools.json');
+                const data = await response.json();
+                
+                resultados.innerHTML += `
+                    <div class="result success">
+                        <h3>Escolas (${data.length} itens)</h3>
+                        <pre>${JSON.stringify(data.slice(0, 2), null, 2)}</pre>
+                    </div>
+                `;
+            } catch (error) {
+                resultados.innerHTML += `
+                    <div class="result error">
+                        <h3>Erro ao carregar escolas</h3>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+        
+        async function testarNoticias() {
+            try {
+                const response = await fetch('../Backend/api/data.php?file=news.json');
+                const data = await response.json();
+                
+                resultados.innerHTML += `
+                    <div class="result success">
+                        <h3>Notícias (${data.length} itens)</h3>
+                        <pre>${JSON.stringify(data.slice(0, 2), null, 2)}</pre>
+                    </div>
+                `;
+            } catch (error) {
+                resultados.innerHTML += `
+                    <div class="result error">
+                        <h3>Erro ao carregar notícias</h3>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+        
+        async function testarFiltros() {
+            try {
+                const response = await fetch('../Backend/api/data.php?file=BRfilters.json');
+                const data = await response.json();
+                
+                resultados.innerHTML += `
+                    <div class="result success">
+                        <h3>Filtros</h3>
+                        <p>Estados encontrados: ${Object.keys(data).length}</p>
+                        <pre>${JSON.stringify(Object.keys(data).slice(0, 5), null, 2)}</pre>
+                    </div>
+                `;
+            } catch (error) {
+                resultados.innerHTML += `
+                    <div class="result error">
+                        <h3>Erro ao carregar filtros</h3>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
