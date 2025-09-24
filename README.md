@@ -2,9 +2,21 @@
 
 Sistema web para gerenciar os arquivos JSON das escolas de futebol do Cruzeiro.
 
-Para iniciar o cms:
-```Bash
+Para iniciar o sistema:
+
+### Backend (Servidor)
+```bash
+cd Backend
 php -S localhost:8000
+```
+
+### Frontend (Interface)
+Abra os arquivos HTML da pasta Frontend em um navegador ou use um servidor local:
+```bash
+cd Frontend
+python -m http.server 3000
+# ou
+npx serve .
 ```
 
 ## Funcionalidades
@@ -20,15 +32,19 @@ php -S localhost:8000
 
 ```
 EscolasDeFutebolDoCruzeiro/
-├── index.php              # Página principal do sistema
-├── login.php              # Página de login
-├── style.css              # Estilos CSS
-├── schools.php            # Sistema antigo (mantido)
-├── README.md              # Este arquivo
-└── Json/
-    ├── schools.json           # Dados das escolas
-    ├── addressSchools.json    # Endereços processados
-    └── failed_addresses.json  # Endereços que falharam
+├── Frontend/              # Interface do usuário
+│   ├── index.html         # Página principal
+│   ├── schools.html       # Página das escolas
+│   ├── news.html          # Página de notícias
+│   ├── css/               # Arquivos de estilo
+│   ├── js/                # Scripts JavaScript
+│   └── assets/            # Recursos estáticos
+├── Backend/               # Servidor e dados
+│   ├── admin/             # Sistema administrativo
+│   ├── api/               # APIs REST
+│   ├── data/Json/         # Arquivos de dados
+│   └── config.php         # Configurações
+└── README.md              # Este arquivo
 ```
 
 ## Credenciais de Acesso
@@ -38,12 +54,22 @@ EscolasDeFutebolDoCruzeiro/
 
 ## Como Usar
 
-1. Acesse `index.php` no navegador
+### Frontend (Usuários)
+1. Acesse `Frontend/index.html` no navegador
+2. Navegue pelas páginas:
+   - **Home**: Página principal com mapa e notícias
+   - **Escolas**: Lista filtrada das escolas
+   - **Notícias**: Últimas notícias do Cruzeiro
+
+### Backend (Administradores)
+1. Acesse `Backend/admin/index.php` no navegador
 2. Faça login com as credenciais
-3. Use as abas para navegar entre os arquivos:
+3. Use as abas para gerenciar:
    - **Escolas**: Dados completos das escolas
    - **Endereços**: Coordenadas e endereços
-   - **Falhas**: Endereços que não foram processados
+   - **Falhas**: Endereços que falharam
+   - **Notícias**: Gerenciar notícias e rascunhos
+   - **Usuários**: Gerenciar usuários do sistema
 
 ### Operações Disponíveis
 
@@ -92,11 +118,25 @@ EscolasDeFutebolDoCruzeiro/
 ]
 ```
 
+## Instalação Rápida
+
+```bash
+# 1. Iniciar o servidor
+cd Backend
+php -S localhost:8000
+
+# 2. Acessar a aplicação
+# Frontend: http://localhost:8000/
+# Admin: http://localhost:8000/Backend/admin/
+```
+
+Para instruções detalhadas, consulte [INSTALL.md](INSTALL.md)
+
 ## Requisitos Técnicos
 
 - PHP 7.4+
-- Servidor web (Apache/Nginx)
-- Permissões de escrita na pasta Json/
+- Servidor web (Apache/Nginx) ou PHP built-in server
+- Permissões de escrita na pasta Backend/data/Json/
 
 ## Interface
 
@@ -112,6 +152,19 @@ EscolasDeFutebolDoCruzeiro/
 - Validação de dados no servidor
 - Escape de HTML para prevenir XSS
 - Confirmação para exclusões
+
+## Arquitetura
+
+### Frontend
+- **Tecnologias**: HTML5, CSS3, JavaScript ES6+
+- **Frameworks**: Bootstrap 5, Leaflet Maps
+- **Responsivo**: Desktop, Tablet, Mobile
+
+### Backend
+- **Linguagem**: PHP 7.4+
+- **Dados**: JSON files
+- **API**: REST endpoints
+- **Admin**: Interface web completa
 
 ## Responsividade
 

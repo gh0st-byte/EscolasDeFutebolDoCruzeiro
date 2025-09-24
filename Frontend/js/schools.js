@@ -5,8 +5,8 @@ let filtrosDisponiveis = {};
 async function carregarEscolas() {
     try {
         const [escolasResponse, filtrosResponse] = await Promise.all([
-            fetch('Json/schools.json'),
-            fetch('Json/BRfilters.json')
+            fetch('../Backend/api/data.php?file=schools.json'),
+            fetch('../Backend/api/data.php?file=BRfilters.json')
         ]);
         
         todasEscolas = await escolasResponse.json();
