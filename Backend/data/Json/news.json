@@ -1,12 +1,5 @@
 [
     {
-        "title": "Nova Temporada das Escolas do Cruzeiro",
-        "date": "2025-08-25",
-        "content": "As escolas de futebol do Cruzeiro iniciam uma nova temporada com metodologia renovada e novos profissionais qualificados para formar os futuros talentos do clube. \r\n\r\nCom foco no desenvolvimento integral dos jovens atletas, as escolas oferecem treinamentos modernos e uma estrutura completa para proporcionar a melhor experiência esportiva.  \r\n\r\nAlém disso, o Cruzeiro reforça seu compromisso com a comunidade, promovendo a inclusão social através do esporte e incentivando a prática saudável entre crianças e adolescentes. \r\n\r\nVenha fazer parte dessa história de sucesso e descubra o talento que há em você!  \r\n\r\n#EscolasDoCruzeiro #Futebol #FormaçãoDeAtletas #CruzeiroEsporteClube\r\n  ",
-        "image_URL": null,
-        "category": "Esporte"
-    },
-    {
         "title": "Treino Especial com Ex-Jogadores",
         "subtitle": "Experiência única para os alunos",
         "dayWeek": "Quarta-feira",
@@ -34,17 +27,12 @@
         "1-image_URL": "https:\/\/images.pexels.com\/photos\/29920213\/pexels-photo-29920213.jpeg"
     },
     {
-        "title": "apenas um teste",
-        "date": "2011-09-11",
-        "content": "apenas um teste para observar se o tratamento de dados ocorre como deveria ",
-        "image_URL": "",
-        "category": "Esporte"
-    },
-    {
-        "title": "TEST NOTICIA",
-        "date": "2025-09-25",
-        "content": "Time do Interior surpreende e vence gigante nacional fora de casa\r\n\r\nEm um jogo marcado por intensidade e equilíbrio, o Esporte Clube Vale Verde derrotou o tradicional Clube Atlético Central por 2 a 1, neste domingo, no Estádio Nacional. O resultado surpreendeu torcedores e especialistas, já que o time do interior vinha de três derrotas seguidas no campeonato.\r\n\r\nOs gols da equipe visitante foram marcados por João Mendes, de pênalti, ainda no primeiro tempo, e por Lucas Araújo, em um contra-ataque rápido aos 38 minutos da etapa final. O Atlético Central chegou a empatar com gol de cabeça de Rafael, mas não conseguiu manter a pressão.\r\n\r\nCom o resultado, o Vale Verde respira na tabela e ganha confiança para a sequência da competição, enquanto o Atlético vê a liderança momentânea escapar.",
-        "image_URL": "https:\/\/cruzeiro-website-project-news.s3.us-east-1.amazonaws.com\/news\/Imagens+Not%C3%ADcias\/Masculino\/Maracan%C3%A3+-+Torcida+do+Cruzeiro+%5B1%5D.jpg",
-        "category": "Esporte"
+        "title": "MAIS UMA VIRADA! ",
+        "subtitle": "Com apoio incessante da Nação Azul, Cruzeiro vira sobre o RB Bragantino e alcança quatro vitórias consecutivas no Brasileirão",
+        "dayWeek": "Quinta-feira",
+        "date": "25",
+        "month": "Setembro",
+        "content": "O Cruzeiro entrou em campo, na noite deste domingo, e conquistou mais uma grande vitória no Campeonato Brasileiro. Diante da Nação Azul no Mineirão, o Cabuloso saiu atrás do placar no confronto com o Red Bull Bragantino, mas conseguiu a virada com um golaço de Lucas Silva e um gol de Kaiki. O triunfo por 2 a 1 no compromisso da 24ª rodada fez o time celeste chegar a seis vitórias consecutivas na temporada, sendo quatro seguidas considerando apenas o Brasileirão.\r\n\r\n\r\nA partida no Mineirão começou com o time visitante oferecendo dificuldades ao Cruzeiro. Com marcação redobrada no setor de meio-campo, o Red Bull Bragantino buscava desarticular a criação celeste. Contudo, a primeira boa chance de gol no jogo foi para o lado azul. Aos 20 minutos, em um contra-golpe vertical, Matheus Pereira recebeu de Lucas Silva no campo defensivo, conduziu e lançou para Kaio Jorge, que empurrou a marcação para trás e arriscou de fora da área, obrigando o goleiro Cleiton a se esticar e espalmar para escanteio.\r\n\r\n\r\nO Red Bull Bragantino reagiu e conseguiu ameaçar o gol celeste. Aos 23 minutos, em inversão para a ponta direita, a bola foi cruzada para a área e encontrou o atacante Eduardo Sasha, que conseguiu antecipar e chutar; Cássio mostrou reflexo e fez importante defesa, espalmando para fora. Porém, aos 25 minutos, outra boa trama do adversário e, desta vez, Jhon Jhon acertou um chutaço da meia-lua que foi no ângulo esquerdo de Cássio, sem chances para o goleiro celeste. 1 a 0 para o Bragantino.\r\n\r\n\r\nO Cruzeiro quase empatou aos 31 minutos. Em jogada individual, Wanderson recebeu na ponta esquerda, costurou para o meio e chutou cruzado com muito perigo; a bola encobriu o goleiro e bateu no teto da rede pelo lado de fora. Aos 34 minutos, Cássio se agigantou e defendeu cara a cara com Eduardo Sasha, após um passe em profundidade que encontrou o atacante do RB Bragantino.\r\n\r\n\r\nMas aos 46 minutos, finalmente a reação. Matheus Pereira recebeu na ala esquerda, fez passe para Kaio Jorge, que fez o pivô e passou para Lucas Silva. O capitão celeste driblou o marcador, tirando da jogada também outros dois marcadores, e chutou de três dedos na gaveta! Um GOLAÇO do Príncipe para empatar a partida!\r\n\r\n\r\nO segundo tempo começou com um cenário semelhante ao primeiro. Nos primeiros minutos, o Red Bull Bragantino conseguiu chegar em dois momentos, primeiramente com Lucas Barbosa, que recebeu cruzamento rasteiro e chutou para boa defesa de Cássio, e depois com Eduardo Sasha, que tentou emendar um voleio após escanteio, mas pegou fraco.",
+        "1-image_URL": "https:\/\/cruzeiro-website-project-news.s3.us-east-1.amazonaws.com\/news\/Imagens+Not%C3%ADcias\/Masculino+-+2025\/2025-09-21+-+Cruzeiro+x+RB+Bragantino.jpg"
     }
 ]

@@ -225,6 +225,12 @@ nav button:hover::before {
     text-decoration: none !important;
 }
 
+.btn, .btn-link, .dropdown-toggle{
+    color: white; 
+    border: none; 
+    font-size: 1.5rem;
+}
+
 /* HERO */
 .container-hero {
     display: flex;
@@ -309,6 +315,7 @@ a button {
     display: inline-block;
     position: relative;
     overflow: hidden;
+    -webkit-backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
@@ -1101,6 +1108,7 @@ footer ul {
         border-radius: 8px;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         backdrop-filter: blur(10px);
+        display: block;
     }
     
     .dropdown-item {
