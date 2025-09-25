@@ -94,10 +94,12 @@ if ($_POST && !isset($_POST['username'])) {
                 } elseif ($arquivo === 'news.json' || $arquivo === 'news_draft.json') {
                     $novo = [
                         'title' => $_POST['title'],
+                        'subtitle' => $_POST['subtitle'] ?? '',
+                        'dayWeek' => $_POST['dayWeek'] ?? '',
                         'date' => $_POST['date'],
+                        'month' => $_POST['month'] ?? '',
                         'content' => $_POST['content'],
-                        'image_URL' => $_POST['image_URL'] ?? null,
-                        'category' => $_POST['category'] ?? 'Esporte'
+                        '1-image_URL' => $_POST['1-image_URL'] ?? null
                     ];
                 } elseif ($arquivo === '.user.json') {
                     $novo = [
@@ -131,10 +133,12 @@ if ($_POST && !isset($_POST['username'])) {
                 } elseif ($arquivo === 'news.json' || $arquivo === 'news_draft.json') {
                     $dados[$index] = [
                         'title' => $_POST['title'],
+                        'subtitle' => $_POST['subtitle'] ?? '',
+                        'dayWeek' => $_POST['dayWeek'] ?? '',
                         'date' => $_POST['date'],
+                        'month' => $_POST['month'] ?? '',
                         'content' => $_POST['content'],
-                        'image_URL' => $_POST['image_URL'] ?: null,
-                        'category' => $_POST['category'] ?? 'Escolas'
+                        '1-image_URL' => $_POST['1-image_URL'] ?: null
                     ];
                 } elseif ($arquivo === '.user.json') {
                     $dados[$index] = [
@@ -183,6 +187,11 @@ if ($_POST && !isset($_POST['username'])) {
 $allowed_tabs = ['schools.json', 'addressSchools.json', 'failed_addresses.json', 'news.json', 'news_draft.json', '.user.json'];
 $tab_atual = in_array($_GET['tab'] ?? '', $allowed_tabs) ? $_GET['tab'] : 'schools.json';
 $dados = lerJSON($tab_atual);
+
+// Inverter ordem para notícias (mais recentes primeiro)
+if ($tab_atual === 'news.json' || $tab_atual === 'news_draft.json') {
+    $dados = array_reverse($dados);
+}
 ?>
 
 <!DOCTYPE html>
@@ -235,9 +244,11 @@ $dados = lerJSON($tab_atual);
                 <?php elseif ($tab_atual === 'news.json' || $tab_atual === 'news_draft.json'): ?>
                     <div class="form-grid">
                         <input type="text" name="title" placeholder="Título" required>
-                        <input type="date" name="date" placeholder="Data" required>
-                        <input type="url" name="image_URL" placeholder="URL da Imagem">
-                        <input type="text" name="category" placeholder="Categoria" value="Esporte">
+                        <input type="text" name="subtitle" placeholder="Subtítulo">
+                        <input type="text" name="dayWeek" placeholder="Dia da Semana">
+                        <input type="text" name="date" placeholder="Dia (01-31)" required>
+                        <input type="text" name="month" placeholder="Mês">
+                        <input type="url" name="1-image_URL" placeholder="URL da Imagem">
                         <textarea name="content" placeholder="Conteúdo da notícia" required></textarea>
                     </div>
                 <?php elseif ($tab_atual === '.user.json'): ?>
@@ -280,8 +291,8 @@ $dados = lerJSON($tab_atual);
                         <thead>
                             <tr>
                                 <th>Título</th>
+                                <th>Subtítulo</th>
                                 <th>Data</th>
-                                <th>Categoria</th>
                                 <th>Conteúdo</th>
                                 <th>Ações</th>
                             </tr>
@@ -290,16 +301,17 @@ $dados = lerJSON($tab_atual);
                             <?php foreach($dados as $index => $item): ?>
                             <tr>
                                 <td><?= htmlspecialchars($item['title']) ?></td>
-                                <td><?= htmlspecialchars($item['date']) ?></td>
-                                <td><?= htmlspecialchars($item['category'] ?? ' ') ?></td>
+                                <td><?= htmlspecialchars($item['subtitle'] ?? '') ?></td>
+                                <td><?= htmlspecialchars(($item['dayWeek'] ?? '') . ', ' . ($item['date'] ?? '') . ' de ' . ($item['month'] ?? '')) ?></td>
                                 <td class="endereco"><?= htmlspecialchars(substr($item['content'], 0, 100)) ?>...</td>
                                 <td class="actions">
+                                    <button onclick="visualizarNoticia(<?= $index ?>)">Visualizar</button>
                                     <button onclick="editarItem(<?= $index ?>)">Editar</button>
                                     <?php if ($tab_atual === 'news_draft.json'): ?>
                                         <form method="POST" style="display:inline;" onsubmit="return confirm('Publicar notícia?')">
                                             <input type="hidden" name="acao" value="publicar">
                                             <input type="hidden" name="arquivo" value="news_draft.json">
-                                            <input type="hidden" name="index" value="<?= $index ?>">
+                                            <input type="hidden" name="index" value="<?= count(lerJSON('news_draft.json')) - 1 - $index ?>">
                                             <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                                             <button type="submit" style="background: #28a745; color: white;">Publicar</button>
                                         </form>
@@ -307,7 +319,13 @@ $dados = lerJSON($tab_atual);
                                     <form method="POST" style="display:inline;" onsubmit="return confirm('Deletar?')">
                                         <input type="hidden" name="acao" value="deletar">
                                         <input type="hidden" name="arquivo" value="<?= $tab_atual ?>">
-                                        <input type="hidden" name="index" value="<?= $index ?>">
+                                        <input type="hidden" name="index" value="<?php 
+                                            if ($tab_atual === 'news.json' || $tab_atual === 'news_draft.json') {
+                                                echo count(lerJSON($tab_atual)) - 1 - $index;
+                                            } else {
+                                                echo $index;
+                                            }
+                                        ?>">
                                         <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                                         <button type="submit">Deletar</button>
                                     </form>
@@ -429,13 +447,29 @@ $dados = lerJSON($tab_atual);
         </div>
     </div>
 
+    <!-- Modal de Visualização de Notícia -->
+    <div id="newsModal" class="modal">
+        <div class="modal-content" style="max-width: 800px;">
+            <div class="news-modal-container" style="padding: 2rem; background: linear-gradient(135deg, #0033a0, #1e5bb8); color: white; border-radius: 10px;">
+                <h1 class="news-modal-title" id="newsModalLabel" style="margin-bottom: 1.5rem; font-size: 2rem;">Título da Notícia</h1>
+                <div class="news-modal-image" id="newsModalImage" style="margin-bottom: 1.5rem;"></div>
+                <div class="news-modal-text" id="newsModalBody"></div>
+            </div>
+            <div class="modal-actions">
+                <button type="button" onclick="fecharModalNoticia()">Fechar</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         const dados = <?= json_encode($dados) ?>;
         const tabAtual = <?= json_encode($tab_atual) ?>;
         
         function editarItem(index) {
+            const realIndex = (tabAtual === 'news.json' || tabAtual === 'news_draft.json') ? 
+                dados.length - 1 - index : index;
             const item = dados[index];
-            document.getElementById('editIndex').value = index;
+            document.getElementById('editIndex').value = realIndex;
             
             let fields = '';
             if (tabAtual === 'failed_addresses.json') {
@@ -444,9 +478,11 @@ $dados = lerJSON($tab_atual);
                 fields = `
                     <div class="form-grid">
                         <input type="text" placeholder="Título" name="title" value="${item.title}" required>
-                        <input type="date" placeholder="Data" name="date" value="${item.date}" required>
-                        <input type="url" placeholder="URL da Imagem" name="image_URL" value="${item.image_URL || ''}">
-                        <input type="text" placeholder="Categoria" name="category" value="${item.category}">
+                        <input type="text" placeholder="Subtítulo" name="subtitle" value="${item.subtitle || ''}">
+                        <input type="text" placeholder="Dia da Semana" name="dayWeek" value="${item.dayWeek || ''}">
+                        <input type="text" placeholder="Dia (01-31)" name="date" value="${item.date}" required>
+                        <input type="text" placeholder="Mês" name="month" value="${item.month || ''}">
+                        <input type="url" placeholder="URL da Imagem" name="1-image_URL" value="${item['1-image_URL'] || ''}">
                         <textarea placeholder="Conteúdo" name="content" required>${item.content}</textarea>
                     </div>
                 `;
@@ -494,11 +530,48 @@ $dados = lerJSON($tab_atual);
             document.getElementById('editModal').style.display = 'none';
         }
         
+        function visualizarNoticia(index) {
+            const item = dados[index];
+            document.getElementById('newsModalLabel').textContent = item.title || 'Notícia';
+            
+            const imageContainer = document.getElementById('newsModalImage');
+            const imageUrl = item['1-image_URL'];
+            if (imageUrl) {
+                imageContainer.innerHTML = '<img src="' + imageUrl + '" alt="' + (item.title || '') + '" style="width: 100%; max-width: 500px; border-radius: 8px;">';
+            } else {
+                imageContainer.innerHTML = '';
+            }
+            
+            let dateText = '';
+            if (item.dayWeek && item.date && item.month) {
+                dateText = item.dayWeek + ', ' + item.date + ' de ' + item.month;
+            }
+            
+            document.getElementById('newsModalBody').innerHTML = 
+                '<div class="news-meta" style="margin-bottom: 1rem;">' +
+                    (dateText ? '<span class="news-date" style="color: gold; font-weight: 600;">' + dateText + '</span>' : '') +
+                '</div>' +
+                '<div class="news-content">' +
+                    (item.subtitle ? '<h3 style="color: white; margin-bottom: 1rem;">' + item.subtitle + '</h3>' : '') +
+                    '<p style="color: rgba(255,255,255,0.95); line-height: 1.6;">' + (item.content || 'Conteúdo não disponível') + '</p>' +
+                '</div>';
+            
+            document.getElementById('newsModal').style.display = 'flex';
+        }
+        
+        function fecharModalNoticia() {
+            document.getElementById('newsModal').style.display = 'none';
+        }
+        
         // Fechar modal clicando fora
         window.onclick = function(event) {
-            const modal = document.getElementById('editModal');
-            if (event.target === modal) {
+            const editModal = document.getElementById('editModal');
+            const newsModal = document.getElementById('newsModal');
+            if (event.target === editModal) {
                 fecharModal();
+            }
+            if (event.target === newsModal) {
+                fecharModalNoticia();
             }
         }
     </script>

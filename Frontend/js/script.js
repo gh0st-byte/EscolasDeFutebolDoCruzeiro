@@ -1,4 +1,51 @@
+// Carregar notícias para o index
+function loadIndexNews() {
+  fetch('/api/data.php?file=news.json')
+    .then(response => response.json())
+    .then(data => {
+      const container = document.getElementById('newsCardsContainer');
+      if (!container) return;
+      
+      // Pegar as 5 primeiras notícias
+      const noticias = data.slice(0, 5);
+      
+      container.innerHTML = noticias.map(item => {
+        const imageUrl = item['1-image_URL'] || 'https://images.pexels.com/photos/29920213/pexels-photo-29920213.jpeg';
+        const title = item.title || 'Título da Notícia';
+        const content = item.content || 'Resumo da notícia...';
+        const resumo = content.length > 80 ? content.substring(0, 80) + '...' : content;
+        
+        return `
+          <div class="card">
+            <img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(title)}">
+            <h3>${escapeHtml(title)}</h3>
+            <p>${escapeHtml(resumo)}</p>
+            <a href="news.html?id=${item.id}">Leia mais</a>
+          </div>
+        `;
+      }).join('');
+    })
+    .catch(error => {
+      console.error('Erro ao carregar notícias:', error);
+      // Fallback com notícias estáticas
+      const container = document.getElementById('newsCardsContainer');
+      if (container) {
+        container.innerHTML = `
+          <div class="card">
+            <img src="https://images.pexels.com/photos/29920213/pexels-photo-29920213.jpeg" alt="Notícia">
+            <h3>Últimas Notícias</h3>
+            <p>Acompanhe as novidades das Escolas do Cruzeiro...</p>
+          </div>
+        `;
+      }
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+  // Carregar notícias se estivermos na página index
+  if (document.getElementById('newsCardsContainer')) {
+    loadIndexNews();
+  }
   const map = L.map('map', {
     center: [-15.78, -47.93], 
     zoom: 4,
@@ -156,48 +203,53 @@ fetch("/api/data.php?file=schools.json")
   }, 300);
 
   // Carousel and menu-map button logic moved inside DOMContentLoaded to avoid timing issues
-  const track = document.querySelector('.news-cards');
-  const prevBtn = document.querySelector('.btn-prev');
-  const nextBtn = document.querySelector('.btn-next');
-  const cards = document.querySelectorAll('.card');
+  // Aguardar carregamento das notícias antes de inicializar o carrossel
+  setTimeout(() => {
+    const track = document.querySelector('.news-cards');
+    const prevBtn = document.querySelector('.btn-prev');
+    const nextBtn = document.querySelector('.btn-next');
+    const cards = document.querySelectorAll('.card');
+    
+    if (!track || !cards.length) return;
 
-  let visibleCards = 3; // ajuste conforme layout
-  let index = 0; // começa no primeiro card
-  const cardWidth = cards.length > 0 ? cards[0].offsetWidth + 28 : 0; // largura + gap
-  const maxIndex = Math.max(cards.length - visibleCards, 0);
+    let visibleCards = 3; // ajuste conforme layout
+    let index = 0; // começa no primeiro card
+    const cardWidth = cards.length > 0 ? cards[0].offsetWidth + 28 : 0; // largura + gap
+    const maxIndex = Math.max(cards.length - visibleCards, 0);
 
-  function updateCarousel() {
-    // Garante que o índice está dentro dos limites
-    index = Math.max(0, Math.min(index, maxIndex));
-    if (track) {
-      track.style.transform = `translateX(${-index * cardWidth}px)`;
+    function updateCarousel() {
+      // Garante que o índice está dentro dos limites
+      index = Math.max(0, Math.min(index, maxIndex));
+      if (track) {
+        track.style.transform = `translateX(${-index * cardWidth}px)`;
+      }
     }
-  }
 
-  // Inicializa o carrossel mostrando o primeiro card
-  updateCarousel();
+    // Inicializa o carrossel mostrando o primeiro card
+    updateCarousel();
 
-  if (nextBtn) {
-    nextBtn.addEventListener('click', () => {
-      if (index < maxIndex) {
-        index++;
-      } else {
-        index = 0; // loop para o início
-      }
-      updateCarousel();
-    });
-  }
+    if (nextBtn) {
+      nextBtn.addEventListener('click', () => {
+        if (index < maxIndex) {
+          index++;
+        } else {
+          index = 0; // loop para o início
+        }
+        updateCarousel();
+      });
+    }
 
-  if (prevBtn) {
-    prevBtn.addEventListener('click', () => {
-      if (index > 0) {
-        index--;
-      } else {
-        index = maxIndex; // loop para o final
-      }
-      updateCarousel();
-    });
-  }
+    if (prevBtn) {
+      prevBtn.addEventListener('click', () => {
+        if (index > 0) {
+          index--;
+        } else {
+          index = maxIndex; // loop para o final
+        }
+        updateCarousel();
+      });
+    }
+  }, 500); // Aguarda 500ms para as notícias carregarem
 
   window.addEventListener('scroll', () => {
     const header = document.querySelector('header');
@@ -231,7 +283,7 @@ function openModal(index) {
     document.getElementById('newsModalLabel').textContent = escapeHtml(item.title || 'Notícia');
     
     var imageContainer = document.getElementById('newsModalImage');
-    var imageUrl = item['1-image_URL'] || item.image_URL;
+    var imageUrl = item['1-image_URL'];
     if (imageUrl) {
         imageContainer.innerHTML = '<img src="' + escapeHtml(imageUrl) + '" alt="' + escapeHtml(item.title) + '">';
     } else {
@@ -262,19 +314,37 @@ function loadNews() {
             if (xhr.status === 200) {
                 try {
                     newsData = JSON.parse(xhr.responseText);
+                    // Reverter ordem para mostrar mais recentes primeiro
+                    newsData.reverse();
+                    
                     for (var i = 0; i < newsData.length; i++) {
                         var item = newsData[i];
                         var newsItem = document.createElement('div');
                         newsItem.className = 'news-item';
                         
+                        //  tratamento de data
                         var dateText = '';
                         if (item.dayWeek && item.date && item.month) {
                             dateText = item.dayWeek + ', ' + item.date + ' de ' + item.month;
+                        } else if (item.date) {
+                            // Formatar data ISO para português
+                            var date = new Date(item.date);
+                            if (!isNaN(date.getTime())) {
+                                dateText = date.toLocaleDateString('pt-BR');
+                            }
+                        }
+                        
+                        // Tratar imagem
+                        var imageUrl = item['1-image_URL'];
+                        var imageHtml = '';
+                        if (imageUrl && imageUrl.trim() !== '') {
+                            imageHtml = '<img src="' + escapeHtml(imageUrl) + '" alt="' + escapeHtml(item.title) + '" style="width: 100%; max-width: 300px; border-radius: 5%; height: auto; margin-bottom: 10px;">';
                         }
                         
                         newsItem.innerHTML = 
+                            imageHtml +
                             '<h2>' + escapeHtml(item.title || 'Título') + '</h2>' +
-                            (dateText ? '<p class="date">' + escapeHtml(dateText) + '</p>' : '') +
+                            (dateText ? '<p class="date" style="color: #666; font-size: 0.9em; margin: 5px 0;">' + escapeHtml(dateText) + '</p>' : '') +
                             '<p>' + escapeHtml((item.content || '').substring(0, 80)) + '...</p>' +
                             '<button class="read-more-btn" data-bs-toggle="modal" data-bs-target="#newsModal" onclick="openModal(' + i + ')">Leia mais</button>';
                         
