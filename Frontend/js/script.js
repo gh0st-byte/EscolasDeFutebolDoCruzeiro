@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 let schools = [];
 
-fetch("/Backend/api/data.php?file=schools.json")
+fetch("/api/data.php?file=schools.json")
   .then(res => {
     console.log('Response status:', res.status);
     if (!res.ok) {
@@ -68,12 +68,7 @@ fetch("/Backend/api/data.php?file=schools.json")
   });
 
 
-  // Função para escapar HTML
-  function escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-  }
+
 
   // Create custom blue circle icon
   function createBlueCircleIcon() {
@@ -114,10 +109,10 @@ fetch("/Backend/api/data.php?file=schools.json")
       const icon = createBlueCircleIcon();
       const popupContent = `
         <div style="text-align: center;">
-          <h4>${escapeHtml(p.nome || p.cidade)}</h4>
-          <p><strong>Endereço:</strong> ${escapeHtml(p.endereco_encontrado)}</p>
-          ${p.telefone ? `<p><strong>Telefone:</strong> ${escapeHtml(p.telefone)}</p>` : ''}
-          ${p.instagram ? `<p><strong>Instagram:</strong> ${escapeHtml(p.instagram)}</p>` : ''}
+          <h4>${(p.nome || p.cidade || '').replace(/[<>&"']/g, function(m) { return {'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&#39;'}[m]; })}</h4>
+          <p><strong>Endereço:</strong> ${(p.endereco_encontrado || '').replace(/[<>&"']/g, function(m) { return {'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&#39;'}[m]; })}</p>
+          ${p.telefone ? `<p><strong>Telefone:</strong> ${p.telefone.replace(/[<>&"']/g, function(m) { return {'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&#39;'}[m]; })}</p>` : ''}
+          ${p.instagram ? `<p><strong>Instagram:</strong> ${p.instagram.replace(/[<>&"']/g, function(m) { return {'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&#39;'}[m]; })}</p>` : ''}
         </div>
       `;
       const marker = L.marker([p.lat, p.lng], {icon: icon}).bindPopup(popupContent);
@@ -219,6 +214,14 @@ fetch("/Backend/api/data.php?file=schools.json")
 
 
 
+// Função para escapar HTML (escopo global)
+function escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
 // news.html
 // News functionality
 var newsData = [];
@@ -252,7 +255,7 @@ function openModal(index) {
 
 function loadNews() {
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/Backend/api/data.php?file=news.json', true);
+    xhr.open('GET', '/api/data.php?file=news.json', true);
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4) {
             var newsContainer = document.querySelector('.news-letter');

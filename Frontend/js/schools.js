@@ -13,8 +13,8 @@ function escapeHtml(text) {
 async function carregarEscolas() {
     try {
         const [escolasResponse, filtrosResponse] = await Promise.all([
-            fetch('/Backend/api/data.php?file=schools.json'),
-            fetch('/Backend/api/data.php?file=BRfilters.json')
+            fetch('/api/data.php?file=schools.json'),
+            fetch('/api/data.php?file=BRfilters.json')
         ]);
         
         if (!escolasResponse.ok) {

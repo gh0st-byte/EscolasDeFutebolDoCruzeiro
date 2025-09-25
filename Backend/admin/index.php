@@ -34,7 +34,7 @@ if (isset($_GET['logout'])) {
 
 // Funções para manipular JSON
 function lerJSON($arquivo) {
-    $allowed_files = ['schools.json', 'addressSchools.json', 'failed_addresses.json', 'news.json', 'news_draft.json', '.user.json'];
+    $allowed_files = ['schools.json', 'failed_addresses.json', 'news.json', 'news_draft.json', '.user.json'];
     if (!in_array($arquivo, $allowed_files)) return [];
     
     $caminho = "../data/Json/$arquivo";
@@ -45,7 +45,7 @@ function lerJSON($arquivo) {
 }
 
 function salvarJSON($arquivo, $dados) {
-    $allowed_files = ['schools.json', 'addressSchools.json', 'failed_addresses.json', 'news.json', 'news_draft.json', '.user.json'];
+    $allowed_files = ['schools.json', 'failed_addresses.json', 'news.json', 'news_draft.json', '.user.json'];
     if (!in_array($arquivo, $allowed_files)) return false;
     
     $caminho = "../data/Json/$arquivo";
@@ -64,7 +64,7 @@ if ($_POST && !isset($_POST['username'])) {
     }
     
     // Validar arquivo permitido
-    $allowed_files = ['schools.json', 'addressSchools.json', 'failed_addresses.json', 'news.json', 'news_draft.json', '.user.json'];
+    $allowed_files = ['schools.json', 'failed_addresses.json', 'news.json', 'news_draft.json', '.user.json'];
     if (!in_array($arquivo, $allowed_files)) {
         die('Arquivo não permitido');
     }
@@ -134,7 +134,7 @@ if ($_POST && !isset($_POST['username'])) {
                         'date' => $_POST['date'],
                         'content' => $_POST['content'],
                         'image_URL' => $_POST['image_URL'] ?: null,
-                        'category' => $_POST['category'] ?? 'Esporte'
+                        'category' => $_POST['category'] ?? 'Escolas'
                     ];
                 } elseif ($arquivo === '.user.json') {
                     $dados[$index] = [
@@ -291,13 +291,14 @@ $dados = lerJSON($tab_atual);
                             <tr>
                                 <td><?= htmlspecialchars($item['title']) ?></td>
                                 <td><?= htmlspecialchars($item['date']) ?></td>
-                                <td><?= htmlspecialchars($item['category']) ?></td>
+                                <td><?= htmlspecialchars($item['category'] ?? ' ') ?></td>
                                 <td class="endereco"><?= htmlspecialchars(substr($item['content'], 0, 100)) ?>...</td>
                                 <td class="actions">
                                     <button onclick="editarItem(<?= $index ?>)">Editar</button>
                                     <?php if ($tab_atual === 'news_draft.json'): ?>
                                         <form method="POST" style="display:inline;" onsubmit="return confirm('Publicar notícia?')">
                                             <input type="hidden" name="acao" value="publicar">
+                                            <input type="hidden" name="arquivo" value="news_draft.json">
                                             <input type="hidden" name="index" value="<?= $index ?>">
                                             <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                                             <button type="submit" style="background: #28a745; color: white;">Publicar</button>

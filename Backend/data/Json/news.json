@@ -1,12 +1,10 @@
 [
     {
         "title": "Nova Temporada das Escolas do Cruzeiro",
-        "subtitle": "Metodologia renovada e novos profissionais",
-        "dayWeek": "Segunda-feira",
-        "date": "15",
-        "month": "Janeiro",
-        "content": "As escolas de futebol do Cruzeiro iniciam uma nova temporada com metodologia renovada e novos profissionais qualificados para formar os futuros talentos do clube. \n\nCom foco no desenvolvimento integral dos jovens atletas, as escolas oferecem treinamentos modernos e uma estrutura completa para proporcionar a melhor experiência esportiva.  \n\nAlém disso, o Cruzeiro reforça seu compromisso com a comunidade, promovendo a inclusão social através do esporte e incentivando a prática saudável entre crianças e adolescentes. \n\nVenha fazer parte dessa história de sucesso e descubra o talento que há em você!  \n\n#EscolasDoCruzeiro #Futebol #FormaçãoDeAtletas #CruzeiroEsporteClube  ",
-        "1-image_URL": "https:\/\/images.pexels.com\/photos\/29920213\/pexels-photo-29920213.jpeg"
+        "date": "2025-08-25",
+        "content": "As escolas de futebol do Cruzeiro iniciam uma nova temporada com metodologia renovada e novos profissionais qualificados para formar os futuros talentos do clube. \r\n\r\nCom foco no desenvolvimento integral dos jovens atletas, as escolas oferecem treinamentos modernos e uma estrutura completa para proporcionar a melhor experiência esportiva.  \r\n\r\nAlém disso, o Cruzeiro reforça seu compromisso com a comunidade, promovendo a inclusão social através do esporte e incentivando a prática saudável entre crianças e adolescentes. \r\n\r\nVenha fazer parte dessa história de sucesso e descubra o talento que há em você!  \r\n\r\n#EscolasDoCruzeiro #Futebol #FormaçãoDeAtletas #CruzeiroEsporteClube\r\n  ",
+        "image_URL": null,
+        "category": "Esporte"
     },
     {
         "title": "Treino Especial com Ex-Jogadores",
@@ -40,6 +38,13 @@
         "date": "2011-09-11",
         "content": "apenas um teste para observar se o tratamento de dados ocorre como deveria ",
         "image_URL": "",
+        "category": "Esporte"
+    },
+    {
+        "title": "TEST NOTICIA",
+        "date": "2025-09-25",
+        "content": "Time do Interior surpreende e vence gigante nacional fora de casa\r\n\r\nEm um jogo marcado por intensidade e equilíbrio, o Esporte Clube Vale Verde derrotou o tradicional Clube Atlético Central por 2 a 1, neste domingo, no Estádio Nacional. O resultado surpreendeu torcedores e especialistas, já que o time do interior vinha de três derrotas seguidas no campeonato.\r\n\r\nOs gols da equipe visitante foram marcados por João Mendes, de pênalti, ainda no primeiro tempo, e por Lucas Araújo, em um contra-ataque rápido aos 38 minutos da etapa final. O Atlético Central chegou a empatar com gol de cabeça de Rafael, mas não conseguiu manter a pressão.\r\n\r\nCom o resultado, o Vale Verde respira na tabela e ganha confiança para a sequência da competição, enquanto o Atlético vê a liderança momentânea escapar.",
+        "image_URL": "https:\/\/cruzeiro-website-project-news.s3.us-east-1.amazonaws.com\/news\/Imagens+Not%C3%ADcias\/Masculino\/Maracan%C3%A3+-+Torcida+do+Cruzeiro+%5B1%5D.jpg",
         "category": "Esporte"
     }
 ]

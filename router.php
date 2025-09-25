@@ -26,6 +26,12 @@ if (strpos($path, '/Backend/admin') === 0) {
 // Frontend routes
 if (strpos($path, '/Frontend') === 0) {
     $file = __DIR__ . $path;
+    
+    // Se é um diretório, adicionar index.html
+    if (is_dir($file)) {
+        $file .= '/index.html';
+    }
+    
     if (file_exists($file)) {
         $mimeType = mime_content_type($file);
         if ($mimeType) {
