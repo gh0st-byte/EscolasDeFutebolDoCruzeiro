@@ -47,10 +47,7 @@ EscolasDeFutebolDoCruzeiro/
 └── README.md              # Este arquivo
 ```
 
-## Credenciais de Acesso
 
-- **Usuário**: admin
-- **Senha**: cruzeiro2024
 
 ## Como Usar
 
@@ -173,3 +170,9 @@ O sistema se adapta automaticamente para:
 - Desktop (1200px+)
 - Tablet (768px - 1199px)
 - Mobile (< 768px)
+
+
+# Licenciamento
+
+- **Desenvolvedor Reponsável:** Marco Túlio Paiva Repoles
+- **Empresa:** &copy;Cruzeiro Esporte Clube - SAF
