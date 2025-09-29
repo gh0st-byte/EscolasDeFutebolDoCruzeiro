@@ -59,14 +59,20 @@ if ($_POST && !isset($_POST['username'])) {
     $arquivo = $_POST['arquivo'] ?? '';
     
     // Validar CSRF token para ações administrativas
-    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
-        die('Token CSRF inválido');
+    if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+        http_response_code(403);
+        header('Content-Type: application/json');
+        echo json_encode(['error' => 'Token CSRF inválido']);
+        exit;
     }
     
     // Validar arquivo permitido
     $allowed_files = ['schools.json', 'failed_addresses.json', 'news.json', 'news_draft.json', '.user.json'];
     if (!in_array($arquivo, $allowed_files)) {
-        die('Arquivo não permitido');
+        http_response_code(400);
+        header('Content-Type: application/json');
+        echo json_encode(['error' => 'Arquivo não permitido']);
+        exit;
     }
     
     switch($acao) {
@@ -237,7 +243,7 @@ if ($tab_atual === 'news.json' || $tab_atual === 'news_draft.json') {
             <form method="POST" id="addForm">
                 <input type="hidden" name="acao" value="adicionar">
                 <input type="hidden" name="arquivo" value="<?= htmlspecialchars($tab_atual, ENT_QUOTES, 'UTF-8') ?>">
-                <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>">
                 
                 <?php if ($tab_atual === 'failed_addresses.json'): ?>
                     <input type="text" name="endereco" placeholder="Endereço que falhou" required>
@@ -312,7 +318,7 @@ if ($tab_atual === 'news.json' || $tab_atual === 'news_draft.json') {
                                             <input type="hidden" name="acao" value="publicar">
                                             <input type="hidden" name="arquivo" value="news_draft.json">
                                             <input type="hidden" name="index" value="<?= count(lerJSON('news_draft.json')) - 1 - $index ?>">
-                                            <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+                                            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>">
                                             <button type="submit" style="background: #28a745; color: white;">Publicar</button>
                                         </form>
                                     <?php endif; ?>
@@ -326,7 +332,7 @@ if ($tab_atual === 'news.json' || $tab_atual === 'news_draft.json') {
                                                 echo $index;
                                             }
                                         ?>">
-                                        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+                                        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>">
                                         <button type="submit">Deletar</button>
                                     </form>
                                 </td>
@@ -356,7 +362,7 @@ if ($tab_atual === 'news.json' || $tab_atual === 'news_draft.json') {
                                         <input type="hidden" name="acao" value="deletar">
                                         <input type="hidden" name="arquivo" value="<?= $tab_atual ?>">
                                         <input type="hidden" name="index" value="<?= $index ?>">
-                                        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+                                        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>">
                                         <button type="submit">Deletar</button>
                                     </form>
                                 </td>
@@ -376,7 +382,7 @@ if ($tab_atual === 'news.json' || $tab_atual === 'news_draft.json') {
                                     <input type="hidden" name="acao" value="deletar">
                                     <input type="hidden" name="arquivo" value="<?= $tab_atual ?>">
                                     <input type="hidden" name="index" value="<?= $index ?>">
-                                    <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+                                    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>">
                                     <button type="submit">Deletar</button>
                                 </form>
                             </div>
@@ -416,7 +422,7 @@ if ($tab_atual === 'news.json' || $tab_atual === 'news_draft.json') {
                                         <input type="hidden" name="acao" value="deletar">
                                         <input type="hidden" name="arquivo" value="<?= $tab_atual ?>">
                                         <input type="hidden" name="index" value="<?= $index ?>">
-                                        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+                                        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>">
                                         <button type="submit">Deletar</button>
                                     </form>
                                 </td>
@@ -437,7 +443,7 @@ if ($tab_atual === 'news.json' || $tab_atual === 'news_draft.json') {
                 <input type="hidden" name="acao" value="editar">
                 <input type="hidden" name="arquivo" value="<?= htmlspecialchars($tab_atual, ENT_QUOTES, 'UTF-8') ?>">
                 <input type="hidden" name="index" id="editIndex">
-                <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>">
                 <div id="editFields"></div>
                 <div class="modal-actions">
                     <button type="submit">Salvar</button>
@@ -462,8 +468,8 @@ if ($tab_atual === 'news.json' || $tab_atual === 'news_draft.json') {
     </div>
 
     <script>
-        const dados = <?= json_encode($dados) ?>;
-        const tabAtual = <?= json_encode($tab_atual) ?>;
+        const dados = <?= json_encode($dados, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>;
+        const tabAtual = <?= json_encode($tab_atual, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>;
         
         function editarItem(index) {
             const realIndex = (tabAtual === 'news.json' || tabAtual === 'news_draft.json') ? 

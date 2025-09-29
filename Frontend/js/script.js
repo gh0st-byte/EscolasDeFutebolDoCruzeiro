@@ -269,9 +269,17 @@ fetch("/api/data.php?file=schools.json")
 // Função para escapar HTML (escopo global)
 function escapeHtml(text) {
     if (!text) return '';
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
+    const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;',
+        '/': '&#x2F;'
+    };
+    return String(text).replace(/[&<>"'\/]/g, function (s) {
+        return map[s];
+    });
 }
 
 // news.html
