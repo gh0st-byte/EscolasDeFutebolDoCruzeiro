@@ -40,13 +40,17 @@ if (!$file || !in_array($file, $allowed_files)) {
     exit;
 }
 
-$filepath = __DIR__ . '/../data/Json/' . $file;
+$basePath = realpath(__DIR__ . '/../data/Json/');
+$filepath = $basePath . '/' . basename($file);
+$realPath = realpath($filepath);
 
-if (!file_exists($filepath)) {
+if (!$realPath || strpos($realPath, $basePath) !== 0 || !file_exists($realPath)) {
     http_response_code(404);
     echo json_encode(['error' => 'Arquivo não encontrado']);
     exit;
 }
+
+$filepath = $realPath;
 
 $data = file_get_contents($filepath);
 echo $data;

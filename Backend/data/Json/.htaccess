@@ -1,0 +1,11 @@
+# Negar acesso direto aos arquivos JSON
+<Files "*.json">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+# Permitir apenas para localhost em desenvolvimento
+<RequireAll>
+    Require ip 127.0.0.1
+    Require ip ::1
+</RequireAll>

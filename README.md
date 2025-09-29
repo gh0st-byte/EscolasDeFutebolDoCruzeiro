@@ -5,13 +5,16 @@ Sistema web para gerenciar os arquivos JSON das escolas de futebol do Cruzeiro.
 Para iniciar o sistema:
 
 ### Backend (Servidor)
+
 ```bash
 cd Backend
 php -S localhost:8000
 ```
 
 ### Frontend (Interface)
+
 Abra os arquivos HTML da pasta Frontend em um navegador ou use um servidor local:
+
 ```bash
 cd Frontend
 python -m http.server 3000
@@ -48,10 +51,19 @@ EscolasDeFutebolDoCruzeiro/
 ```
 
 
+<<<<<<< HEAD
+=======
+-  **IMPORTANTE**: Antes de usar em produção:
+
+1. Copie `.env.example` para `.env`
+2. Altere as credenciais no arquivo `.env`
+3. Configure variáveis de ambiente seguras
+>>>>>>> 23a3139 (update de segurança)
 
 ## Como Usar
 
 ### Frontend (Usuários)
+
 1. Acesse `Frontend/index.html` no navegador
 2. Navegue pelas páginas:
    - **Home**: Página principal com mapa e notícias
@@ -59,6 +71,7 @@ EscolasDeFutebolDoCruzeiro/
    - **Notícias**: Últimas notícias do Cruzeiro
 
 ### Backend (Administradores)
+
 1. Acesse `Backend/admin/index.php` no navegador
 2. Faça login com as credenciais
 3. Use as abas para gerenciar:
@@ -115,7 +128,113 @@ EscolasDeFutebolDoCruzeiro/
 ]
 ```
 
-## Instalação Rápida
+## Instalação no AWS Lightsail
+
+### 1. Configuração do Servidor
+
+```bash
+# Conectar via SSH
+ssh -i sua-chave.pem ubuntu@seu-ip-lightsail
+
+# Atualizar sistema
+sudo apt update && sudo apt upgrade -y
+
+# Instalar dependências
+sudo apt install apache2 php libapache2-mod-php php-json php-mbstring php-curl -y
+
+# Instalar ModSecurity
+sudo apt install libapache2-mod-security2 modsecurity-crs -y
+sudo a2enmod security2
+sudo a2enmod rewrite
+```
+
+### 2. Configurar ModSecurity
+
+```bash
+# Ativar ModSecurity
+sudo cp /etc/modsecurity/modsecurity.conf-recommended /etc/modsecurity/modsecurity.conf
+sudo sed -i 's/SecRuleEngine DetectionOnly/SecRuleEngine On/' /etc/modsecurity/modsecurity.conf
+
+# Ativar OWASP Core Rules
+sudo ln -s /usr/share/modsecurity-crs /etc/modsecurity/
+echo 'Include /etc/modsecurity/modsecurity-crs/crs-setup.conf' | sudo tee -a /etc/apache2/mods-enabled/security2.conf
+echo 'Include /etc/modsecurity/modsecurity-crs/rules/*.conf' | sudo tee -a /etc/apache2/mods-enabled/security2.conf
+```
+
+### 3. Deploy da Aplicação
+
+```bash
+# Clonar repositório
+cd /var/www/html
+sudo git clone https://github.com/seu-usuario/EscolasDeFutebolDoCruzeiro.git .
+
+# Configurar permissões
+sudo chown -R www-data:www-data Backend/data/Json/
+sudo chmod -R 755 Backend/data/Json/
+
+# Configurar variáveis de ambiente
+sudo cp .env.example .env
+sudo nano .env  # Editar credenciais
+```
+
+### 4. Configurar SSL (HTTPS)
+
+```bash
+# Instalar Certbot
+sudo apt install certbot python3-certbot-apache -y
+
+# Obter certificado SSL
+sudo certbot --apache -d seu-dominio.com
+```
+
+### 5. Configurar Virtual Host
+
+```apache
+# /etc/apache2/sites-available/cruzeiro.conf
+<VirtualHost *:80>
+    ServerName seu-dominio.com
+    DocumentRoot /var/www/html
+  
+    # ModSecurity
+    SecRuleEngine On
+  
+    # Redirecionar para HTTPS
+    RewriteEngine On
+    RewriteCond %{HTTPS} off
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</VirtualHost>
+
+<VirtualHost *:443>
+    ServerName seu-dominio.com
+    DocumentRoot /var/www/html
+  
+    # SSL
+    SSLEngine on
+    SSLCertificateFile /etc/letsencrypt/live/seu-dominio.com/fullchain.pem
+    SSLCertificateKeyFile /etc/letsencrypt/live/seu-dominio.com/privkey.pem
+  
+    # ModSecurity
+    SecRuleEngine On
+  
+    # PHP
+    DirectoryIndex index.php index.html
+  
+    <Directory /var/www/html>
+        AllowOverride All
+        Require all granted
+    </Directory>
+</VirtualHost>
+```
+
+### 6. Ativar Site
+
+```bash
+sudo a2ensite cruzeiro.conf
+sudo a2dissite 000-default.conf
+sudo systemctl restart apache2
+```
+
+## Instalação Local (Desenvolvimento)
 
 ```bash
 # 1. Iniciar o servidor
@@ -127,13 +246,37 @@ php -S localhost:8000
 # Admin: http://localhost:8000/Backend/admin/
 ```
 
-Para instruções detalhadas, consulte [INSTALL.md](INSTALL.md)
-
 ## Requisitos Técnicos
 
-- PHP 7.4+
-- Servidor web (Apache/Nginx) ou PHP built-in server
-- Permissões de escrita na pasta Backend/data/Json/
+### Servidor (AWS Lightsail)
+
+- **OS**: Ubuntu 20.04 LTS ou superior
+- **PHP**: 7.4+ com extensões: json, mbstring, curl
+- **Servidor Web**: Apache 2.4+ (recomendado) ou Nginx
+- **ModSecurity**: 2.9+ (WAF - Web Application Firewall)
+- **SSL/TLS**: Certificado Let's Encrypt
+- **Memória**: Mínimo 1GB RAM
+- **Armazenamento**: 20GB SSD
+
+### Dependências do Sistema
+
+```bash
+# Pacotes essenciais
+sudo apt update
+sudo apt install apache2 php libapache2-mod-php php-json php-mbstring php-curl
+
+# ModSecurity (Firewall de Aplicação Web)
+sudo apt install libapache2-mod-security2 modsecurity-crs
+
+# SSL/HTTPS
+sudo apt install certbot python3-certbot-apache
+```
+
+### Permissões Necessárias
+
+- Escrita na pasta `Backend/data/Json/`
+- Execução de scripts PHP
+- Acesso de leitura aos arquivos estáticos
 
 ## Interface
 
@@ -145,23 +288,88 @@ Para instruções detalhadas, consulte [INSTALL.md](INSTALL.md)
 
 ## Segurança
 
-- Autenticação por sessão
+- Autenticação por sessão com CSRF protection
 - Validação de dados no servidor
 - Escape de HTML para prevenir XSS
+- Proteção contra Path Traversal
+- Headers de segurança configurados
+- Sanitização de entrada de dados
 - Confirmação para exclusões
+
+### Configuração de Segurança
+
+1. **ModSecurity (WAF)**: Firewall de aplicação web ativo
+
+   - Proteção contra XSS, SQL Injection, Path Traversal
+   - OWASP Core Rule Set habilitado
+   - Monitoramento em tempo real
+2. **SSL/TLS**: Certificado Let's Encrypt configurado
+
+   - HTTPS obrigatório (redirecionamento automático)
+   - Criptografia TLS 1.2+
+3. **Variáveis de Ambiente**: Credenciais em `.env`
+
+   - Senhas criptografadas
+   - Tokens CSRF protegidos
+4. **Firewall AWS**: Portas restritas
+
+   - Apenas 80 (HTTP) e 443 (HTTPS) abertas
+   - SSH restrito por IP
+5. **Backup**: Dados protegidos
+
+   - Arquivos JSON com backup automático
+   - Versionamento no Git
 
 ## Arquitetura
 
 ### Frontend
+
 - **Tecnologias**: HTML5, CSS3, JavaScript ES6+
 - **Frameworks**: Bootstrap 5, Leaflet Maps
 - **Responsivo**: Desktop, Tablet, Mobile
 
 ### Backend
+
 - **Linguagem**: PHP 7.4+
 - **Dados**: JSON files
 - **API**: REST endpoints
 - **Admin**: Interface web completa
+
+## Monitoramento e Manutenção
+
+### Logs do ModSecurity
+
+```bash
+# Verificar logs de segurança
+sudo tail -f /var/log/apache2/modsec_audit.log
+
+# Verificar ataques bloqueados
+sudo grep "Access denied" /var/log/apache2/error.log
+```
+
+### Atualizações de Segurança
+
+```bash
+# Atualizar sistema
+sudo apt update && sudo apt upgrade -y
+
+# Atualizar regras ModSecurity
+sudo apt update modsecurity-crs
+sudo systemctl restart apache2
+
+# Renovar certificado SSL (automático)
+sudo certbot renew --dry-run
+```
+
+### Backup dos Dados
+
+```bash
+# Backup manual
+sudo tar -czf backup-$(date +%Y%m%d).tar.gz Backend/data/Json/
+
+# Backup automático (crontab)
+0 2 * * * /usr/bin/tar -czf /backup/cruzeiro-$(date +\%Y\%m\%d).tar.gz /var/www/html/Backend/data/Json/
+```
 
 ## Responsividade
 

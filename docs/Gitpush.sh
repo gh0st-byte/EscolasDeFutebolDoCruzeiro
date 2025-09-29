@@ -1,6 +1,23 @@
 #!/bin/bash
-$date = date +%Y-%m-%d
-git add .
+set -e
+
+date=$(date +%Y-%m-%d)
+
+if ! git add .; then
+    echo "Erro ao adicionar arquivos"
+    exit 1
+fi
+
 git status
-git commit -m "update $date"
-git push origin main
+
+if ! git commit -m "update $date"; then
+    echo "Erro no commit (talvez não há mudanças)"
+    exit 1
+fi
+
+if ! git push origin main; then
+    echo "Erro ao fazer push"
+    exit 1
+fi
+
+echo "Pushed to GitHub successfully!"
