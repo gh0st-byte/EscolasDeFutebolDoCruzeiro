@@ -6,8 +6,8 @@ if (!isset($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
 
-// Verificar login
-if (isset($_POST['username']) && isset($_POST['password'])) {
+// Verificar login (apenas se não for ação administrativa)
+if (isset($_POST['username']) && isset($_POST['password']) && !isset($_POST['acao'])) {
     $usuarios = lerJSON('.user.json');
     
     foreach ($usuarios as $usuario) {
@@ -19,54 +19,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
         }
     }
 }
-function processarAcoesUsuario (
-    $acao,
-    $arquivo,
-    $dados
-){
-    $index = (int)$_POST['index'] ?? -1;
-    switch ($acao) {
-            case 'adicionar':
-                // Cria um NOVO usuário. A senha é obrigatória aqui (assumindo validação HTML/front-end).
-                $novo = [
-                    'username' => htmlspecialchars($_POST['username'], ENT_QUOTES, 'UTF-8'),
-                    // A função password_hash é obrigatória para ADICIONAR.
-                    'password' => password_hash($_POST['password'], PASSWORD_DEFAULT)
-                ];
-                $dados[] = $novo;
-                break;
 
-            case 'editar':
-                if ($index >= 0 && isset($dados[$index])) {
-                    // 1. Sempre atualiza o nome de usuário
-                    $dados[$index]['username'] = htmlspecialchars($_POST['username'], ENT_QUOTES, 'UTF-8');
-                    
-                    // 2. CORREÇÃO CRÍTICA: Só atualiza a senha se o campo não estiver vazio.
-                    if (!empty($_POST['password'])) {
-                        $dados[$index]['password'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
-                    }
-                    // Se $_POST['password'] estiver vazio, a senha antiga é mantida.
-                }
-                break;
-
-            case 'deletar':
-                if ($index >= 0 && isset($dados[$index])) {
-                    // Remove o item
-                    unset($dados[$index]); 
-                    
-                    // CORREÇÃO CRÍTICA: Reindexa o array para evitar problemas de índice no JSON.
-                    $dados = array_values($dados); 
-                }
-                break;
-            
-            default:
-                // Nenhuma ação reconhecida
-                return false;
-        }
-
-    // Salva o JSON atualizado e retorna o resultado
-    return salvarJSON($arquivo, $dados);
-}
 
 if (!isset($_SESSION['logged_in'])) {
     include 'login.php';
@@ -100,9 +53,47 @@ function salvarJSON($arquivo, $dados) {
     $json = json_encode($dados, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
     return file_put_contents($caminho, $json);
 }
+function processarAcoesUsuario($acao, $arquivo, $dados) {
+    $index = (int)($_POST['index'] ?? -1);
+    
+    switch ($acao) {
+        case 'adicionar':
+            $novo = [
+                'username' => htmlspecialchars($_POST['username'], ENT_QUOTES, 'UTF-8'),
+                'password' => password_hash($_POST['password'], PASSWORD_DEFAULT)
+            ];
+            $dados[] = $novo;
+            break;
 
-// Processar ações
-if ($_POST && !isset($_POST['username'])) {
+        case 'editar':
+            if ($index >= 0 && isset($dados[$index])) {
+                $dados[$index]['username'] = htmlspecialchars($_POST['username'], ENT_QUOTES, 'UTF-8');
+                if (!empty($_POST['password'])) {
+                    $dados[$index]['password'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
+                }
+            }
+            break;
+
+        case 'deletar':
+            if ($index >= 0 && isset($dados[$index])) {
+                unset($dados[$index]);
+                $dados = array_values($dados);
+            }
+            break;
+            
+        default:
+            return false;
+    }
+
+    return salvarJSON($arquivo, $dados);
+}
+// Debug temporário
+if ($_POST) {
+    error_log('POST recebido: ' . print_r($_POST, true));
+}
+
+// Processar ações administrativas
+if ($_POST && isset($_POST['acao']) && isset($_POST['arquivo'])) {
     $acao = $_POST['acao'] ?? '';
     $arquivo = $_POST['arquivo'] ?? '';
     
@@ -123,106 +114,125 @@ if ($_POST && !isset($_POST['username'])) {
         exit;
     }
     
-    switch($acao) {
-        case 'adicionar':
-            $dados = lerJSON($arquivo);
-            if ($arquivo === 'failed_addresses.json') {
-                $dados[] = $_POST['endereco'];
-            } else {
-                $novo = [
-                    'lat' => (float)$_POST['lat'],
-                    'lng' => (float)$_POST['lng'],
-                    'nome' => $_POST['nome'] ?? null,
-                    'cidade' => $_POST['cidade'] ?? null,
-                    'imagem_URL' => $_POST['imagem_URL'] ?? null,
-                    'endereco_encontrado' => $_POST['endereco_encontrado'],
-                    'region' => $_POST['region'] ?? 'brasil'
-                ];
-                if ($arquivo === 'schools.json') {
-                    $novo['endereco'] = $_POST['endereco'] ?? '';
-                    $novo['telefone'] = $_POST['telefone'] ?? '';
-                    $novo['whatsapp'] = $_POST['whatsapp'] ?? '';
-                    $novo['instagram'] = $_POST['instagram'] ?? null;
-                    $novo['instagram_url'] = $_POST['instagram_url'] ?? null;
-                    $novo['estado'] = $_POST['estado'] ?? '';
-                } elseif ($arquivo === 'news.json' || $arquivo === 'news_draft.json') {
-                    $novo = [
-                        'title' => $_POST['title'],
-                        'subtitle' => $_POST['subtitle'] ?? '',
-                        'dayWeek' => $_POST['dayWeek'] ?? '',
-                        'date' => $_POST['date'],
-                        'month' => $_POST['month'] ?? '',
-                        'content' => $_POST['content'],
-                        '1-image_URL' => $_POST['1-image_URL'] ?? null
-                    ];
-                } 
-                
-
-            }
-            salvarJSON($arquivo, $dados);
-            break;
-            
-        case 'publicar':
-            $rascunhos = lerJSON('news_draft.json');
-            $noticias = lerJSON('news.json');
-            $index = (int)$_POST['index'];
-            if (isset($rascunhos[$index])) {
-                $noticias[] = $rascunhos[$index];
-                array_splice($rascunhos, $index, 1);
-                salvarJSON('news.json', $noticias);
-                salvarJSON('news_draft.json', $rascunhos);
-            }
-            break;
-            
-        case 'editar':
-            $dados = lerJSON($arquivo);
-            $index = (int)$_POST['index'];
-            if (isset($dados[$index])) {
+    // Lógica especial para .user.json
+    if ($arquivo === '.user.json') {
+        error_log('Processando .user.json - Ação: ' . $acao);
+        $dados = lerJSON($arquivo);
+        error_log('Dados antes: ' . print_r($dados, true));
+        $resultado = processarAcoesUsuario($acao, $arquivo, $dados);
+        error_log('Resultado: ' . ($resultado ? 'sucesso' : 'falha'));
+        if (!$resultado) {
+            http_response_code(500);
+            header('Content-Type: application/json');
+            echo json_encode(['error' => 'Erro ao processar ação']);
+            exit;
+        }
+    } 
+    // **Lógica para todos os outros arquivos**
+    else {
+        switch($acao) {
+            case 'adicionar':
+                $dados = lerJSON($arquivo);
                 if ($arquivo === 'failed_addresses.json') {
-                    $dados[$index] = $_POST['endereco'];
-                } elseif ($arquivo === 'news.json' || $arquivo === 'news_draft.json') {
-                    $dados[$index] = [
-                        'title' => $_POST['title'],
-                        'subtitle' => $_POST['subtitle'] ?? '',
-                        'dayWeek' => $_POST['dayWeek'] ?? '',
-                        'date' => $_POST['date'],
-                        'month' => $_POST['month'] ?? '',
-                        'content' => $_POST['content'],
-                        '1-image_URL' => $_POST['1-image_URL'] ?: null
-                    ];
-                
-                
+                    $dados[] = $_POST['endereco'];
                 } else {
-                    $dados[$index]['lat'] = (float)$_POST['lat'];
-                    $dados[$index]['lng'] = (float)$_POST['lng'];
-                    $dados[$index]['nome'] = $_POST['nome'] ?: null;
-                    $dados[$index]['cidade'] = $_POST['cidade'] ?: null;
-                    $dados[$index]['imagem_URL'] = $_POST['imagem_URL'] ?: null;
-                    $dados[$index]['endereco_encontrado'] = $_POST['endereco_encontrado'];
-                    $dados[$index]['region'] = $_POST['region'] ?? 'brasil';
+                    // Lógica para adicionar School, News, etc. (mantida)
+                    $novo = [
+                        'lat' => (float)$_POST['lat'],
+                        'lng' => (float)$_POST['lng'],
+                        'nome' => $_POST['nome'] ?? null,
+                        'cidade' => $_POST['cidade'] ?? null,
+                        'imagem_URL' => $_POST['imagem_URL'] ?? null,
+                        'endereco_encontrado' => $_POST['endereco_encontrado'],
+                        'region' => $_POST['region'] ?? 'brasil'
+                    ];
                     if ($arquivo === 'schools.json') {
-                        $dados[$index]['endereco'] = $_POST['endereco'] ?? '';
-                        $dados[$index]['telefone'] = $_POST['telefone'] ?? '';
-                        $dados[$index]['whatsapp'] = $_POST['whatsapp'] ?? '';
-                        $dados[$index]['instagram'] = $_POST['instagram'] ?: null;
-                        $dados[$index]['instagram_url'] = $_POST['instagram_url'] ?: null;
-                        $dados[$index]['estado'] = $_POST['estado'] ?? '';
+                        $novo['endereco'] = $_POST['endereco'] ?? '';
+                        $novo['telefone'] = $_POST['telefone'] ?? '';
+                        $novo['whatsapp'] = $_POST['whatsapp'] ?? '';
+                        $novo['instagram'] = $_POST['instagram'] ?? null;
+                        $novo['instagram_url'] = $_POST['instagram_url'] ?? null;
+                        $novo['estado'] = $_POST['estado'] ?? '';
+                    } elseif ($arquivo === 'news.json' || $arquivo === 'news_draft.json') {
+                        $novo = [
+                            'title' => $_POST['title'],
+                            'subtitle' => $_POST['subtitle'] ?? '',
+                            'dayWeek' => $_POST['dayWeek'] ?? '',
+                            'date' => $_POST['date'],
+                            'month' => $_POST['month'] ?? '',
+                            'content' => $_POST['content'],
+                            '1-image_URL' => $_POST['1-image_URL'] ?? null
+                        ];
                     }
+                    $dados[] = $novo;
                 }
                 salvarJSON($arquivo, $dados);
-            }
-            break;
-            
-        case 'deletar':
-            $dados = lerJSON($arquivo);
-            $index = (int)$_POST['index'];
-            if (isset($dados[$index])) {
-                array_splice($dados, $index, 1);
-                salvarJSON($arquivo, $dados);
-            }
-            break;
+                break;
+                
+            case 'publicar':
+                $rascunhos = lerJSON('news_draft.json');
+                $noticias = lerJSON('news.json');
+                $index = (int)$_POST['index'];
+                if (isset($rascunhos[$index])) {
+                    $noticias[] = $rascunhos[$index];
+                    // Mantém array_splice aqui, pois news_draft.json não precisa de reindexação rigorosa como .user.json
+                    array_splice($rascunhos, $index, 1);
+                    salvarJSON('news.json', $noticias);
+                    salvarJSON('news_draft.json', $rascunhos);
+                }
+                break;
+                
+            case 'editar':
+                $dados = lerJSON($arquivo);
+                $index = (int)$_POST['index'];
+                if (isset($dados[$index])) {
+                    if ($arquivo === 'failed_addresses.json') {
+                        $dados[$index] = $_POST['endereco'];
+                    } elseif ($arquivo === 'news.json' || $arquivo === 'news_draft.json') {
+                        $dados[$index] = [
+                            'title' => $_POST['title'],
+                            'subtitle' => $_POST['subtitle'] ?? '',
+                            'dayWeek' => $_POST['dayWeek'] ?? '',
+                            'date' => $_POST['date'],
+                            'month' => $_POST['month'] ?? '',
+                            'content' => $_POST['content'],
+                            '1-image_URL' => $_POST['1-image_URL'] ?: null
+                        ];
+                    } else {
+                        // Edição para Schools e outros (mantida)
+                        $dados[$index]['lat'] = (float)$_POST['lat'];
+                        $dados[$index]['lng'] = (float)$_POST['lng'];
+                        $dados[$index]['nome'] = $_POST['nome'] ?: null;
+                        $dados[$index]['cidade'] = $_POST['cidade'] ?: null;
+                        $dados[$index]['imagem_URL'] = $_POST['imagem_URL'] ?: null;
+                        $dados[$index]['endereco_encontrado'] = $_POST['endereco_encontrado'];
+                        $dados[$index]['region'] = $_POST['region'] ?? 'brasil';
+                        if ($arquivo === 'schools.json') {
+                            $dados[$index]['endereco'] = $_POST['endereco'] ?? '';
+                            $dados[$index]['telefone'] = $_POST['telefone'] ?? '';
+                            $dados[$index]['whatsapp'] = $_POST['whatsapp'] ?? '';
+                            $dados[$index]['instagram'] = $_POST['instagram'] ?: null;
+                            $dados[$index]['instagram_url'] = $_POST['instagram_url'] ?: null;
+                            $dados[$index]['estado'] = $_POST['estado'] ?? '';
+                        }
+                    }
+                    salvarJSON($arquivo, $dados);
+                }
+                break;
+                
+            case 'deletar':
+                $dados = lerJSON($arquivo);
+                $index = (int)$_POST['index'];
+                if (isset($dados[$index])) {
+                    // Mantém array_splice para outros arquivos (mais simples se a reindexação não for crítica)
+                    array_splice($dados, $index, 1);
+                    salvarJSON($arquivo, $dados);
+                }
+                break;
+        }
     }
     
+    // Redirecionamento (mantido)
     if ($acao === 'publicar') {
         header('Location: index.php?tab=news_draft.json');
     } else {
