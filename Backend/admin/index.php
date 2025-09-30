@@ -19,6 +19,54 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
         }
     }
 }
+function processarAcoesUsuario (
+    $acao,
+    $arquivo,
+    $dados
+){
+    $index = (int)$_POST['index'] ?? -1;
+    switch ($acao) {
+            case 'adicionar':
+                // Cria um NOVO usuário. A senha é obrigatória aqui (assumindo validação HTML/front-end).
+                $novo = [
+                    'username' => htmlspecialchars($_POST['username'], ENT_QUOTES, 'UTF-8'),
+                    // A função password_hash é obrigatória para ADICIONAR.
+                    'password' => password_hash($_POST['password'], PASSWORD_DEFAULT)
+                ];
+                $dados[] = $novo;
+                break;
+
+            case 'editar':
+                if ($index >= 0 && isset($dados[$index])) {
+                    // 1. Sempre atualiza o nome de usuário
+                    $dados[$index]['username'] = htmlspecialchars($_POST['username'], ENT_QUOTES, 'UTF-8');
+                    
+                    // 2. CORREÇÃO CRÍTICA: Só atualiza a senha se o campo não estiver vazio.
+                    if (!empty($_POST['password'])) {
+                        $dados[$index]['password'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
+                    }
+                    // Se $_POST['password'] estiver vazio, a senha antiga é mantida.
+                }
+                break;
+
+            case 'deletar':
+                if ($index >= 0 && isset($dados[$index])) {
+                    // Remove o item
+                    unset($dados[$index]); 
+                    
+                    // CORREÇÃO CRÍTICA: Reindexa o array para evitar problemas de índice no JSON.
+                    $dados = array_values($dados); 
+                }
+                break;
+            
+            default:
+                // Nenhuma ação reconhecida
+                return false;
+        }
+
+    // Salva o JSON atualizado e retorna o resultado
+    return salvarJSON($arquivo, $dados);
+}
 
 if (!isset($_SESSION['logged_in'])) {
     include 'login.php';
@@ -107,13 +155,9 @@ if ($_POST && !isset($_POST['username'])) {
                         'content' => $_POST['content'],
                         '1-image_URL' => $_POST['1-image_URL'] ?? null
                     ];
-                } elseif ($arquivo === '.user.json') {
-                    $novo = [
-                        'username' => htmlspecialchars($_POST['username'], ENT_QUOTES, 'UTF-8'),
-                        'password' => password_hash($_POST['password'], PASSWORD_DEFAULT)
-                    ];
-                }
-                $dados[] = $novo;
+                } 
+                
+
             }
             salvarJSON($arquivo, $dados);
             break;
@@ -146,11 +190,8 @@ if ($_POST && !isset($_POST['username'])) {
                         'content' => $_POST['content'],
                         '1-image_URL' => $_POST['1-image_URL'] ?: null
                     ];
-                } elseif ($arquivo === '.user.json') {
-                    $dados[$index] = [
-                        'username' => htmlspecialchars($_POST['username'], ENT_QUOTES, 'UTF-8'),
-                        'password' => password_hash($_POST['password'], PASSWORD_DEFAULT)
-                    ];
+                
+                
                 } else {
                     $dados[$index]['lat'] = (float)$_POST['lat'];
                     $dados[$index]['lng'] = (float)$_POST['lng'];
@@ -190,7 +231,8 @@ if ($_POST && !isset($_POST['username'])) {
     exit;
 }
 
-$allowed_tabs = ['schools.json', 'addressSchools.json', 'failed_addresses.json', 'news.json', 'news_draft.json', '.user.json'];
+
+$allowed_tabs = ['schools.json', 'failed_addresses.json', 'news.json', 'news_draft.json', '.user.json'];
 $tab_atual = in_array($_GET['tab'] ?? '', $allowed_tabs) ? $_GET['tab'] : 'schools.json';
 $dados = lerJSON($tab_atual);
 
@@ -494,11 +536,11 @@ if ($tab_atual === 'news.json' || $tab_atual === 'news_draft.json') {
                 `;
             } else if (tabAtual === '.user.json') {
                 fields = `
-                    <div class="form-grid">
-                        <input type="text" name="username" value="${item.username}" required>
-                        <input type="password" name="password" value="${item.password}" required>
-                    </div>
-                `;
+            <div class="form-grid">
+                <input type="text" name="username" value="${item.username}" required>
+                <input type="password" name="password" placeholder="Nova senha (deixe vazio para manter atual)">
+            </div>
+        `;
             } else {
                 fields = `
                     <div class="form-grid">
