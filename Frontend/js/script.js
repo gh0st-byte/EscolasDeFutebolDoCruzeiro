@@ -1,6 +1,6 @@
 // Carregar notícias para o index
 function loadIndexNews() {
-  fetch('/api/data.php?file=news.json')
+  fetch('/Backend/api/data.php?file=news.json')
     .then(response => response.json())
     .then(data => {
       const container = document.getElementById('newsCardsContainer');
@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 let schools = [];
 
-fetch("/api/data.php?file=schools.json")
+fetch("/Backend/api/data.php?file=schools.json")
   .then(res => {
     console.log('Response status:', res.status);
     if (!res.ok) {
@@ -315,7 +315,7 @@ function openModal(index) {
 
 function loadNews() {
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/api/data.php?file=news.json', true);
+    xhr.open('GET', '/Backend/api/data.php?file=news.json', true);
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4) {
             var newsContainer = document.querySelector('.news-letter');
