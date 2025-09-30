@@ -25,7 +25,6 @@ $file = $_GET['file'] ?? '';
 
 $allowed_files = [
     'schools.json', 
-    'addressSchools.json', 
     'failed_addresses.json', 
     'news.json', 
     'news_draft.json', 
