@@ -144,7 +144,7 @@ if ($_POST && isset($_POST['acao']) && isset($_POST['arquivo'])) {
                         'cidade' => $_POST['cidade'] ?? null,
                         'imagem_URL' => $_POST['imagem_URL'] ?? null,
                         'endereco_encontrado' => $_POST['endereco_encontrado'],
-                        'region' => $_POST['region'] ?? 'brasil'
+                        'region' => $_POST['region'] ?? 'Brasil'
                     ];
                     if ($arquivo === 'schools.json') {
                         $novo['endereco'] = $_POST['endereco'] ?? '';
@@ -206,7 +206,7 @@ if ($_POST && isset($_POST['acao']) && isset($_POST['arquivo'])) {
                         $dados[$index]['cidade'] = $_POST['cidade'] ?: null;
                         $dados[$index]['imagem_URL'] = $_POST['imagem_URL'] ?: null;
                         $dados[$index]['endereco_encontrado'] = $_POST['endereco_encontrado'];
-                        $dados[$index]['region'] = $_POST['region'] ?? 'brasil';
+                        $dados[$index]['region'] = $_POST['region'] ?? 'Brasil';
                         if ($arquivo === 'schools.json') {
                             $dados[$index]['endereco'] = $_POST['endereco'] ?? '';
                             $dados[$index]['telefone'] = $_POST['telefone'] ?? '';
@@ -559,7 +559,7 @@ if ($tab_atual === 'news.json' || $tab_atual === 'news_draft.json') {
                         <input type="url" placeholder="URL da Imagem" name="imagem_URL" value="${item.imagem_URL || ''}">
                         <input type="number" step="any" placeholder="Latitude" name="lat" value="${item.lat}" required>
                         <input type="number" step="any" placeholder="Longitude" name="lng" value="${item.lng}" required>
-                        <input type="text" placeholder="Região" name="region" value="${item.region || 'brasil'}">
+                        <input type="text" placeholder="Região" name="region" value="${item.region || 'Brasil'}">
                         <textarea placeholder="Endereço Encontrado" name="endereco_encontrado" required>${item.endereco_encontrado}</textarea>
                 `;
                 

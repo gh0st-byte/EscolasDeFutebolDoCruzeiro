@@ -58,7 +58,7 @@ function preencherFiltros() {
     const filtroCidade = document.getElementById('filtroCidade');
     
     // Preencher regiões
-    filtroRegiao.innerHTML += `<option value="brasil">Brasil</option>`;
+    filtroRegiao.innerHTML += `<option value="Brasil">Brasil</option>`;
     
     // Preencher estados usando BRfilters.json
     Object.keys(filtrosDisponiveis).forEach(siglaEstado => {

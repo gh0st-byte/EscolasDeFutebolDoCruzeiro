@@ -1,50 +1,170 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-   <meta charset="UTF-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CruzeiroAcademy</title>
+    <title>Benefícios - Escolas do Cruzeiro</title>
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/benefits-styles.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
-    <main>
-        <section>
-             <header>
-                <div class="container-logo">
+    <header>
+        <div class="container-logo">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="https://logodetimes.com/times/cruzeiro/logo-cruzeiro-4096.png" alt="Cruzeiro Logo">
+                </a>
+            </div>
+            <div class="dropdown d-md-none">
+                <button class="btn btn-link dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                    ☰
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" href="index.html">Home</a></li>
+                    <li><a class="dropdown-item" href="benefits.html">Benefícios</a></li>
+                    <li><a class="dropdown-item" href="schools.html">Unidades</a></li>
+                    <li><a class="dropdown-item" href="news.html">Notícias</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="#">Quero ser Franqueado</a></li>
+                </ul>
+            </div>
+            <nav class="d-none d-md-flex">
+                <ul class="nav-links">
+                    <li><a href="index.html" class="nav-item">Home</a></li>
+                    <li><a href="benefits.html" class="nav-item">Benefícios</a></li>
+                    <li><a href="schools.html" class="nav-item">Unidades</a></li>
+                    <li><a href="news.html" class="nav-item">Notícias</a></li>
+                    <li><a href="#" class="nav-franqueado"><button>Quero ser Franqueado</button></a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
 
-                    <div class="logo">
-                        <img src="https://logodetimes.com/times/cruzeiro/logo-cruzeiro-4096.png" alt="Cruzeiro Logo">
+    <main>
+        <!-- Hero Section -->
+        <section class="benefits-hero">
+            <div class="hero-content">
+                <h1>Benefícios das Escolas do Cruzeiro</h1>
+                <p>Descubra todas as vantagens de fazer parte da maior rede de escolas de futebol do Brasil</p>
+            </div>
+        </section>
+
+        <!-- Benefits Grid -->
+        <section class="benefits-section">
+            <div class="container">
+                <div class="benefits-grid">
+                    <div class="benefit-card">
+                        <div class="benefit-icon">⚽</div>
+                        <h3>Metodologia Exclusiva</h3>
+                        <p>Sistema de ensino desenvolvido pelos profissionais do Cruzeiro, focado no desenvolvimento técnico e tático dos atletas.</p>
                     </div>
-                    <div class="dropdown d-md-none">
-                        <button class="btn btn-link dropdown-toggle custom-dropdown-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            ☰
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="#metodologia">Metodologia</a></li>
-                            <li><a class="dropdown-item" href="benefits.html">Benefícios</a></li>
-                            <li><a class="dropdown-item" href="#crias">#CriasDaToca</a></li>
-                            <li><a class="dropdown-item" href="schools.html">Unidades</a></li>
-                            <li><a class="dropdown-item" href="news.html">Notícias</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#">Quero ser Franqueado</a></li>
-                        </ul>
+                    
+                    <div class="benefit-card">
+                        <div class="benefit-icon">🏆</div>
+                        <h3>Tradição Vitoriosa</h3>
+                        <p>Mais de 100 anos de história e tradição no futebol brasileiro, com títulos nacionais e internacionais.</p>
                     </div>
-                    <nav class="d-none d-md-flex">
-                        <ul class="nav-links">
-                            <li><a href="#metodologia" class="nav-item">Metodologia</a></li>
-                            <li><a href="#" class="nav-item">Benefícios</a></li>
-                            <li><a href="#" class="nav-item">#CriasDaToca</a></li>
-                            <li><a href="schools.html" class="nav-item">Unidades</a></li>
-                            <li><a href="news.html" class="nav-item">Notícias</a></li>
-                            <li><a href="#" class="btn-franqueado nav-franqueado"><button>Quero ser Franqueado</button></a></li>
-                        </ul>
-                    </nav>
+                    
+                    <div class="benefit-card">
+                        <div class="benefit-icon">👨‍🏫</div>
+                        <h3>Professores Qualificados</h3>
+                        <p>Equipe técnica formada por profissionais certificados e com experiência no futebol profissional.</p>
+                    </div>
+                    
+                    <div class="benefit-card">
+                        <div class="benefit-icon">🌟</div>
+                        <h3>Desenvolvimento Integral</h3>
+                        <p>Foco não apenas no futebol, mas também no desenvolvimento pessoal, social e educacional dos alunos.</p>
+                    </div>
+                    
+                    <div class="benefit-card">
+                        <div class="benefit-icon">🏟️</div>
+                        <h3>Infraestrutura Completa</h3>
+                        <p>Campos de qualidade, vestiários, materiais esportivos e toda estrutura necessária para o aprendizado.</p>
+                    </div>
+                    
+                    <div class="benefit-card">
+                        <div class="benefit-icon">🎯</div>
+                        <h3>Oportunidades Reais</h3>
+                        <p>Conexão direta com o clube e possibilidade de participar de peneiras e eventos especiais do Cruzeiro.</p>
+                    </div>
                 </div>
-            </header>
+            </div>
+        </section>
+
+        <!-- Age Groups -->
+        <section class="age-groups">
+            <div class="container">
+                <h2>Categorias por Idade</h2>
+                <div class="age-grid">
+                    <div class="age-card">
+                        <h3>4 a 6 anos</h3>
+                        <h4>Iniciação</h4>
+                        <ul>
+                            <li>Coordenação motora</li>
+                            <li>Socialização</li>
+                            <li>Diversão com a bola</li>
+                            <li>Regras básicas</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="age-card">
+                        <h3>7 a 10 anos</h3>
+                        <h4>Desenvolvimento</h4>
+                        <ul>
+                            <li>Fundamentos técnicos</li>
+                            <li>Trabalho em equipe</li>
+                            <li>Disciplina esportiva</li>
+                            <li>Primeiros jogos</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="age-card">
+                        <h3>11 a 14 anos</h3>
+                        <h4>Aperfeiçoamento</h4>
+                        <ul>
+                            <li>Técnica avançada</li>
+                            <li>Tática de jogo</li>
+                            <li>Competições</li>
+                            <li>Liderança</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="age-card">
+                        <h3>15 a 17 anos</h3>
+                        <h4>Especialização</h4>
+                        <ul>
+                            <li>Alto rendimento</li>
+                            <li>Preparação física</li>
+                            <li>Mentalidade profissional</li>
+                            <li>Oportunidades no clube</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-benefits">
+            <div class="container">
+                <h2>Pronto para fazer parte da família Cruzeiro?</h2>
+                <p>Encontre a unidade mais próxima e matricule seu filho hoje mesmo!</p>
+                <div class="cta-buttons">
+                    <a href="schools.html" class="btn-primary">Encontrar Unidade</a>
+                    <a href="#" class="btn-secondary">Falar com Consultor</a>
+                </div>
+            </div>
         </section>
     </main>
 
-    
+    <footer>
+        <p>&copy; 2024 Cruzeiro Esporte Clube - SAF. Todos os direitos reservados.</p>
+        
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/script.js"></script>
 </body>
 </html>
