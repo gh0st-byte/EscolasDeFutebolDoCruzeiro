@@ -303,9 +303,37 @@ if ($tab_atual === 'news.json' || $tab_atual === 'news_draft.json') {
                     <div class="form-grid">
                         <input type="text" name="title" placeholder="Título" required>
                         <input type="text" name="subtitle" placeholder="Subtítulo">
-                        <input type="text" name="dayWeek" placeholder="Dia da Semana">
-                        <input type="text" name="date" placeholder="Dia (01-31)" required>
-                        <input type="text" name="month" placeholder="Mês">
+                        <select name="dayWeek">
+                            <option value="">Selecione o dia da semana</option>
+                            <option value="Segunda-feira">Segunda-feira</option>
+                            <option value="Terça-feira">Terça-feira</option>
+                            <option value="Quarta-feira">Quarta-feira</option>
+                            <option value="Quinta-feira">Quinta-feira</option>
+                            <option value="Sexta-feira">Sexta-feira</option>
+                            <option value="Sábado">Sábado</option>
+                            <option value="Domingo">Domingo</option>
+                        </select>
+                        <select name="date" required>
+                            <option value="">Selecione o dia</option>
+                            <?php for($i = 1; $i <= 31; $i++): ?>
+                                <option value="<?= sprintf('%02d', $i) ?>"><?= sprintf('%02d', $i) ?></option>
+                            <?php endfor; ?>
+                        </select>
+                        <select name="month">
+                            <option value="">Selecione o mês</option>
+                            <option value="Janeiro">Janeiro</option>
+                            <option value="Fevereiro">Fevereiro</option>
+                            <option value="Março">Março</option>
+                            <option value="Abril">Abril</option>
+                            <option value="Maio">Maio</option>
+                            <option value="Junho">Junho</option>
+                            <option value="Julho">Julho</option>
+                            <option value="Agosto">Agosto</option>
+                            <option value="Setembro">Setembro</option>
+                            <option value="Outubro">Outubro</option>
+                            <option value="Novembro">Novembro</option>
+                            <option value="Dezembro">Dezembro</option>
+                        </select>
                         <input type="url" name="1-image_URL" placeholder="URL da Imagem">
                         <textarea name="content" placeholder="Conteúdo da notícia" required></textarea>
                     </div>
@@ -321,7 +349,26 @@ if ($tab_atual === 'news.json' || $tab_atual === 'news_draft.json') {
                         <input type="url" name="imagem_URL" placeholder="URL da Imagem">
                         <input type="number" step="any" name="lat" placeholder="Latitude" required>
                         <input type="number" step="any" name="lng" placeholder="Longitude" required>
-                        <input type="text" name="region" placeholder="Região" value="Brasil">
+                        <select name="region">
+                            <option value="Brasil" selected>Brasil</option>
+                            <option value="Argentina">Argentina</option>
+                            <option value="Chile">Chile</option>
+                            <option value="Uruguai">Uruguai</option>
+                            <option value="Paraguai">Paraguai</option>
+                            <option value="Estados Unidos">Estados Unidos</option>
+                            <option value="Canadá">Canadá</option>
+                            <option value="México">México</option>
+                            <option value="Portugal">Portugal</option>
+                            <option value="Espanha">Espanha</option>
+                            <option value="França">França</option>
+                            <option value="Itália">Itália</option>
+                            <option value="Alemanha">Alemanha</option>
+                            <option value="Reino Unido">Reino Unido</option>
+                            <option value="Japão">Japão</option>
+                            <option value="China">China</option>
+                            <option value="Austrália">Austrália</option>
+                            <option value="Outros">Outros</option>
+                        </select>
                         <textarea name="endereco_encontrado" placeholder="Endereço encontrado" required></textarea>
                         
                         <?php if ($tab_atual === 'schools.json'): ?>
@@ -330,7 +377,37 @@ if ($tab_atual === 'news.json' || $tab_atual === 'news_draft.json') {
                             <input type="text" name="whatsapp" placeholder="WhatsApp URL (basta inserir o numero completo sem símbolos)" value="https://wa.me/+" >
                             <input type="text" name="instagram" placeholder="Instagram @" value="@">
                             <input type="text" name="instagram_url" placeholder="Instagram URL (basta inserir o usuário do instagram)" value="https://www.instagram.com/" >
-                            <input type="text" name="estado" placeholder="Estado (UF)">
+                            <label for="estado" style="color: red; font-weight:900">Observação: Caso o País nativo da escola não seja o Brasil não selecione nenhuma opção de Estado</label>
+                            <select name="estado">
+                                <option value="">Selecione o Estado</option>
+                                <option value="AC">Acre (AC)</option>
+                                <option value="AL">Alagoas (AL)</option>
+                                <option value="AP">Amapá (AP)</option>
+                                <option value="AM">Amazonas (AM)</option>
+                                <option value="BA">Bahia (BA)</option>
+                                <option value="CE">Ceará (CE)</option>
+                                <option value="DF">Distrito Federal (DF)</option>
+                                <option value="ES">Espírito Santo (ES)</option>
+                                <option value="GO">Goiás (GO)</option>
+                                <option value="MA">Maranhão (MA)</option>
+                                <option value="MT">Mato Grosso (MT)</option>
+                                <option value="MS">Mato Grosso do Sul (MS)</option>
+                                <option value="MG">Minas Gerais (MG)</option>
+                                <option value="PA">Pará (PA)</option>
+                                <option value="PB">Paraíba (PB)</option>
+                                <option value="PR">Paraná (PR)</option>
+                                <option value="PE">Pernambuco (PE)</option>
+                                <option value="PI">Piauí (PI)</option>
+                                <option value="RJ">Rio de Janeiro (RJ)</option>
+                                <option value="RN">Rio Grande do Norte (RN)</option>
+                                <option value="RS">Rio Grande do Sul (RS)</option>
+                                <option value="RO">Rondônia (RO)</option>
+                                <option value="RR">Roraima (RR)</option>
+                                <option value="SC">Santa Catarina (SC)</option>
+                                <option value="SP">São Paulo (SP)</option>
+                                <option value="SE">Sergipe (SE)</option>
+                                <option value="TO">Tocantins (TO)</option>
+                            </select>
                         <?php endif; ?>
                     </div>
                 <?php endif; ?>
@@ -537,9 +614,38 @@ if ($tab_atual === 'news.json' || $tab_atual === 'news_draft.json') {
                     <div class="form-grid">
                         <input type="text" placeholder="Título" name="title" value="${item.title}" required>
                         <input type="text" placeholder="Subtítulo" name="subtitle" value="${item.subtitle || ''}">
-                        <input type="text" placeholder="Dia da Semana" name="dayWeek" value="${item.dayWeek || ''}">
-                        <input type="text" placeholder="Dia (01-31)" name="date" value="${item.date}" required>
-                        <input type="text" placeholder="Mês" name="month" value="${item.month || ''}">
+                        <select name="dayWeek">
+                            <option value="">Selecione o dia da semana</option>
+                            <option value="Segunda-feira" ${item.dayWeek === 'Segunda-feira' ? 'selected' : ''}>Segunda-feira</option>
+                            <option value="Terça-feira" ${item.dayWeek === 'Terça-feira' ? 'selected' : ''}>Terça-feira</option>
+                            <option value="Quarta-feira" ${item.dayWeek === 'Quarta-feira' ? 'selected' : ''}>Quarta-feira</option>
+                            <option value="Quinta-feira" ${item.dayWeek === 'Quinta-feira' ? 'selected' : ''}>Quinta-feira</option>
+                            <option value="Sexta-feira" ${item.dayWeek === 'Sexta-feira' ? 'selected' : ''}>Sexta-feira</option>
+                            <option value="Sábado" ${item.dayWeek === 'Sábado' ? 'selected' : ''}>Sábado</option>
+                            <option value="Domingo" ${item.dayWeek === 'Domingo' ? 'selected' : ''}>Domingo</option>
+                        </select>
+                        <select name="date" required>
+                            <option value="">Selecione o dia</option>`;
+                        for(let i = 1; i <= 31; i++) {
+                            const day = i.toString().padStart(2, '0');
+                            fields += `<option value="${day}" ${item.date === day ? 'selected' : ''}>${day}</option>`;
+                        }
+                        fields += `</select>
+                        <select name="month">
+                            <option value="">Selecione o mês</option>
+                            <option value="Janeiro" ${item.month === 'Janeiro' ? 'selected' : ''}>Janeiro</option>
+                            <option value="Fevereiro" ${item.month === 'Fevereiro' ? 'selected' : ''}>Fevereiro</option>
+                            <option value="Março" ${item.month === 'Março' ? 'selected' : ''}>Março</option>
+                            <option value="Abril" ${item.month === 'Abril' ? 'selected' : ''}>Abril</option>
+                            <option value="Maio" ${item.month === 'Maio' ? 'selected' : ''}>Maio</option>
+                            <option value="Junho" ${item.month === 'Junho' ? 'selected' : ''}>Junho</option>
+                            <option value="Julho" ${item.month === 'Julho' ? 'selected' : ''}>Julho</option>
+                            <option value="Agosto" ${item.month === 'Agosto' ? 'selected' : ''}>Agosto</option>
+                            <option value="Setembro" ${item.month === 'Setembro' ? 'selected' : ''}>Setembro</option>
+                            <option value="Outubro" ${item.month === 'Outubro' ? 'selected' : ''}>Outubro</option>
+                            <option value="Novembro" ${item.month === 'Novembro' ? 'selected' : ''}>Novembro</option>
+                            <option value="Dezembro" ${item.month === 'Dezembro' ? 'selected' : ''}>Dezembro</option>
+                        </select>
                         <input type="url" placeholder="URL da Imagem" name="1-image_URL" value="${item['1-image_URL'] || ''}">
                         <textarea placeholder="Conteúdo" name="content" required>${item.content}</textarea>
                     </div>
@@ -559,7 +665,26 @@ if ($tab_atual === 'news.json' || $tab_atual === 'news_draft.json') {
                         <input type="url" placeholder="URL da Imagem" name="imagem_URL" value="${item.imagem_URL || ''}">
                         <input type="number" step="any" placeholder="Latitude" name="lat" value="${item.lat}" required>
                         <input type="number" step="any" placeholder="Longitude" name="lng" value="${item.lng}" required>
-                        <input type="text" placeholder="Região" name="region" value="${item.region || 'Brasil'}">
+                        <select name="region">
+                            <option value="Brasil" ${(item.region || 'Brasil') === 'Brasil' ? 'selected' : ''}>Brasil</option>
+                            <option value="Argentina" ${item.region === 'Argentina' ? 'selected' : ''}>Argentina</option>
+                            <option value="Chile" ${item.region === 'Chile' ? 'selected' : ''}>Chile</option>
+                            <option value="Uruguai" ${item.region === 'Uruguai' ? 'selected' : ''}>Uruguai</option>
+                            <option value="Paraguai" ${item.region === 'Paraguai' ? 'selected' : ''}>Paraguai</option>
+                            <option value="Estados Unidos" ${item.region === 'Estados Unidos' ? 'selected' : ''}>Estados Unidos</option>
+                            <option value="Canadá" ${item.region === 'Canadá' ? 'selected' : ''}>Canadá</option>
+                            <option value="México" ${item.region === 'México' ? 'selected' : ''}>México</option>
+                            <option value="Portugal" ${item.region === 'Portugal' ? 'selected' : ''}>Portugal</option>
+                            <option value="Espanha" ${item.region === 'Espanha' ? 'selected' : ''}>Espanha</option>
+                            <option value="França" ${item.region === 'França' ? 'selected' : ''}>França</option>
+                            <option value="Itália" ${item.region === 'Itália' ? 'selected' : ''}>Itália</option>
+                            <option value="Alemanha" ${item.region === 'Alemanha' ? 'selected' : ''}>Alemanha</option>
+                            <option value="Reino Unido" ${item.region === 'Reino Unido' ? 'selected' : ''}>Reino Unido</option>
+                            <option value="Japão" ${item.region === 'Japão' ? 'selected' : ''}>Japão</option>
+                            <option value="China" ${item.region === 'China' ? 'selected' : ''}>China</option>
+                            <option value="Austrália" ${item.region === 'Austrália' ? 'selected' : ''}>Austrália</option>
+                            <option value="Outros" ${item.region === 'Outros' ? 'selected' : ''}>Outros</option>
+                        </select>
                         <textarea placeholder="Endereço Encontrado" name="endereco_encontrado" required>${item.endereco_encontrado}</textarea>
                 `;
                 
@@ -570,7 +695,36 @@ if ($tab_atual === 'news.json' || $tab_atual === 'news_draft.json') {
                         <input type="text" placeholder="WhatsApp" name="whatsapp" value="${item.whatsapp || ''}">
                         <input type="text" placeholder="Instagram" name="instagram" value="${item.instagram || ''}">
                         <input type="text" placeholder="URL do Instagram" name="instagram_url" value="${item.instagram_url || ''}">
-                        <input type="text" placeholder="Estado" name="estado" value="${item.estado || ''}">
+                        <select name="estado">
+                            <option value="">Selecione o Estado</option>
+                            <option value="AC" ${item.estado === 'AC' ? 'selected' : ''}>Acre (AC)</option>
+                            <option value="AL" ${item.estado === 'AL' ? 'selected' : ''}>Alagoas (AL)</option>
+                            <option value="AP" ${item.estado === 'AP' ? 'selected' : ''}>Amapá (AP)</option>
+                            <option value="AM" ${item.estado === 'AM' ? 'selected' : ''}>Amazonas (AM)</option>
+                            <option value="BA" ${item.estado === 'BA' ? 'selected' : ''}>Bahia (BA)</option>
+                            <option value="CE" ${item.estado === 'CE' ? 'selected' : ''}>Ceará (CE)</option>
+                            <option value="DF" ${item.estado === 'DF' ? 'selected' : ''}>Distrito Federal (DF)</option>
+                            <option value="ES" ${item.estado === 'ES' ? 'selected' : ''}>Espírito Santo (ES)</option>
+                            <option value="GO" ${item.estado === 'GO' ? 'selected' : ''}>Goiás (GO)</option>
+                            <option value="MA" ${item.estado === 'MA' ? 'selected' : ''}>Maranhão (MA)</option>
+                            <option value="MT" ${item.estado === 'MT' ? 'selected' : ''}>Mato Grosso (MT)</option>
+                            <option value="MS" ${item.estado === 'MS' ? 'selected' : ''}>Mato Grosso do Sul (MS)</option>
+                            <option value="MG" ${item.estado === 'MG' ? 'selected' : ''}>Minas Gerais (MG)</option>
+                            <option value="PA" ${item.estado === 'PA' ? 'selected' : ''}>Pará (PA)</option>
+                            <option value="PB" ${item.estado === 'PB' ? 'selected' : ''}>Paraíba (PB)</option>
+                            <option value="PR" ${item.estado === 'PR' ? 'selected' : ''}>Paraná (PR)</option>
+                            <option value="PE" ${item.estado === 'PE' ? 'selected' : ''}>Pernambuco (PE)</option>
+                            <option value="PI" ${item.estado === 'PI' ? 'selected' : ''}>Piauí (PI)</option>
+                            <option value="RJ" ${item.estado === 'RJ' ? 'selected' : ''}>Rio de Janeiro (RJ)</option>
+                            <option value="RN" ${item.estado === 'RN' ? 'selected' : ''}>Rio Grande do Norte (RN)</option>
+                            <option value="RS" ${item.estado === 'RS' ? 'selected' : ''}>Rio Grande do Sul (RS)</option>
+                            <option value="RO" ${item.estado === 'RO' ? 'selected' : ''}>Rondônia (RO)</option>
+                            <option value="RR" ${item.estado === 'RR' ? 'selected' : ''}>Roraima (RR)</option>
+                            <option value="SC" ${item.estado === 'SC' ? 'selected' : ''}>Santa Catarina (SC)</option>
+                            <option value="SP" ${item.estado === 'SP' ? 'selected' : ''}>São Paulo (SP)</option>
+                            <option value="SE" ${item.estado === 'SE' ? 'selected' : ''}>Sergipe (SE)</option>
+                            <option value="TO" ${item.estado === 'TO' ? 'selected' : ''}>Tocantins (TO)</option>
+                        </select>
                     `;
                 }
                 fields += '</div>';
