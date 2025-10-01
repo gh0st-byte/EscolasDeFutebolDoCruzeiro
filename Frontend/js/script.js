@@ -1,3 +1,10 @@
+// Função para escapar HTML
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
 // Carregar notícias para o index
 function loadIndexNews() {
   fetch('/Backend/api/data.php?file=news.json')
@@ -6,7 +13,6 @@ function loadIndexNews() {
       const container = document.getElementById('newsCardsContainer');
       if (!container) return;
       
-      // Pegar as 5 primeiras notícias
       const noticias = data.slice(0, 5);
       
       container.innerHTML = noticias.map(item => {
@@ -24,10 +30,12 @@ function loadIndexNews() {
           </div>
         `;
       }).join('');
+      
+      // Inicializar carrossel após carregar notícias
+      setTimeout(() => initNewsCarousel(), 100);
     })
     .catch(error => {
       console.error('Erro ao carregar notícias:', error);
-      // Fallback com notícias estáticas
       const container = document.getElementById('newsCardsContainer');
       if (container) {
         container.innerHTML = `
@@ -41,50 +49,50 @@ function loadIndexNews() {
     });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  // Carregar notícias se estivermos na página index
-  if (document.getElementById('newsCardsContainer')) {
-    loadIndexNews();
+// Header scroll effect
+window.addEventListener('scroll', () => {
+  const header = document.querySelector('header');
+  if (header) {
+    header.classList.toggle('scrolled', window.scrollY > 0);
   }
-  const map = L.map('map', {
+});
+
+// Variáveis globais
+let map, markers, schools = [];
+
+// Inicializar mapa
+function initMap() {
+  const mapElement = document.getElementById('map');
+  if (!mapElement) return;
+  
+  // Verificar se Leaflet está carregado
+  if (typeof L === 'undefined') {
+    console.error('Leaflet não carregado');
+    return;
+  }
+  
+  map = L.map('map', {
     center: [-15.78, -47.93], 
     zoom: 4,
     minZoom: 2,
     maxZoom: 18,
     worldCopyJump: false,
-    maxBounds: [
-      [-85, -180], 
-      [85, 180]    
-    ]
+    maxBounds: [[-85, -180], [85, 180]]
   });
 
-  // Light basemap to better see the blue markers
   L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
     noWrap: true,
-    bounds: [
-      [-85, -180],
-      [85, 180]
-    ],
+    bounds: [[-85, -180], [85, 180]],
     minZoom: 2,
     maxZoom: 18
   }).addTo(map);
 
-  // Customize marker cluster appearance
-  const markers = L.markerClusterGroup({
+  markers = L.markerClusterGroup({
     maxClusterRadius: 50,
     iconCreateFunction: function(cluster) {
       const childCount = cluster.getChildCount();
-      let size = 40;
-      
-      if (childCount < 10) {
-        size = 40;
-      } else if (childCount < 20) {
-        size = 50;
-      } else {
-        size = 60;
-      }
-
+      const size = childCount < 10 ? 40 : childCount < 20 ? 50 : 60;
       return new L.DivIcon({ 
         html: `<div style="background-color: #0033a0; width: ${size}px; height: ${size}px; border-radius: 50%; border: 2px solid white; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 14px;">${childCount}</div>`, 
         className: 'custom-cluster', 
@@ -92,198 +100,155 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
   });
-
-
-let schools = [];
-
-fetch("/Backend/api/data.php?file=schools.json")
-  .then(res => {
-    console.log('Response status:', res.status);
-    if (!res.ok) {
-      throw new Error(`HTTP error! status: ${res.status}`);
-    }
-    return res.json();
-  })
-  .then(data => {
-    console.log('Escolas carregadas:', data.length);
-    console.log('Primeira escola:', data[0]);
-    schools = data;
-    addMarkers('brasil');
-  })
-  .catch(error => {
-    console.error('Erro ao carregar escolas:', error);
-  });
-
-
-
-
-  // Create custom blue circle icon
-  function createBlueCircleIcon() {
-    return L.divIcon({
-      className: 'custom-marker',
-      html: `<div style="background-color: #0033a0; width: 100%; height: 100%; border-radius: 50%; box-shadow: 0 0 10px 3px #0033a0;"></div>`,
-      iconSize: [20, 20],
-      iconAnchor: [10, 10]
-    });
-  }
-
-  function addMarkers(region = 'all') {
-    console.log('addMarkers chamado com região:', region);
-    markers.clearLayers();
-    
-    const filteredSchools = schools.filter(p => {
-      if (region === 'all') return true;
-      if (region === 'brasil') return p.region && (p.region.toLowerCase() === 'brasil' || p.region.toLowerCase() === 'brazil');
-      if (region === 'world') return p.region && p.region.toLowerCase() !== 'brasil' && p.region.toLowerCase() !== 'brazil';
-      return p.region && p.region.toLowerCase() === region.toLowerCase();
-    });
-    
-    console.log(`Filtro: ${region}, Escolas encontradas: ${filteredSchools.length}`);
-    
-    if (filteredSchools.length === 0) {
-      console.warn('Nenhuma escola encontrada para o filtro:', region);
-      return;
-    }
-    
-    filteredSchools.forEach((p, index) => {
-      console.log(`Adicionando marcador ${index + 1}:`, p.nome || p.cidade, 'lat:', p.lat, 'lng:', p.lng);
-      
-      if (!p.lat || !p.lng || isNaN(p.lat) || isNaN(p.lng)) {
-        console.error('Coordenadas inválidas para:', p.nome || p.cidade, p.lat, p.lng);
-        return;
-      }
-      
-      const icon = createBlueCircleIcon();
-      const popupContent = `
-        <div style="text-align: center;">
-          <h4>${(p.nome || p.cidade || '').replace(/[<>&"']/g, function(m) { return {'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&#39;'}[m]; })}</h4>
-          <p><strong>Endereço:</strong> ${(p.endereco_encontrado || '').replace(/[<>&"']/g, function(m) { return {'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&#39;'}[m]; })}</p>
-          ${p.telefone ? `<p><strong>Telefone:</strong> ${p.telefone.replace(/[<>&"']/g, function(m) { return {'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&#39;'}[m]; })}</p>` : ''}
-          ${p.instagram ? `<p><strong>Instagram:</strong> ${p.instagram.replace(/[<>&"']/g, function(m) { return {'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&#39;'}[m]; })}</p>` : ''}
-        </div>
-      `;
-      const marker = L.marker([p.lat, p.lng], {icon: icon}).bindPopup(popupContent);
-      markers.addLayer(marker);
-    });
-    
-    console.log('Total de marcadores adicionados:', markers.getLayers().length);
-    map.addLayer(markers);
-  }
-
   
+  loadSchools();
+  setupMapButtons();
+  
+  // Forçar redimensionamento do mapa
+  setTimeout(() => {
+    if (map) {
+      map.invalidateSize();
+      console.log('Mapa inicializado');
+    }
+  }, 500);
+}
 
-  // Initialize with all markers
-  // addMarkers(); // Removido pois será chamado após carregar JSON
+// Carregar escolas
+function loadSchools() {
+  fetch("/Backend/api/data.php?file=schools.json")
+    .then(res => {
+      if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+      return res.json();
+    })
+    .then(data => {
+      schools = data;
+      addMarkers('Brasil');
+    })
+    .catch(error => console.error('Erro ao carregar escolas:', error));
+}
 
-  // Button event handlers
+// Criar ícone personalizado
+function createBlueCircleIcon() {
+  return L.divIcon({
+    className: 'custom-marker',
+    html: `<div style="background-color: #0033a0; width: 100%; height: 100%; border-radius: 50%; box-shadow: 0 0 10px 3px #0033a0;"></div>`,
+    iconSize: [20, 20],
+    iconAnchor: [10, 10]
+  });
+}
+
+// Adicionar marcadores no mapa
+function addMarkers(region = 'all') {
+  if (!markers) return;
+  
+  markers.clearLayers();
+  
+  const filteredSchools = schools.filter(p => {
+    if (region === 'all') return true;
+    if (region === 'Brasil') return p.region && (p.region.toLowerCase() === 'brasil');
+    if (region === 'world') return p.region && p.region.toLowerCase() !== 'brasil' && p.region.toLowerCase() !== 'brazil';
+    return p.region && p.region.toLowerCase() === region.toLowerCase();
+  });
+  
+  filteredSchools.forEach(p => {
+    if (!p.lat || !p.lng || isNaN(p.lat) || isNaN(p.lng)) return;
+    
+    const popupContent = `
+      <div style="text-align: center;">
+        <h4>${escapeHtml(p.nome || p.cidade || '')}</h4>
+        <p><strong>Endereço:</strong> ${escapeHtml(p.endereco_encontrado || '')}</p>
+        ${p.telefone ? `<p><strong>Telefone:</strong> ${escapeHtml(p.telefone)}</p>` : ''}
+        ${p.instagram ? `<p><strong>Instagram:</strong> ${escapeHtml(p.instagram)}</p>` : ''}
+      </div>
+    `;
+    
+    const marker = L.marker([p.lat, p.lng], {icon: createBlueCircleIcon()}).bindPopup(popupContent);
+    markers.addLayer(marker);
+  });
+  
+  map.addLayer(markers);
+}
+
+// Configurar botões do mapa
+function setupMapButtons() {
   document.querySelectorAll('.menu-map button').forEach(btn => {
     btn.addEventListener('click', function() {
       document.querySelectorAll('.menu-map button').forEach(b => b.classList.remove('active-map'));
       this.classList.add('active-map');
       const region = this.dataset.region;
       
-      console.log('Botão clicado, região:', region);
-      if(region === 'brasil') {
+      if(region === 'Brasil') {
         map.setView([-15.78, -47.93], 4);
-        addMarkers('brasil');
+        addMarkers('Brasil');
       } else if(region === 'world') {
         map.setView([20, 0], 2);
         addMarkers('world');
       }
     });
-    
   });
-
-  
-
-  // Make sure map renders properly after DOM is fully loaded
-  setTimeout(() => {
-    map.invalidateSize();
-    console.log('Mapa invalidado e redimensionado');
-  }, 300);
-
-  // Carousel and menu-map button logic moved inside DOMContentLoaded to avoid timing issues
-  // Aguardar carregamento das notícias antes de inicializar o carrossel
-  setTimeout(() => {
-    const track = document.querySelector('.news-cards');
-    const prevBtn = document.querySelector('.btn-prev');
-    const nextBtn = document.querySelector('.btn-next');
-    const cards = document.querySelectorAll('.card');
-    
-    if (!track || !cards.length) return;
-
-    let visibleCards = 3; // ajuste conforme layout
-    let index = 0; // começa no primeiro card
-    const cardWidth = cards.length > 0 ? cards[0].offsetWidth + 28 : 0; // largura + gap
-    const maxIndex = Math.max(cards.length - visibleCards, 0);
-
-    function updateCarousel() {
-      // Garante que o índice está dentro dos limites
-      index = Math.max(0, Math.min(index, maxIndex));
-      if (track) {
-        track.style.transform = `translateX(${-index * cardWidth}px)`;
-      }
-    }
-
-    // Inicializa o carrossel mostrando o primeiro card
-    updateCarousel();
-
-    if (nextBtn) {
-      nextBtn.addEventListener('click', () => {
-        if (index < maxIndex) {
-          index++;
-        } else {
-          index = 0; // loop para o início
-        }
-        updateCarousel();
-      });
-    }
-
-    if (prevBtn) {
-      prevBtn.addEventListener('click', () => {
-        if (index > 0) {
-          index--;
-        } else {
-          index = maxIndex; // loop para o final
-        }
-        updateCarousel();
-      });
-    }
-  }, 500); // Aguarda 500ms para as notícias carregarem
-
-  window.addEventListener('scroll', () => {
-    const header = document.querySelector('header');
-    if (window.scrollY > 0) {
-      header.classList.add('scrolled');
-    } else {
-      header.classList.remove('scrolled');
-    }
-  });
-
-});
-
-
-
-
-
-// Função para escapar HTML (escopo global)
-function escapeHtml(text) {
-    if (!text) return '';
-    const map = {
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&quot;',
-        "'": '&#39;',
-        '/': '&#x2F;'
-    };
-    return String(text).replace(/[&<>"'\/]/g, function (s) {
-        return map[s];
-    });
 }
 
-// news.html
-// News functionality
+// Inicializar carrossel de notícias
+function initNewsCarousel() {
+  const track = document.querySelector('.news-cards');
+  const cards = document.querySelectorAll('.card');
+  
+  if (!track || cards.length === 0) return;
+  
+  let currentIndex = 0;
+  const cardWidth = cards[0].offsetWidth + 20; // incluindo margin
+  const visibleCards = Math.floor(track.parentElement.offsetWidth / cardWidth);
+  const maxIndex = Math.max(0, cards.length - visibleCards);
+  
+  // Criar botões de navegação
+  const prevBtn = document.createElement('button');
+  prevBtn.innerHTML = '‹';
+  prevBtn.className = 'carousel-btn prev-btn';
+  
+  const nextBtn = document.createElement('button');
+  nextBtn.innerHTML = '›';
+  nextBtn.className = 'carousel-btn next-btn';
+  
+  track.parentElement.appendChild(prevBtn);
+  track.parentElement.appendChild(nextBtn);
+  
+  function updateCarousel() {
+    track.style.transform = `translateX(-${currentIndex * cardWidth}px)`;
+    prevBtn.disabled = currentIndex === 0;
+    nextBtn.disabled = currentIndex >= maxIndex;
+  }
+  
+  prevBtn.addEventListener('click', () => {
+    if (currentIndex > 0) {
+      currentIndex--;
+      updateCarousel();
+    }
+  });
+  
+  nextBtn.addEventListener('click', () => {
+    if (currentIndex < maxIndex) {
+      currentIndex++;
+      updateCarousel();
+    }
+  });
+  
+  updateCarousel();
+}
+
+// Inicialização principal
+document.addEventListener('DOMContentLoaded', () => {
+  // Carregar notícias se estivermos na página index
+  if (document.getElementById('newsCardsContainer')) {
+    loadIndexNews();
+  }
+  
+  // Aguardar um pouco antes de inicializar o mapa
+  setTimeout(() => {
+    initMap();
+  }, 100);
+});
+
+// News functionality para news.html
 var newsData = [];
 
 function openModal(index) {
@@ -322,7 +287,6 @@ function loadNews() {
             if (xhr.status === 200) {
                 try {
                     newsData = JSON.parse(xhr.responseText);
-                    // Reverter ordem para mostrar mais recentes primeiro
                     newsData.reverse();
                     
                     for (var i = 0; i < newsData.length; i++) {
@@ -330,19 +294,16 @@ function loadNews() {
                         var newsItem = document.createElement('div');
                         newsItem.className = 'news-item';
                         
-                        //  tratamento de data
                         var dateText = '';
                         if (item.dayWeek && item.date && item.month) {
                             dateText = item.dayWeek + ', ' + item.date + ' de ' + item.month;
                         } else if (item.date) {
-                            // Formatar data ISO para português
                             var date = new Date(item.date);
                             if (!isNaN(date.getTime())) {
                                 dateText = date.toLocaleDateString('pt-BR');
                             }
                         }
                         
-                        // Tratar imagem
                         var imageUrl = item['1-image_URL'];
                         var imageHtml = '';
                         if (imageUrl && imageUrl.trim() !== '') {
@@ -369,11 +330,9 @@ function loadNews() {
     xhr.send();
 }
 
+// Inicializar news se estiver na página news.html
 document.addEventListener('DOMContentLoaded', function() {
     if (document.querySelector('.news-letter')) {
         loadNews();
     }
 });
-
-
-

@@ -102,7 +102,7 @@ EscolasDeFutebolDoCruzeiro/
   "whatsapp": "https://api.whatsapp.com/send/?phone=...",
   "instagram": "@escoladocruzeirocastelo",
   "instagram_url": "http://instagram.com/...",
-  "region": "brasil",
+  "region": "Brasil",
   "estado": "MG"
 }
 ```
@@ -115,7 +115,7 @@ EscolasDeFutebolDoCruzeiro/
   "lng": -43.9450948,
   "nome": "Nome da escola",
   "endereco_encontrado": "Endereço completo",
-  "region": "brasil"
+  "region": "Brasil"
 }
 ```
 

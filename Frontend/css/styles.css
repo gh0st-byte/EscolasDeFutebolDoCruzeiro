@@ -506,7 +506,7 @@ a button {
     font-size: 1rem;
 }
 
-.btn-next, .btn-prev  {
+.next-btn, .prev-btn  {
     background: transparent;
     color: gold;
     border: 2px solid gold;
@@ -607,6 +607,14 @@ a button {
 .card-metodologia img {
     display: none;
 }
+
+
+/*noticias */
+
+#filtroRegiao option{
+    
+}
+
 
 /* CRIAS DA TOCA */
 .crias {

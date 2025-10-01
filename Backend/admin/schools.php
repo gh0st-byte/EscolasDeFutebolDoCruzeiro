@@ -34,7 +34,7 @@ function adicionarEscola($nome, $lat, $lng, $endereco) {
         'lng' => (float)$lng,
         'nome' => $nome,
         'endereco_encontrado' => $endereco,
-        'region' => 'brasil'
+        'region' => 'Brasil'
     ];
     
     $escolas[] = $nova_escola;
