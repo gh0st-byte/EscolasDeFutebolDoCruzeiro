@@ -35,14 +35,14 @@
 .filtros select:focus, .filtros button:hover {
     outline: none;
     background: linear-gradient(135deg, #0033a0, #1e5bb8);
-    color: rgb(0, 46, 92);
+    color: white;
     transform: translateY(-2px);
     box-shadow: 0 4px 15px rgba(0,51,160,0.3);
 }
 
 .filtros button {
     background: linear-gradient(135deg, #0033a0, #1e5bb8);
-    color: rgb(0, 157, 255);
+    color: white;
     min-width: 140px;
 }
 
