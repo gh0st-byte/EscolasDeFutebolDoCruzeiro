@@ -466,18 +466,7 @@ a button {
     border-color: gold;
 }
 
-/* Enhanced Card Hover Effects */
-.card {
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-                box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-                border-color 0.3s ease;
-}
 
-.card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 12px 24px rgba(0,0,0,0.15);
-    border-color: gold;
-}
 
 .card img {
     width: 100%;
@@ -986,6 +975,12 @@ body::after {
 }
 
 /* Optimized Footer Styles */
+
+
+
+
+
+
 footer {
     background: #001a4d;
     color: #fff;
