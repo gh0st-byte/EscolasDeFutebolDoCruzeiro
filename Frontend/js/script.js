@@ -154,11 +154,14 @@ function addMarkers(region = 'all') {
     if (!p.lat || !p.lng || isNaN(p.lat) || isNaN(p.lng)) return;
     
     const popupContent = `
-      <div style="text-align: center;">
+      <div style="text-align: center !important; color: #0033a0; font-weight: bold; font-size: 16px; margin-bottom: 10px; box-shadow: none !important " class="escola-card">
         <h4>${escapeHtml(p.nome || p.cidade || '')}</h4>
         <p><strong>Endereço:</strong> ${escapeHtml(p.endereco_encontrado || '')}</p>
-        ${p.telefone ? `<p><strong>Telefone:</strong> ${escapeHtml(p.telefone)}</p>` : ''}
-        ${p.instagram ? `<p><strong>Instagram:</strong> ${escapeHtml(p.instagram)}</p>` : ''}
+        ${p.ComoChegar ? `<a href="${escapeHtml(p.ComoChegar)}" target="_blank" class="btn-maps">Como Chegar</a>` : ''}
+        <div class="btn-container">
+          ${p.whatsapp ? `<a href="${escapeHtml(p.whatsapp)}" target="_blank" class="btn-whatsapp" style=" color: white;">WhatsApp</a>` : ''}
+          ${p.instagram ? `<a href="${escapeHtml(p.instagram_url)}" target="_blank" class="btn-instagram" style="color: white;">Instagram</a>` : ''}
+        </div>
       </div>
     `;
     

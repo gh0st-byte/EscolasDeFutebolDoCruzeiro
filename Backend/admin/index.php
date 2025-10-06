@@ -144,6 +144,7 @@ if ($_POST && isset($_POST['acao']) && isset($_POST['arquivo'])) {
                         'cidade' => $_POST['cidade'] ?? null,
                         'imagem_URL' => $_POST['imagem_URL'] ?? null,
                         'endereco_encontrado' => $_POST['endereco_encontrado'],
+                        'ComoChegar' => $_POST['ComoChegar'] ?? null,
                         'region' => $_POST['region'] ?? 'Brasil'
                     ];
                     if ($arquivo === 'schools.json') {
@@ -152,6 +153,7 @@ if ($_POST && isset($_POST['acao']) && isset($_POST['arquivo'])) {
                         $novo['whatsapp'] = $_POST['whatsapp'] ?? '';
                         $novo['instagram'] = $_POST['instagram'] ?? null;
                         $novo['instagram_url'] = $_POST['instagram_url'] ?? null;
+                        $novo['ComoChegar'] = $_POST['ComoChegar'] ?? null;
                         $novo['estado'] = $_POST['estado'] ?? '';
                     } elseif ($arquivo === 'news.json' || $arquivo === 'news_draft.json') {
                         $novo = [
@@ -206,6 +208,7 @@ if ($_POST && isset($_POST['acao']) && isset($_POST['arquivo'])) {
                         $dados[$index]['cidade'] = $_POST['cidade'] ?: null;
                         $dados[$index]['imagem_URL'] = $_POST['imagem_URL'] ?: null;
                         $dados[$index]['endereco_encontrado'] = $_POST['endereco_encontrado'];
+                        $dados[$index]['ComoChegar'] = $_POST['ComoChegar'] ?: null;
                         $dados[$index]['region'] = $_POST['region'] ?? 'Brasil';
                         if ($arquivo === 'schools.json') {
                             $dados[$index]['endereco'] = $_POST['endereco'] ?? '';
@@ -213,6 +216,7 @@ if ($_POST && isset($_POST['acao']) && isset($_POST['arquivo'])) {
                             $dados[$index]['whatsapp'] = $_POST['whatsapp'] ?? '';
                             $dados[$index]['instagram'] = $_POST['instagram'] ?: null;
                             $dados[$index]['instagram_url'] = $_POST['instagram_url'] ?: null;
+                            $dados[$index]['ComoChegar'] = $_POST['ComoChegar'] ?: null;
                             $dados[$index]['estado'] = $_POST['estado'] ?? '';
                         }
                     }
@@ -274,10 +278,10 @@ if ($tab_atual === 'news.json' || $tab_atual === 'news_draft.json') {
         </a>
 
         <a href="?tab=failed_addresses.json" class="<?= $tab_atual === 'failed_addresses.json' ? 'active' : '' ?>">
-            Falhas (<?= count(lerJSON('failed_addresses.json')) ?>)
+            Escolas não encontradas (<?= count(lerJSON('failed_addresses.json')) ?>)
         </a>
         <a href="?tab=news_draft.json" class="<?= $tab_atual === 'news_draft.json' ? 'active' : '' ?>">
-            Rascunhos (<?= count(lerJSON('news_draft.json')) ?>)
+            Rascunhos de notícias (<?= count(lerJSON('news_draft.json')) ?>)
         </a>
         <a href="?tab=news.json" class="<?= $tab_atual === 'news.json' ? 'active' : '' ?>">
             Notícias (<?= count(lerJSON('news.json')) ?>)
@@ -377,6 +381,7 @@ if ($tab_atual === 'news.json' || $tab_atual === 'news_draft.json') {
                             <input type="text" name="whatsapp" placeholder="WhatsApp URL (basta inserir o numero completo sem símbolos)" value="https://wa.me/+" >
                             <input type="text" name="instagram" placeholder="Instagram @" value="@">
                             <input type="text" name="instagram_url" placeholder="Instagram URL (basta inserir o usuário do instagram)" value="https://www.instagram.com/" >
+                            <input type="text" name="ComoChegar" placeholder=" Google maps de Como chegar">
                             <label for="estado" style="color: red; font-weight:900">Observação: Caso o País nativo da escola não seja o Brasil não selecione nenhuma opção de Estado</label>
                             <select name="estado">
                                 <option value="">Selecione o Estado</option>
@@ -695,6 +700,7 @@ if ($tab_atual === 'news.json' || $tab_atual === 'news_draft.json') {
                         <input type="text" placeholder="WhatsApp" name="whatsapp" value="${item.whatsapp || ''}">
                         <input type="text" placeholder="Instagram" name="instagram" value="${item.instagram || ''}">
                         <input type="text" placeholder="URL do Instagram" name="instagram_url" value="${item.instagram_url || ''}">
+                        <input type"text" placeholder="URL do maps de como  chegar" name="ComoChegar" value="${item.ComoChegar || ''}">
                         <select name="estado">
                             <option value="">Selecione o Estado</option>
                             <option value="AC" ${item.estado === 'AC' ? 'selected' : ''}>Acre (AC)</option>
