@@ -10,7 +10,7 @@ body {
     background: url('https://i0.wp.com/multarte.com.br/wp-content/uploads/2019/01/ceu-estrelado.jpg?fit=2560%2C1707&ssl=1') center/cover fixed;
     color: #050a30;
     overflow-x: hidden;
-    padding-top: 92px;
+    padding-top: 92px ;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
@@ -1648,8 +1648,14 @@ nav button,
 /* Estilos mobile até 480px */
 @media (max-width: 480px) {
  
+    body{
+        margin: 0;
+        padding: 0;
+        
 
+    }
     header {
+        top: 0;
         padding: 0;
         max-height: 76px;
         position: sticky;
