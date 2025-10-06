@@ -34,7 +34,8 @@ function adicionarEscola($nome, $lat, $lng, $endereco) {
         'lng' => (float)$lng,
         'nome' => $nome,
         'endereco_encontrado' => $endereco,
-        'region' => 'Brasil'
+        'region' => 'Brasil',
+        'ComoChegar' => 'Como chegar'
     ];
     
     $escolas[] = $nova_escola;
@@ -50,6 +51,8 @@ function editarEscola($index, $nome, $lat, $lng, $endereco) {
         $escolas[$index]['lat'] = (float)$lat;
         $escolas[$index]['lng'] = (float)$lng;
         $escolas[$index]['endereco_encontrado'] = $endereco;
+        $escolas[$index]['region'] = 'Brasil';
+        $escolas[$index]['ComoChegar'] = 'Como chegar (GMapsLink)';
         
         return salvarEscolas($escolas);
     }
@@ -73,11 +76,11 @@ if ($_POST) {
     
     switch($acao) {
         case 'adicionar':
-            adicionarEscola($_POST['nome'], $_POST['lat'], $_POST['lng'], $_POST['endereco']);
+            adicionarEscola($_POST['nome'], $_POST['lat'], $_POST['lng'], $_POST['endereco'], $_POST['ComoChegar']);
             break;
             
         case 'editar':
-            editarEscola($_POST['index'], $_POST['nome'], $_POST['lat'], $_POST['lng'], $_POST['endereco']);
+            editarEscola($_POST['index'], $_POST['nome'], $_POST['lat'], $_POST['lng'], $_POST['endereco'], $_POST['ComoChegar']);
             break;
             
         case 'deletar':
@@ -126,6 +129,7 @@ $escolas = lerEscolas();
             <input type="number" step="any" name="lat" placeholder="Latitude" required>
             <input type="number" step="any" name="lng" placeholder="Longitude" required>
             <textarea name="endereco" placeholder="Endereço completo" required></textarea>
+            <textarea name="ComoChegar" placeholder="Como chegar (GMapsLink)" required></textarea>
             <button type="submit">Adicionar Escola</button>
         </form>
     </div>
@@ -167,6 +171,7 @@ $escolas = lerEscolas();
             <input type="text" name="nome" id="editNome" required>
             <input type="number" step="any" name="lat" id="editLat" required>
             <input type="number" step="any" name="lng" id="editLng" required>
+            <input type="text" name="ComoChegar" id="editComoChegar" required>
             <textarea name="endereco" id="editEndereco" required></textarea>
             <button type="submit">Salvar</button>
             <button type="button" onclick="document.getElementById('editModal').style.display='none'">Cancelar</button>
@@ -183,6 +188,7 @@ $escolas = lerEscolas();
             document.getElementById('editLat').value = escola.lat;
             document.getElementById('editLng').value = escola.lng;
             document.getElementById('editEndereco').value = escola.endereco_encontrado;
+            document.getElementById('editComoChegar').value = escola.ComoChegar;
             
             document.getElementById('editModal').style.display = 'block';
         }
