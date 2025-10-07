@@ -1,4 +1,23 @@
 /* Estilos para as escolas */
+
+.hero-secundary{
+    text-align: center;
+    margin: 10%;
+    text-transform: uppercase;
+}
+.container-hero-secundary{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background: linear-gradient(135deg, #052688 10%, #163077c6 100%);
+    color: #ffffff;
+    padding: 64px 0;
+    min-height: 40vh;
+    max-height: 60vh;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
 .escolas {
     padding: 4rem 2rem;
     background: #f8f9fa;
@@ -19,7 +38,7 @@
     flex-wrap: wrap;
 }
 
-.filtros select, .filtros button {
+.filtros select, .filtros button, option {
     padding: 0.8rem 1.2rem;
     border: 2px solid #0033a0;
     border-radius: 25px;

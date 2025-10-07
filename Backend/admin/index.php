@@ -142,9 +142,9 @@ if ($_POST && isset($_POST['acao']) && isset($_POST['arquivo'])) {
                         'lng' => (float)$_POST['lng'],
                         'nome' => $_POST['nome'] ?? null,
                         'cidade' => $_POST['cidade'] ?? null,
-                        'imagem_URL' => $_POST['imagem_URL'] ?? null,
+                        'map_URL' => $_POST['map_URL'] ?? '<div class="embed-map-fixed"><div class="embed-map-container"><iframe class="embed-map-frame" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?width=600&height=400&hl=en&q=cruzeiro%20toca%202&t=&z=14&ie=UTF8&iwloc=B&output=embed"></iframe><a href="https://sprunkiretake.net" style="font-size:2px!important;color:gray!important;position:absolute;bottom:0;left:0;z-index:1;max-height:1px;overflow:hidden">sprunki retake</a></div><style>.embed-map-fixed{position:relative;text-align:right;width:600px;height:400px;}.embed-map-container{overflow:hidden;background:none!important;width:600px;height:400px;}.embed-map-frame{width:600px!important;height:400px!important;}</style></div>',
                         'endereco_encontrado' => $_POST['endereco_encontrado'],
-                        'ComoChegar' => $_POST['ComoChegar'] ?? null,
+                        'ComoChegar' => $_POST['ComoChegar'] ?? 'google.com/maps',
                         'region' => $_POST['region'] ?? 'Brasil'
                     ];
                     if ($arquivo === 'schools.json') {
@@ -201,14 +201,14 @@ if ($_POST && isset($_POST['acao']) && isset($_POST['arquivo'])) {
                             '1-image_URL' => $_POST['1-image_URL'] ?: null
                         ];
                     } else {
-                        // Edição para Schools e outros (mantida)
+                        //Schools e outros
                         $dados[$index]['lat'] = (float)$_POST['lat'];
                         $dados[$index]['lng'] = (float)$_POST['lng'];
                         $dados[$index]['nome'] = $_POST['nome'] ?: null;
                         $dados[$index]['cidade'] = $_POST['cidade'] ?: null;
-                        $dados[$index]['imagem_URL'] = $_POST['imagem_URL'] ?: null;
+                        $dados[$index]['map_URL'] = $_POST['map_URL'] ?: '<div class="embed-map-fixed"><div class="embed-map-container"><iframe class="embed-map-frame" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?width=600&height=400&hl=en&q=cruzeiro%20toca%202&t=&z=14&ie=UTF8&iwloc=B&output=embed"></iframe><a href="https://sprunkiretake.net" style="font-size:2px!important;color:gray!important;position:absolute;bottom:0;left:0;z-index:1;max-height:1px;overflow:hidden">sprunki retake</a></div><style>.embed-map-fixed{position:relative;text-align:right;width:600px;height:400px;}.embed-map-container{overflow:hidden;background:none!important;width:600px;height:400px;}.embed-map-frame{width:600px!important;height:400px!important;}</style></div>';
                         $dados[$index]['endereco_encontrado'] = $_POST['endereco_encontrado'];
-                        $dados[$index]['ComoChegar'] = $_POST['ComoChegar'] ?: null;
+                        $dados[$index]['ComoChegar'] = $_POST['ComoChegar'] ?: 'google.com/maps';
                         $dados[$index]['region'] = $_POST['region'] ?? 'Brasil';
                         if ($arquivo === 'schools.json') {
                             $dados[$index]['endereco'] = $_POST['endereco'] ?? '';
@@ -262,6 +262,7 @@ if ($tab_atual === 'news.json' || $tab_atual === 'news_draft.json') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Gerenciamento - Escolas Cruzeiro</title>
+     <link rel="icon" type="image/png" href="https://imagens.cruzeiro.com.br/Escudos/Cruzeiro.png">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -302,117 +303,198 @@ if ($tab_atual === 'news.json' || $tab_atual === 'news_draft.json') {
                 <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>">
                 
                 <?php if ($tab_atual === 'failed_addresses.json'): ?>
-                    <input type="text" name="endereco" placeholder="Endereço que falhou" required>
+                    <div class="field-group">
+                        <label> Endereço com Problema</label>
+                        <input type="text" name="endereco" placeholder="Digite o endereço que não foi encontrado" required>
+                    </div>
                 <?php elseif ($tab_atual === 'news.json' || $tab_atual === 'news_draft.json'): ?>
                     <div class="form-grid">
-                        <input type="text" name="title" placeholder="Título" required>
-                        <input type="text" name="subtitle" placeholder="Subtítulo">
-                        <select name="dayWeek">
-                            <option value="">Selecione o dia da semana</option>
-                            <option value="Segunda-feira">Segunda-feira</option>
-                            <option value="Terça-feira">Terça-feira</option>
-                            <option value="Quarta-feira">Quarta-feira</option>
-                            <option value="Quinta-feira">Quinta-feira</option>
-                            <option value="Sexta-feira">Sexta-feira</option>
-                            <option value="Sábado">Sábado</option>
-                            <option value="Domingo">Domingo</option>
-                        </select>
-                        <select name="date" required>
-                            <option value="">Selecione o dia</option>
-                            <?php for($i = 1; $i <= 31; $i++): ?>
-                                <option value="<?= sprintf('%02d', $i) ?>"><?= sprintf('%02d', $i) ?></option>
-                            <?php endfor; ?>
-                        </select>
-                        <select name="month">
-                            <option value="">Selecione o mês</option>
-                            <option value="Janeiro">Janeiro</option>
-                            <option value="Fevereiro">Fevereiro</option>
-                            <option value="Março">Março</option>
-                            <option value="Abril">Abril</option>
-                            <option value="Maio">Maio</option>
-                            <option value="Junho">Junho</option>
-                            <option value="Julho">Julho</option>
-                            <option value="Agosto">Agosto</option>
-                            <option value="Setembro">Setembro</option>
-                            <option value="Outubro">Outubro</option>
-                            <option value="Novembro">Novembro</option>
-                            <option value="Dezembro">Dezembro</option>
-                        </select>
-                        <input type="url" name="1-image_URL" placeholder="URL da Imagem">
-                        <textarea name="content" placeholder="Conteúdo da notícia" required></textarea>
+                        <div class="field-group">
+                            <label> Título da Notícia *</label>
+                            <input type="text" name="title" placeholder="Ex: Cruzeiro inaugura nova escola em BH" required>
+                        </div>
+                        <div class="field-group">
+                            <label> Subtítulo (opcional)</label>
+                            <input type="text" name="subtitle" placeholder="Breve descrição da notícia">
+                        </div>
+                        <div class="field-group">
+                            <label> Dia da Semana</label>
+                            <select name="dayWeek">
+                                <option value="">Selecione o dia da semana</option>
+                                <option value="Segunda-feira">Segunda-feira</option>
+                                <option value="Terça-feira">Terça-feira</option>
+                                <option value="Quarta-feira">Quarta-feira</option>
+                                <option value="Quinta-feira">Quinta-feira</option>
+                                <option value="Sexta-feira">Sexta-feira</option>
+                                <option value="Sábado">Sábado</option>
+                                <option value="Domingo">Domingo</option>
+                            </select>
+                        </div>
+                        <div class="field-group">
+                            <label> Dia do Mês *</label>
+                            <select name="date" required>
+                                <option value="">Selecione o dia</option>
+                                <?php for($i = 1; $i <= 31; $i++): ?>
+                                    <option value="<?= sprintf('%02d', $i) ?>"><?= sprintf('%02d', $i) ?></option>
+                                <?php endfor; ?>
+                            </select>
+                        </div>
+                        <div class="field-group">
+                            <label> Mês</label>
+                            <select name="month">
+                                <option value="">Selecione o mês</option>
+                                <option value="Janeiro">Janeiro</option>
+                                <option value="Fevereiro">Fevereiro</option>
+                                <option value="Março">Março</option>
+                                <option value="Abril">Abril</option>
+                                <option value="Maio">Maio</option>
+                                <option value="Junho">Junho</option>
+                                <option value="Julho">Julho</option>
+                                <option value="Agosto">Agosto</option>
+                                <option value="Setembro">Setembro</option>
+                                <option value="Outubro">Outubro</option>
+                                <option value="Novembro">Novembro</option>
+                                <option value="Dezembro">Dezembro</option>
+                            </select>
+                        </div>
+                        <div class="field-group">
+                            <label> Imagem da Notícia</label>
+                            <input type="url" name="1-image_URL" placeholder="https://exemplo.com/imagem.jpg">
+                        </div>
+                        <div class="field-group full-width">
+                            <label> Conteúdo da Notícia *</label>
+                            <textarea name="content" placeholder="Escreva o conteúdo completo da notícia aqui..." rows="6" required></textarea>
+                        </div>
                     </div>
                 <?php elseif ($tab_atual === '.user.json'): ?>
                     <div class="form-grid">
-                        <input type="text" name="username" placeholder="Nome de usuário" required>
-                        <input type="password" name="password" placeholder="Senha" required>
+                        <div class="field-group">
+                            <label> Nome de Usuário *</label>
+                            <input type="text" name="username" placeholder="Digite o nome de usuário" required>
+                        </div>
+                        <div class="field-group">
+                            <label> Senha *</label>
+                            <input type="password" name="password" placeholder="Digite uma senha segura" required>
+                        </div>
                     </div>
                 <?php else: ?>
                     <div class="form-grid">
-                        <input type="text" name="nome" placeholder="Nome">
-                        <input type="text" name="cidade" placeholder="Cidade" required>
-                        <input type="url" name="imagem_URL" placeholder="URL da Imagem">
-                        <input type="number" step="any" name="lat" placeholder="Latitude" required>
-                        <input type="number" step="any" name="lng" placeholder="Longitude" required>
-                        <select name="region">
-                            <option value="Brasil" selected>Brasil</option>
-                            <option value="Argentina">Argentina</option>
-                            <option value="Chile">Chile</option>
-                            <option value="Uruguai">Uruguai</option>
-                            <option value="Paraguai">Paraguai</option>
-                            <option value="Estados Unidos">Estados Unidos</option>
-                            <option value="Canadá">Canadá</option>
-                            <option value="México">México</option>
-                            <option value="Portugal">Portugal</option>
-                            <option value="Espanha">Espanha</option>
-                            <option value="França">França</option>
-                            <option value="Itália">Itália</option>
-                            <option value="Alemanha">Alemanha</option>
-                            <option value="Reino Unido">Reino Unido</option>
-                            <option value="Japão">Japão</option>
-                            <option value="China">China</option>
-                            <option value="Austrália">Austrália</option>
-                            <option value="Outros">Outros</option>
-                        </select>
-                        <textarea name="endereco_encontrado" placeholder="Endereço encontrado" required></textarea>
+                        <div class="field-group">
+                            <label> Nome da Escola</label>
+                            <input type="text" name="nome" placeholder="Ex: Escola Cruzeiro - Castelo">
+                        </div>
+                        <div class="field-group">
+                            <label> Cidade *</label>
+                            <input type="text" name="cidade" placeholder="Ex: Belo Horizonte" required>
+                        </div>
+                        <div class="field-group">
+                            <label> Mapa Embed da Escola</label>
+                            
+                            <input type="url" name="map_URL" placeholder="Insira aqui o texto copiado da pagina">
+                            <small style="color: #e74c3c; font-weight: 900;"> Após clicar no botão ative a opção<br> "Make responsive"</small>
+                            <a href="https://www.mapembed.org/?gad_source=1&gad_campaignid=22280139497&gbraid=0AAAAA98a5IP3RTdeHHLDaAYXkZ8h50b_F&gclid=EAIaIQobChMI49aI18SSkAMVWGZIAB15LhcJEAAYAiAAEgIe3vD_BwE" style="text-decoration: none; color: #fff; display: inline-block; background-color: #007bff; border: 1px solid #007bff; padding: 10px 20px; border-radius: 5px; font-family: Arial, sans-serif; font-weight: bold; text-align: center; cursor: pointer; " target="_blank">Clique aqui para gerar o mapa</a>
+
+                        </div>
+                        <div class="field-group">
+                            <label> Latitude *</label>
+                            
+                            <input type="number" step="any" name="lat" placeholder="Ex: -19.9227318" required>
+                            <small>Use Google Maps para obter coordenadas</small>
+                        </div>
+                        <div class="field-group">
+                            <label> Longitude *</label>
+                            <input type="number" step="any" name="lng" placeholder="Ex: -43.9450948" required>
+                            <small>Use Google Maps para obter coordenadas</small>
+                        </div>
+                        <div class="field-group">
+                            <label> País/Região</label>
+                            <select name="region">
+                                <option value="Brasil" selected> Brasil</option>
+                                <option value="Argentina"> Argentina</option>
+                                <option value="Chile"> Chile</option>
+                                <option value="Uruguai"> Uruguai</option>
+                                <option value="Paraguai"> Paraguai</option>
+                                <option value="Estados Unidos"> Estados Unidos</option>
+                                <option value="Canadá"> Canadá</option>
+                                <option value="México"> México</option>
+                                <option value="Portugal"> Portugal</option>
+                                <option value="Espanha"> Espanha</option>
+                                <option value="França"> França</option>
+                                <option value="Itália"> Itália</option>
+                                <option value="Alemanha"> Alemanha</option>
+                                <option value="Reino Unido"> Reino Unido</option>
+                                <option value="Japão"> Japão</option>
+                                <option value="China"> China</option>
+                                <option value="Austrália"> Austrália</option>
+                                <option value="Outros"> Outros</option>
+                            </select>
+                        </div>
+                        <div class="field-group full-width">
+                            <label> Endereço Completo *</label>
+                            <textarea name="endereco_encontrado" placeholder="Ex: Rua das Flores, 123 - Bairro Centro - Belo Horizonte/MG" rows="3" required></textarea>
+                        </div>
                         
                         <?php if ($tab_atual === 'schools.json'): ?>
-                            <input type="text" name="endereco" placeholder="Endereço original">
-                            <input type="text" name="telefone" placeholder="Telefone">
-                            <input type="text" name="whatsapp" placeholder="WhatsApp URL (basta inserir o numero completo sem símbolos)" value="https://wa.me/+" >
-                            <input type="text" name="instagram" placeholder="Instagram @" value="@">
-                            <input type="text" name="instagram_url" placeholder="Instagram URL (basta inserir o usuário do instagram)" value="https://www.instagram.com/" >
-                            <input type="text" name="ComoChegar" placeholder=" Google maps de Como chegar">
-                            <label for="estado" style="color: red; font-weight:900">Observação: Caso o País nativo da escola não seja o Brasil não selecione nenhuma opção de Estado</label>
-                            <select name="estado">
-                                <option value="">Selecione o Estado</option>
-                                <option value="AC">Acre (AC)</option>
-                                <option value="AL">Alagoas (AL)</option>
-                                <option value="AP">Amapá (AP)</option>
-                                <option value="AM">Amazonas (AM)</option>
-                                <option value="BA">Bahia (BA)</option>
-                                <option value="CE">Ceará (CE)</option>
-                                <option value="DF">Distrito Federal (DF)</option>
-                                <option value="ES">Espírito Santo (ES)</option>
-                                <option value="GO">Goiás (GO)</option>
-                                <option value="MA">Maranhão (MA)</option>
-                                <option value="MT">Mato Grosso (MT)</option>
-                                <option value="MS">Mato Grosso do Sul (MS)</option>
-                                <option value="MG">Minas Gerais (MG)</option>
-                                <option value="PA">Pará (PA)</option>
-                                <option value="PB">Paraíba (PB)</option>
-                                <option value="PR">Paraná (PR)</option>
-                                <option value="PE">Pernambuco (PE)</option>
-                                <option value="PI">Piauí (PI)</option>
-                                <option value="RJ">Rio de Janeiro (RJ)</option>
-                                <option value="RN">Rio Grande do Norte (RN)</option>
-                                <option value="RS">Rio Grande do Sul (RS)</option>
-                                <option value="RO">Rondônia (RO)</option>
-                                <option value="RR">Roraima (RR)</option>
-                                <option value="SC">Santa Catarina (SC)</option>
-                                <option value="SP">São Paulo (SP)</option>
-                                <option value="SE">Sergipe (SE)</option>
-                                <option value="TO">Tocantins (TO)</option>
-                            </select>
+                            <div class="field-group">
+                                <label> Endereço Original</label>
+                                <input type="text" name="endereco" placeholder="Endereço como foi fornecido inicialmente">
+                            </div>
+                            <div class="field-group">
+                                <label> Telefone</label>
+                                <input type="text" name="telefone" placeholder="(31) 99999-9999">
+                            </div>
+                            <div class="field-group">
+                                <label> WhatsApp</label>
+                                <input type="text" name="whatsapp" placeholder="5531999999999" value="">
+                                <small style="color: #e74c3c; font-weight: 900;"> Digite apenas números: 55 + DDD + número</small>
+                            </div>
+                            <div class="field-group">
+                                <label> Instagram (@user)</label>
+                                <input type="text" name="instagram" placeholder="@escolacruzeiro">
+                            </div>
+                            <div class="field-group">
+                                <label> URL do Instagram</label>
+                                <input type="text" name="instagram_url" placeholder="escolacruzeiro" value="">
+                                <small>Digite apenas o nome de usuário (sem @)</small>
+                            </div>
+                            <div class="field-group">
+                                <label> Link Google Maps</label>
+                                <input type="text" name="ComoChegar" placeholder="https://maps.google.com/...">
+                            </div>
+                            <div class="field-group">
+                                <label> Estado (apenas para Brasil)</label>
+                                <select name="estado">
+                                    <option value="">Selecione o Estado</option>
+                                    <option value="AC">Acre (AC)</option>
+                                    <option value="AL">Alagoas (AL)</option>
+                                    <option value="AP">Amapá (AP)</option>
+                                    <option value="AM">Amazonas (AM)</option>
+                                    <option value="BA">Bahia (BA)</option>
+                                    <option value="CE">Ceará (CE)</option>
+                                    <option value="DF">Distrito Federal (DF)</option>
+                                    <option value="ES">Espírito Santo (ES)</option>
+                                    <option value="GO">Goiás (GO)</option>
+                                    <option value="MA">Maranhão (MA)</option>
+                                    <option value="MT">Mato Grosso (MT)</option>
+                                    <option value="MS">Mato Grosso do Sul (MS)</option>
+                                    <option value="MG">Minas Gerais (MG)</option>
+                                    <option value="PA">Pará (PA)</option>
+                                    <option value="PB">Paraíba (PB)</option>
+                                    <option value="PR">Paraná (PR)</option>
+                                    <option value="PE">Pernambuco (PE)</option>
+                                    <option value="PI">Piauí (PI)</option>
+                                    <option value="RJ">Rio de Janeiro (RJ)</option>
+                                    <option value="RN">Rio Grande do Norte (RN)</option>
+                                    <option value="RS">Rio Grande do Sul (RS)</option>
+                                    <option value="RO">Rondônia (RO)</option>
+                                    <option value="RR">Roraima (RR)</option>
+                                    <option value="SC">Santa Catarina (SC)</option>
+                                    <option value="SP">São Paulo (SP)</option>
+                                    <option value="SE">Sergipe (SE)</option>
+                                    <option value="TO">Tocantins (TO)</option>
+                                </select>
+                                <small style="color: #e74c3c;">⚠️ Deixe vazio se a escola não for no Brasil</small>
+                            </div>
                         <?php endif; ?>
                     </div>
                 <?php endif; ?>
@@ -590,7 +672,7 @@ if ($tab_atual === 'news.json' || $tab_atual === 'news_draft.json') {
     <!-- Modal de Visualização de Notícia -->
     <div id="newsModal" class="modal">
         <div class="modal-content" style="max-width: 800px;">
-            <div class="news-modal-container" style="padding: 2rem; background: linear-gradient(135deg, #0033a0, #1e5bb8); color: white; border-radius: 10px;">
+            <div class="news-modal-container" style="padding: 2rem; background: white; color: #11114E; border-radius: 10px; text-align: center">
                 <h1 class="news-modal-title" id="newsModalLabel" style="margin-bottom: 1.5rem; font-size: 2rem;">Título da Notícia</h1>
                 <div class="news-modal-image" id="newsModalImage" style="margin-bottom: 1.5rem;"></div>
                 <div class="news-modal-text" id="newsModalBody"></div>
@@ -612,125 +694,153 @@ if ($tab_atual === 'news.json' || $tab_atual === 'news_draft.json') {
             document.getElementById('editIndex').value = realIndex;
             
             let fields = '';
+            
             if (tabAtual === 'failed_addresses.json') {
-                fields = `<input type="text" name="endereco" value="${item}" required>`;
-            } else if (tabAtual === 'news.json' || tabAtual === 'news_draft.json') {
                 fields = `
-                    <div class="form-grid">
-                        <input type="text" placeholder="Título" name="title" value="${item.title}" required>
-                        <input type="text" placeholder="Subtítulo" name="subtitle" value="${item.subtitle || ''}">
-                        <select name="dayWeek">
-                            <option value="">Selecione o dia da semana</option>
-                            <option value="Segunda-feira" ${item.dayWeek === 'Segunda-feira' ? 'selected' : ''}>Segunda-feira</option>
-                            <option value="Terça-feira" ${item.dayWeek === 'Terça-feira' ? 'selected' : ''}>Terça-feira</option>
-                            <option value="Quarta-feira" ${item.dayWeek === 'Quarta-feira' ? 'selected' : ''}>Quarta-feira</option>
-                            <option value="Quinta-feira" ${item.dayWeek === 'Quinta-feira' ? 'selected' : ''}>Quinta-feira</option>
-                            <option value="Sexta-feira" ${item.dayWeek === 'Sexta-feira' ? 'selected' : ''}>Sexta-feira</option>
-                            <option value="Sábado" ${item.dayWeek === 'Sábado' ? 'selected' : ''}>Sábado</option>
-                            <option value="Domingo" ${item.dayWeek === 'Domingo' ? 'selected' : ''}>Domingo</option>
-                        </select>
-                        <select name="date" required>
-                            <option value="">Selecione o dia</option>`;
-                        for(let i = 1; i <= 31; i++) {
-                            const day = i.toString().padStart(2, '0');
-                            fields += `<option value="${day}" ${item.date === day ? 'selected' : ''}>${day}</option>`;
-                        }
-                        fields += `</select>
-                        <select name="month">
-                            <option value="">Selecione o mês</option>
-                            <option value="Janeiro" ${item.month === 'Janeiro' ? 'selected' : ''}>Janeiro</option>
-                            <option value="Fevereiro" ${item.month === 'Fevereiro' ? 'selected' : ''}>Fevereiro</option>
-                            <option value="Março" ${item.month === 'Março' ? 'selected' : ''}>Março</option>
-                            <option value="Abril" ${item.month === 'Abril' ? 'selected' : ''}>Abril</option>
-                            <option value="Maio" ${item.month === 'Maio' ? 'selected' : ''}>Maio</option>
-                            <option value="Junho" ${item.month === 'Junho' ? 'selected' : ''}>Junho</option>
-                            <option value="Julho" ${item.month === 'Julho' ? 'selected' : ''}>Julho</option>
-                            <option value="Agosto" ${item.month === 'Agosto' ? 'selected' : ''}>Agosto</option>
-                            <option value="Setembro" ${item.month === 'Setembro' ? 'selected' : ''}>Setembro</option>
-                            <option value="Outubro" ${item.month === 'Outubro' ? 'selected' : ''}>Outubro</option>
-                            <option value="Novembro" ${item.month === 'Novembro' ? 'selected' : ''}>Novembro</option>
-                            <option value="Dezembro" ${item.month === 'Dezembro' ? 'selected' : ''}>Dezembro</option>
-                        </select>
-                        <input type="url" placeholder="URL da Imagem" name="1-image_URL" value="${item['1-image_URL'] || ''}">
-                        <textarea placeholder="Conteúdo" name="content" required>${item.content}</textarea>
+                    <div class="field-group">
+                        <label>Endereço com Problema</label>
+                        <input type="text" name="endereco" value="${escapeHtml(item)}" required>
                     </div>
                 `;
-            } else if (tabAtual === '.user.json') {
-                fields = `
-            <div class="form-grid">
-                <input type="text" name="username" value="${item.username}" required>
-                <input type="password" name="password" placeholder="Nova senha (deixe vazio para manter atual)">
-            </div>
-        `;
-            } else {
+            } 
+            else if (tabAtual === 'news.json' || tabAtual === 'news_draft.json') {
                 fields = `
                     <div class="form-grid">
-                        <input type="text" placeholder="Nome" name="nome" value="${item.nome || ''}">
-                        <input type="text" placeholder="Cidade" name="cidade" value="${item.cidade || ''}" required>
-                        <input type="url" placeholder="URL da Imagem" name="imagem_URL" value="${item.imagem_URL || ''}">
-                        <input type="number" step="any" placeholder="Latitude" name="lat" value="${item.lat}" required>
-                        <input type="number" step="any" placeholder="Longitude" name="lng" value="${item.lng}" required>
-                        <select name="region">
-                            <option value="Brasil" ${(item.region || 'Brasil') === 'Brasil' ? 'selected' : ''}>Brasil</option>
-                            <option value="Argentina" ${item.region === 'Argentina' ? 'selected' : ''}>Argentina</option>
-                            <option value="Chile" ${item.region === 'Chile' ? 'selected' : ''}>Chile</option>
-                            <option value="Uruguai" ${item.region === 'Uruguai' ? 'selected' : ''}>Uruguai</option>
-                            <option value="Paraguai" ${item.region === 'Paraguai' ? 'selected' : ''}>Paraguai</option>
-                            <option value="Estados Unidos" ${item.region === 'Estados Unidos' ? 'selected' : ''}>Estados Unidos</option>
-                            <option value="Canadá" ${item.region === 'Canadá' ? 'selected' : ''}>Canadá</option>
-                            <option value="México" ${item.region === 'México' ? 'selected' : ''}>México</option>
-                            <option value="Portugal" ${item.region === 'Portugal' ? 'selected' : ''}>Portugal</option>
-                            <option value="Espanha" ${item.region === 'Espanha' ? 'selected' : ''}>Espanha</option>
-                            <option value="França" ${item.region === 'França' ? 'selected' : ''}>França</option>
-                            <option value="Itália" ${item.region === 'Itália' ? 'selected' : ''}>Itália</option>
-                            <option value="Alemanha" ${item.region === 'Alemanha' ? 'selected' : ''}>Alemanha</option>
-                            <option value="Reino Unido" ${item.region === 'Reino Unido' ? 'selected' : ''}>Reino Unido</option>
-                            <option value="Japão" ${item.region === 'Japão' ? 'selected' : ''}>Japão</option>
-                            <option value="China" ${item.region === 'China' ? 'selected' : ''}>China</option>
-                            <option value="Austrália" ${item.region === 'Austrália' ? 'selected' : ''}>Austrália</option>
-                            <option value="Outros" ${item.region === 'Outros' ? 'selected' : ''}>Outros</option>
-                        </select>
-                        <textarea placeholder="Endereço Encontrado" name="endereco_encontrado" required>${item.endereco_encontrado}</textarea>
+                        <div class="field-group">
+                            <label>Título da Notícia *</label>
+                            <input type="text" name="title" value="${escapeHtml(item.title)}" required>
+                        </div>
+                        <div class="field-group">
+                            <label>Subtítulo</label>
+                            <input type="text" name="subtitle" value="${escapeHtml(item.subtitle || '')}">
+                        </div>
+                        <div class="field-group">
+                            <label>Dia da Semana</label>
+                            <select name="dayWeek">
+                                <option value="">Selecione o dia da semana</option>
+                                ${['Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado', 'Domingo']
+                                  .map(day => `<option value="${day}" ${item.dayWeek === day ? 'selected' : ''}>${day}</option>`).join('')}
+                            </select>
+                        </div>
+                        <div class="field-group">
+                            <label>Dia do Mês *</label>
+                            <select name="date" required>
+                                <option value="">Selecione o dia</option>
+                                ${Array.from({length: 31}, (_, i) => {
+                                    const day = String(i + 1).padStart(2, '0');
+                                    return `<option value="${day}" ${item.date === day ? 'selected' : ''}>${day}</option>`;
+                                }).join('')}
+                            </select>
+                        </div>
+                        <div class="field-group">
+                            <label>Mês</label>
+                            <select name="month">
+                                <option value="">Selecione o mês</option>
+                                ${['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
+                                  .map(month => `<option value="${month}" ${item.month === month ? 'selected' : ''}>${month}</option>`).join('')}
+                            </select>
+                        </div>
+                        <div class="field-group">
+                            <label>Imagem da Notícia</label>
+                            <input type="url" name="1-image_URL" value="${escapeHtml(item['1-image_URL'] || '')}" placeholder="https://exemplo.com/imagem.jpg">
+                        </div>
+                        <div class="field-group full-width">
+                            <label>Conteúdo da Notícia *</label>
+                            <textarea name="content" required rows="6">${escapeHtml(item.content)}</textarea>
+                        </div>
+                    </div>
+                `;
+            } 
+            else if (tabAtual === '.user.json') {
+                fields = `
+                    <div class="form-grid">
+                        <div class="field-group">
+                            <label>Nome de Usuário *</label>
+                            <input type="text" name="username" value="${escapeHtml(item.username)}" required>
+                        </div>
+                        <div class="field-group">
+                            <label>Nova Senha</label>
+                            <input type="password" name="password" placeholder="Deixe vazio para manter atual">
+                            <small>Digite apenas se quiser alterar a senha</small>
+                        </div>
+                    </div>
+                `;
+            } 
+            else {
+                fields = `
+                    <div class="form-grid">
+                        <div class="field-group">
+                            <label>Nome da Escola</label>
+                            <input type="text" name="nome" value="${escapeHtml(item.nome || '')}">
+                        </div>
+                        <div class="field-group">
+                            <label>Cidade *</label>
+                            <input type="text" name="cidade" value="${escapeHtml(item.cidade || '')}" required>
+                        </div>
+                        <div class="field-group">
+                            <label> Map Embed</label>
+                            <input type="text" name="map_URL" value="${escapeHtml(item.map_URL || '<div class="embed-map-fixed"><div class="embed-map-container"><iframe class="embed-map-frame" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?width=600&height=400&hl=en&q=cruzeiro%20toca%202&t=&z=14&ie=UTF8&iwloc=B&output=embed"></iframe><a href="https://sprunkiretake.net" style="font-size:2px!important;color:gray!important;position:absolute;bottom:0;left:0;z-index:1;max-height:1px;overflow:hidden">sprunki retake</a></div><style>.embed-map-fixed{position:relative;text-align:right;width:600px;height:400px;}.embed-map-container{overflow:hidden;background:none!important;width:600px;height:400px;}.embed-map-frame{width:600px!important;height:400px!important;}</style></div>')}" placeholder="https://exemplo.com/foto.jpg">
+                        </div>
+                        <div class="field-group">
+                            <label>Latitude *</label>
+                            <input type="number" step="any" name="lat" value="${item.lat}" required>
+                            <small>Use Google Maps para obter coordenadas</small>
+                        </div>
+                        <div class="field-group">
+                            <label>Longitude *</label>
+                            <input type="number" step="any" name="lng" value="${item.lng}" required>
+                            <small>Use Google Maps para obter coordenadas</small>
+                        </div>
+                        <div class="field-group">
+                            <label>País/Região</label>
+                            <select name="region">
+                                ${['Brasil', 'Argentina', 'Chile', 'Uruguai', 'Paraguai', 'Estados Unidos', 'Canadá', 'México', 'Portugal', 'Espanha', 'França', 'Itália', 'Alemanha', 'Reino Unido', 'Japão', 'China', 'Austrália', 'Outros']
+                                  .map(region => `<option value="${region}" ${(item.region || 'Brasil') === region ? 'selected' : ''}>${region}</option>`).join('')}
+                            </select>
+                        </div>
+                        <div class="field-group full-width">
+                            <label>Endereço Completo *</label>
+                            <textarea name="endereco_encontrado" required rows="3">${escapeHtml(item.endereco_encontrado)}</textarea>
+                        </div>
                 `;
                 
                 if (tabAtual === 'schools.json') {
                     fields += `
-                        <input type="text" placeholder="Endereço Original" name="endereco" value="${item.endereco || ''}">
-                        <input type="text" placeholder="Telefone" name="telefone" value="${item.telefone || ''}">
-                        <input type="text" placeholder="WhatsApp" name="whatsapp" value="${item.whatsapp || ''}">
-                        <input type="text" placeholder="Instagram" name="instagram" value="${item.instagram || ''}">
-                        <input type="text" placeholder="URL do Instagram" name="instagram_url" value="${item.instagram_url || ''}">
-                        <input type"text" placeholder="URL do maps de como  chegar" name="ComoChegar" value="${item.ComoChegar || ''}">
-                        <select name="estado">
-                            <option value="">Selecione o Estado</option>
-                            <option value="AC" ${item.estado === 'AC' ? 'selected' : ''}>Acre (AC)</option>
-                            <option value="AL" ${item.estado === 'AL' ? 'selected' : ''}>Alagoas (AL)</option>
-                            <option value="AP" ${item.estado === 'AP' ? 'selected' : ''}>Amapá (AP)</option>
-                            <option value="AM" ${item.estado === 'AM' ? 'selected' : ''}>Amazonas (AM)</option>
-                            <option value="BA" ${item.estado === 'BA' ? 'selected' : ''}>Bahia (BA)</option>
-                            <option value="CE" ${item.estado === 'CE' ? 'selected' : ''}>Ceará (CE)</option>
-                            <option value="DF" ${item.estado === 'DF' ? 'selected' : ''}>Distrito Federal (DF)</option>
-                            <option value="ES" ${item.estado === 'ES' ? 'selected' : ''}>Espírito Santo (ES)</option>
-                            <option value="GO" ${item.estado === 'GO' ? 'selected' : ''}>Goiás (GO)</option>
-                            <option value="MA" ${item.estado === 'MA' ? 'selected' : ''}>Maranhão (MA)</option>
-                            <option value="MT" ${item.estado === 'MT' ? 'selected' : ''}>Mato Grosso (MT)</option>
-                            <option value="MS" ${item.estado === 'MS' ? 'selected' : ''}>Mato Grosso do Sul (MS)</option>
-                            <option value="MG" ${item.estado === 'MG' ? 'selected' : ''}>Minas Gerais (MG)</option>
-                            <option value="PA" ${item.estado === 'PA' ? 'selected' : ''}>Pará (PA)</option>
-                            <option value="PB" ${item.estado === 'PB' ? 'selected' : ''}>Paraíba (PB)</option>
-                            <option value="PR" ${item.estado === 'PR' ? 'selected' : ''}>Paraná (PR)</option>
-                            <option value="PE" ${item.estado === 'PE' ? 'selected' : ''}>Pernambuco (PE)</option>
-                            <option value="PI" ${item.estado === 'PI' ? 'selected' : ''}>Piauí (PI)</option>
-                            <option value="RJ" ${item.estado === 'RJ' ? 'selected' : ''}>Rio de Janeiro (RJ)</option>
-                            <option value="RN" ${item.estado === 'RN' ? 'selected' : ''}>Rio Grande do Norte (RN)</option>
-                            <option value="RS" ${item.estado === 'RS' ? 'selected' : ''}>Rio Grande do Sul (RS)</option>
-                            <option value="RO" ${item.estado === 'RO' ? 'selected' : ''}>Rondônia (RO)</option>
-                            <option value="RR" ${item.estado === 'RR' ? 'selected' : ''}>Roraima (RR)</option>
-                            <option value="SC" ${item.estado === 'SC' ? 'selected' : ''}>Santa Catarina (SC)</option>
-                            <option value="SP" ${item.estado === 'SP' ? 'selected' : ''}>São Paulo (SP)</option>
-                            <option value="SE" ${item.estado === 'SE' ? 'selected' : ''}>Sergipe (SE)</option>
-                            <option value="TO" ${item.estado === 'TO' ? 'selected' : ''}>Tocantins (TO)</option>
-                        </select>
+                        <div class="field-group">
+                            <label>Endereço Original</label>
+                            <input type="text" name="endereco" value="${escapeHtml(item.endereco || '')}">
+                        </div>
+                        <div class="field-group">
+                            <label>Telefone</label>
+                            <input type="text" name="telefone" value="${escapeHtml(item.telefone || '')}" placeholder="(31) 99999-9999">
+                        </div>
+                        <div class="field-group">
+                            <label>WhatsApp</label>
+                            <input type="text" name="whatsapp" value="${escapeHtml(item.whatsapp || '')}" placeholder="5531999999999">
+                            <small style="color: #e74c3c;">Digite apenas números: 55 + DDD + número</small>
+                        </div>
+                        <div class="field-group">
+                            <label>Instagram (@user)</label>
+                            <input type="text" name="instagram" value="${escapeHtml(item.instagram || '')}" placeholder="@escolacruzeiro">
+                        </div>
+                        <div class="field-group">
+                            <label>URL do Instagram</label>
+                            <input type="text" name="instagram_url" value="${escapeHtml(item.instagram_url || '')}" placeholder="escolacruzeiro">
+                            <small>Digite apenas o nome de usuário (sem @)</small>
+                        </div>
+                        <div class="field-group">
+                            <label>Link Google Maps</label>
+                            <input type="url" name="ComoChegar" value="${escapeHtml(item.ComoChegar || 'https://www.google.com/maps')}" placeholder="https://maps.google.com/...">
+                        </div>
+                        <div class="field-group">
+                            <label>Estado (apenas Brasil)</label>
+                            <select name="estado">
+                                <option value="">Selecione o Estado</option>
+                                ${[{v:'AC',n:'Acre'},{v:'AL',n:'Alagoas'},{v:'AP',n:'Amapá'},{v:'AM',n:'Amazonas'},{v:'BA',n:'Bahia'},{v:'CE',n:'Ceará'},{v:'DF',n:'Distrito Federal'},{v:'ES',n:'Espírito Santo'},{v:'GO',n:'Goiás'},{v:'MA',n:'Maranhão'},{v:'MT',n:'Mato Grosso'},{v:'MS',n:'Mato Grosso do Sul'},{v:'MG',n:'Minas Gerais'},{v:'PA',n:'Pará'},{v:'PB',n:'Paraíba'},{v:'PR',n:'Paraná'},{v:'PE',n:'Pernambuco'},{v:'PI',n:'Piauí'},{v:'RJ',n:'Rio de Janeiro'},{v:'RN',n:'Rio Grande do Norte'},{v:'RS',n:'Rio Grande do Sul'},{v:'RO',n:'Rondônia'},{v:'RR',n:'Roraima'},{v:'SC',n:'Santa Catarina'},{v:'SP',n:'São Paulo'},{v:'SE',n:'Sergipe'},{v:'TO',n:'Tocantins'}]
+                                  .map(estado => `<option value="${estado.v}" ${item.estado === estado.v ? 'selected' : ''}>${estado.n} (${estado.v})</option>`).join('')}
+                            </select>
+                            <small style="color: #e74c3c;">⚠️ Deixe vazio se a escola não for no Brasil</small>
+                        </div>
                     `;
                 }
                 fields += '</div>';
@@ -738,6 +848,13 @@ if ($tab_atual === 'news.json' || $tab_atual === 'news_draft.json') {
             
             document.getElementById('editFields').innerHTML = fields;
             document.getElementById('editModal').style.display = 'flex';
+        }
+        
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         }
         
         function editarFailed(index, endereco) {
@@ -753,9 +870,9 @@ if ($tab_atual === 'news.json' || $tab_atual === 'news_draft.json') {
             document.getElementById('newsModalLabel').textContent = item.title || 'Notícia';
             
             const imageContainer = document.getElementById('newsModalImage');
-            const imageUrl = item['1-image_URL'];
-            if (imageUrl) {
-                imageContainer.innerHTML = '<img src="' + imageUrl + '" alt="' + (item.title || '') + '" style="width: 100%; max-width: 500px; border-radius: 8px;">';
+            const imageURL = item['1-image_URL'];
+            if (imageURL) {
+                imageContainer.innerHTML = '<img src="' + imageURL + '" style="width: 100%; max-width: 500px; border-radius: 8px;" alt="Imagem da notícia">';
             } else {
                 imageContainer.innerHTML = '';
             }
@@ -766,12 +883,12 @@ if ($tab_atual === 'news.json' || $tab_atual === 'news_draft.json') {
             }
             
             document.getElementById('newsModalBody').innerHTML = 
-                '<div class="news-meta" style="margin-bottom: 1rem;">' +
+                '<div class="news-meta" style="margin-bottom: 1rem; text-align: center;">' +
                     (dateText ? '<span class="news-date" style="color: gold; font-weight: 600;">' + dateText + '</span>' : '') +
                 '</div>' +
                 '<div class="news-content">' +
-                    (item.subtitle ? '<h3 style="color: white; margin-bottom: 1rem;">' + item.subtitle + '</h3>' : '') +
-                    '<p style="color: rgba(255,255,255,0.95); line-height: 1.6;">' + (item.content || 'Conteúdo não disponível') + '</p>' +
+                    (item.subtitle ? '<h3 style="color:  rgba(0, 8, 67, 0.95); margin-bottom: 1rem;">' + item.subtitle + '</h3>' : '') +
+                    '<p style="color: rgba(0, 8, 67, 0.95); line-height: 1.6;">' + (item.content || 'Conteúdo não disponível') + '</p>' +
                 '</div>';
             
             document.getElementById('newsModal').style.display = 'flex';
