@@ -391,7 +391,7 @@ if ($tab_atual === 'news.json' || $tab_atual === 'news_draft.json') {
                             <label> Mapa Embed da Escola</label>
                             
                             <input type="url" name="map_URL" placeholder="Insira aqui o texto copiado da pagina">
-                            <small style="color: #e74c3c; font-weight: 900;"> Após clicar no botão ative a opção<br> "Make responsive"</small>
+                            <small style="color: #e74c3c; font-weight: 900;"> Após clicar no botão ative a opção<br> "Make responsive" <br>Copie e cole o codigo gerado na caixa de texto logo acima.</small>
                             <a href="https://www.mapembed.org/?gad_source=1&gad_campaignid=22280139497&gbraid=0AAAAA98a5IP3RTdeHHLDaAYXkZ8h50b_F&gclid=EAIaIQobChMI49aI18SSkAMVWGZIAB15LhcJEAAYAiAAEgIe3vD_BwE" style="text-decoration: none; color: #fff; display: inline-block; background-color: #007bff; border: 1px solid #007bff; padding: 10px 20px; border-radius: 5px; font-family: Arial, sans-serif; font-weight: bold; text-align: center; cursor: pointer; " target="_blank">Clique aqui para gerar o mapa</a>
 
                         </div>
