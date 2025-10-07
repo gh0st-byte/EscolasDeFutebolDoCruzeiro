@@ -171,20 +171,20 @@ function renderizarEscolas(escolas) {
         const endereco = escapeHtml(escola.endereco_encontrado || escola.endereco || 'Endereço não informado');
         const telefone = escapeHtml(escola.telefone || 'N/A');
         const estado = escapeHtml(escola.estado || 'N/A');
-        const imagemUrl = escapeHtml(escola.imagem_URL || '');
-        const whatsappUrl = escapeHtml(escola.whatsapp || '');
-        const instagramUrl = escapeHtml(escola.instagram_url || '');
+        const mapUrl = escapeHtml(escola.map_URL || 'Erro em Iframe, confira banco de dados');
+        const whatsappUrl = escola.whatsapp ? `https://api.whatsapp.com/send/?phone=${escola.whatsapp}` : '';
+        const instagramUrl = escola.instagram_url ? `https://instagram.com/${escola.instagram_url}` : '';
         
         return `
             <div class="escola-card">
-                ${imagemUrl ? `<img src="${imagemUrl}" alt="${nome}" class="escola-imagem" onerror="this.style.display='none'">` : ''}
+                ${mapUrl && mapUrl !== 'Erro em Iframe, confira banco de dados' ? `<div class="embed-map-fixed">${mapUrl}</div>` : '<div class="embed-map-responsive" style="border-radius: 30%"><div class="embed-map-container"><iframe class="embed-map-frame" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?width=400&height=400&hl=en&q=cruzeiro%20toca%202&t=&z=14&ie=UTF8&iwloc=B&output=embed"></iframe><a href="https://sprunkiretake.net" style="border-radius: 10%; font-size:2px!important;color:gray!important;position:absolute;bottom:0;left:0;z-index:1;max-height:1px;overflow:hidden">sprunki retake</a></div><style>.embed-map-responsive{position:relative;text-align:right;width:100%;height:0;padding-bottom:100%;}.embed-map-container{overflow:hidden;background:none!important;width:100%;height:100%;position:absolute;top:0;left:0;}.embed-map-frame{width:100%!important;height:100%!important;position:absolute;top:0;left:0;}</style></div>'}
+                <br>
                 <h3>${nome}</h3>
-                <p><strong>Endereço:</strong> ${endereco}</p>
                 <p><strong>Telefone:</strong> ${telefone}</p>
                 <p><strong>Estado:</strong> ${estado}</p>
                 <div class="btn-container">
-                    ${whatsappUrl ? `<a href="${whatsappUrl}" target="_blank" class="btn-whatsapp">WhatsApp</a>` : ''}
-                    ${instagramUrl ? `<a href="${instagramUrl}" target="_blank" class="btn-instagram">Instagram</a>` : ''}
+                    ${whatsappUrl ? `<a href="${escapeHtml(whatsappUrl)}" target="_blank" class="btn-whatsapp">WhatsApp</a>` : ''}
+                    ${instagramUrl ? `<a href="${escapeHtml(instagramUrl)}" target="_blank" class="btn-instagram">Instagram</a>` : ''}
                 </div>
             </div>
         `;

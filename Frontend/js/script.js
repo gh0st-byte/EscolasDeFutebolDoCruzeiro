@@ -5,8 +5,10 @@ function escapeHtml(text) {
   return div.innerHTML;
 }
 
+
 // Carregar notícias para o index
 function loadIndexNews() {
+  
   fetch('/Backend/api/data.php?file=news.json')
     .then(response => response.json())
     .then(data => {
@@ -16,14 +18,14 @@ function loadIndexNews() {
       const noticias = data.slice(0, 5);
       
       container.innerHTML = noticias.map(item => {
-        const imageUrl = item['1-image_URL'] || 'https://images.pexels.com/photos/29920213/pexels-photo-29920213.jpeg';
+        const imageURL = item['1-image_URL'] || 'https://images.pexels.com/photos/29920213/pexels-photo-29920213.jpeg';
         const title = item.title || 'Título da Notícia';
         const content = item.content || 'Resumo da notícia...';
         const resumo = content.length > 80 ? content.substring(0, 80) + '...' : content;
         
         return `
           <div class="card">
-            <img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(title)}">
+            <img src="${escapeHtml(imageURL)}" alt="${escapeHtml(title)}">
             <h3>${escapeHtml(title)}</h3>
             <p>${escapeHtml(resumo)}</p>
             <a href="news.html?id=${item.id}">Leia mais</a>
@@ -252,90 +254,105 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // News functionality para news.html
-var newsData = [];
 
-function openModal(index) {
-    var item = newsData[index];
-    document.getElementById('newsModalLabel').textContent = escapeHtml(item.title || 'Notícia');
-    
-    var imageContainer = document.getElementById('newsModalImage');
-    var imageUrl = item['1-image_URL'];
-    if (imageUrl) {
-        imageContainer.innerHTML = '<img src="' + escapeHtml(imageUrl) + '" alt="' + escapeHtml(item.title) + '">';
-    } else {
-        imageContainer.innerHTML = '';
-    }
-    
-    var dateText = '';
-    if (item.dayWeek && item.date && item.month) {
-        dateText = item.dayWeek + ', ' + item.date + ' de ' + item.month;
-    }
-    
-    document.getElementById('newsModalBody').innerHTML = 
-        '<div class="news-meta">' +
-            (dateText ? '<span class="news-date">' + escapeHtml(dateText) + '</span>' : '') +
-        '</div>' +
-        '<div class="news-content">' +
-            (item.subtitle ? '<h3>' + escapeHtml(item.subtitle) + '</h3>' : '') +
-            '<p>' + escapeHtml(item.content || 'Conteúdo não disponível') + '</p>' +
-        '</div>';
-}
+        let allNews = [];
+        let currentPage = 1;
+        const newsPerPage = 10;
+        
+        async function loadNews() {
+            try {
+                const response = await fetch('/Backend/api/data.php?file=news.json');
 
-function loadNews() {
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/Backend/api/data.php?file=news.json', true);
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4) {
-            var newsContainer = document.querySelector('.news-letter');
-            if (xhr.status === 200) {
-                try {
-                    newsData = JSON.parse(xhr.responseText);
-                    newsData.reverse();
-                    
-                    for (var i = 0; i < newsData.length; i++) {
-                        var item = newsData[i];
-                        var newsItem = document.createElement('div');
-                        newsItem.className = 'news-item';
-                        
-                        var dateText = '';
-                        if (item.dayWeek && item.date && item.month) {
-                            dateText = item.dayWeek + ', ' + item.date + ' de ' + item.month;
-                        } else if (item.date) {
-                            var date = new Date(item.date);
-                            if (!isNaN(date.getTime())) {
-                                dateText = date.toLocaleDateString('pt-BR');
-                            }
-                        }
-                        
-                        var imageUrl = item['1-image_URL'];
-                        var imageHtml = '';
-                        if (imageUrl && imageUrl.trim() !== '') {
-                            imageHtml = '<img src="' + escapeHtml(imageUrl) + '" alt="' + escapeHtml(item.title) + '" style="width: 100%; max-width: 300px; border-radius: 5%; height: auto; margin-bottom: 10px;">';
-                        }
-                        
-                        newsItem.innerHTML = 
-                            imageHtml +
-                            '<h2>' + escapeHtml(item.title || 'Título') + '</h2>' +
-                            (dateText ? '<p class="date" style="color: #666; font-size: 0.9em; margin: 5px 0;">' + escapeHtml(dateText) + '</p>' : '') +
-                            '<p>' + escapeHtml((item.content || '').substring(0, 80)) + '...</p>' +
-                            '<button class="read-more-btn" data-bs-toggle="modal" data-bs-target="#newsModal" onclick="openModal(' + i + ')">Leia mais</button>';
-                        
-                        newsContainer.appendChild(newsItem);
-                    }
-                } catch (e) {
-                    newsContainer.innerHTML += '<p style="color: red;">Erro ao processar dados.</p>';
-                }
-            } else {
-                newsContainer.innerHTML += '<p style="color: red;">Erro ao carregar notícias.</p>';
+                if (!response.ok) throw new Error('Erro ao carregar notícias');
+                
+                allNews = await response.json();
+                if (!Array.isArray(allNews)) throw new Error('Dados inválidos');
+
+                allNews = allNews.reverse();
+                
+                displayNews();
+                updatePagination();
+            } catch (error) {
+                console.error('Erro:', error);
+                document.getElementById('newsContainer').innerHTML = '<p class="text-center text-danger">Erro ao carregar notícias</p>';
             }
         }
-    };
-    xhr.send();
-}
 
-// Inicializar news se estiver na página news.html
-document.addEventListener('DOMContentLoaded', function() {
-    if (document.querySelector('.news-letter')) {
-        loadNews();
-    }
-});
+        
+        function displayNews() {
+            const startIndex = (currentPage - 1) * newsPerPage;
+            const endIndex = startIndex + newsPerPage;
+            const newsToShow = allNews.slice(startIndex, endIndex);
+            
+            const container = document.getElementById('newsContainer');
+            
+            if (newsToShow.length === 0) {
+                container.innerHTML = '<p class="text-center">Nenhuma notícia encontrada</p>';
+                return;
+            }
+            
+            container.innerHTML = newsToShow.map((news, index) => `
+                <div class="news-item" onclick="openNewsModal(${startIndex + index})">
+                    <h2>${news.title}</h2>
+                    <div class="date">${news.dayWeek ? news.dayWeek + ', ' : ''}${news.date} de ${news.month}</div>
+                    <p>${news.content.substring(0, 150)}...</p>
+                    <button class="read-more-btn">Ler Mais</button>
+                </div>
+            `).join('');
+        }
+        
+        function updatePagination() {
+            const totalPages = Math.ceil(allNews.length / newsPerPage);
+            
+            document.getElementById('pageInfo').textContent = `Página ${currentPage} de ${totalPages}`;
+            document.getElementById('prevPage').disabled = currentPage === 1;
+            document.getElementById('nextPage').disabled = currentPage === totalPages;
+        }
+        
+        function openNewsModal(index) {
+            const news = allNews[index];
+            document.getElementById('newsModalLabel').textContent = news.title;
+            
+            const imageContainer = document.getElementById('newsModalImage');
+            if (news['1-image_URL']) {
+                imageContainer.innerHTML = `<img src="${news['1-image_URL']}" class="img-fluid mb-3" alt="Imagem da notícia">`;
+            } else {
+                imageContainer.innerHTML = '';
+            }
+            
+            let dateText = '';
+            if (news.dayWeek && news.date && news.month) {
+                dateText = `${news.dayWeek}, ${news.date} de ${news.month}`;
+            }
+            
+            document.getElementById('newsModalBody').innerHTML = `
+                ${dateText ? `<div class="news-date mb-3"><strong>${dateText}</strong></div>` : ''}
+                ${news.subtitle ? `<h4 class="mb-3">${news.subtitle}</h4>` : ''}
+                <div class="news-content">${news.content}</div>
+            `;
+            
+            new bootstrap.Modal(document.getElementById('newsModal')).show();
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            loadNews();
+            
+            document.getElementById('prevPage').addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    window.scrollTo(0, 0);
+                    displayNews();
+                    updatePagination();
+                }
+            });
+            
+            document.getElementById('nextPage').addEventListener('click', () => {
+                const totalPages = Math.ceil(allNews.length / newsPerPage);
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    window.scrollTo(0, 0);
+                    displayNews();
+                    updatePagination();
+                }
+            });
+        });
