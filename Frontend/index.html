@@ -11,6 +11,9 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
     <link rel="icon" type="image/png" href="assets/img/ESCUDO CRUZEIRO 512x512.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
     <style>
         .custom-cluster {
             border: none !important;
@@ -61,7 +64,7 @@
 
                     <div class="logo">
                         <a href="index.html">
-                            <img src="assets/img/ESCUDO CRUZEIRO 512x512.png" alt="Cruzeiro Logo">
+                            <img src="assets/img/logo-escola-em-aprovação.png" alt="Cruzeiro Logo">
                         </a>
                     </div>
                     <div class="dropdown d-md-none">
@@ -114,8 +117,10 @@
 
 
                 
-                <div class="news-cards" id="newsCardsContainer">
-                    <!-- Notícias serão carregadas aqui via JavaScript -->
+                <div class="news-carousel">
+                    <div class="news-cards" id="newsCardsContainer">
+                        <!-- Notícias serão carregadas aqui via JavaScript -->
+                    </div>
                 </div>
 
                     
@@ -133,28 +138,50 @@
 
                 <div class="metodologia-carousel">
                     <div class="metodologia-text">
-                    <div class="card-metodologia" style="background-image: url('assets/img/EXCLUSIVIDADE.png'); f;">
-                        <button class="btn-saiba-mais" onclick="toggleDropdown(this)">Saiba Mais</button>
-                        <div class="dropdown-content">
-                            <p>Metodologia única desenvolvida pelos profissionais do Cruzeiro para formar atletas de excelência.</p>
+                        <div class="metodologia-cards">
+                            <div class="card-metodologia" style="background-image: url('assets/img/EXCLUSIVIDADE.png');">
+                                
+                            </div>
+                            <div class="cals">
+                                 <button class="btn-saiba-mais" onclick="toggleDropdown(this)">Saiba Mais</button>
+                                <div class="dropdown-content">
+                                    <p>Metodologia única desenvolvida pelos profissionais do Cruzeiro para formar atletas de excelência.</p>
+                                </div>
+                            </div>
+                           
                         </div>
-                    </div>
-                    <div class="card-metodologia" style="background-image: url('assets/img/FORMAÇÃO.png');">
-                        <button class="btn-saiba-mais" onclick="toggleDropdown(this)">Saiba Mais</button>
-                        <div class="dropdown-content">
-                            <p>Desenvolvimento técnico e tático baseado na tradição vitoriosa do clube mais vencedor de Minas.</p>
+                        <div class="metodologia-cards">
+                            <div class="card-metodologia" style="background-image: url('assets/img/FORMAÇÃO.png');">
+                                
+                            </div>
+                            <div class="cals">
+                                <button class="btn-saiba-mais" onclick="toggleDropdown(this)">Saiba Mais</button>
+                                <div class="dropdown-content">
+                                    <p>Desenvolvimento técnico e tático baseado na tradição vitoriosa do clube mais vencedor de Minas.</p>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="card-metodologia" style="background-image: url('assets/img/DESENVOLVIMENTO.png');">
-                        <button class="btn-saiba-mais" onclick="toggleDropdown(this)">Saiba Mais</button>
-                        <div class="dropdown-content">
-                            <p>Crescimento integral do atleta, focando aspectos físicos, mentais e sociais.</p>
+                        <div class="metodologia-cards">
+                            <div class="card-metodologia" style="background-image: url('assets/img/DESENVOLVIMENTO.png');">
+                                
+                            </div>
+                            <div class="cals">
+                                <button class="btn-saiba-mais" onclick="toggleDropdown(this)">Saiba Mais</button>
+                                <div class="dropdown-content">
+                                    <p>Crescimento integral do atleta, focando aspectos físicos, mentais e sociais.</p>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="card-metodologia" style="background-image: url('assets/img/ATRIBUTOS.png');">
-                        <button class="btn-saiba-mais" onclick="toggleDropdown(this)">Saiba Mais</button>
-                        <div class="dropdown-content">
-                            <p>Fortalecimento dos valores e características que definem um verdadeiro cruzeirense.</p>
+                        <div class="metodologia-cards">
+                            <div class="card-metodologia" style="background-image: url('assets/img/ATRIBUTOS.png');">
+                                
+                            </div>
+                            <div class="cals">
+                                <button class="btn-saiba-mais" onclick="toggleDropdown(this)">Saiba Mais</button>
+                                <div class="dropdown-content">
+                                    <p>Fortalecimento dos valores e características que definem um verdadeiro cruzeirense.</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -177,6 +204,11 @@
                     <button data-region="world">Mundo</button>
 
                 </div>
+                <!-- Search bar for the map -->
+                <div class="map-search">
+                    <input id="mapSearch" type="search" placeholder="Pesquisar unidades ou endereço..." aria-label="Pesquisar mapa" />
+                    <ul id="mapSearchResults" class="map-search-results" role="listbox" aria-label="Resultados da pesquisa"></ul>
+                </div>
                 <div id="map">
 
                 </div>
@@ -193,10 +225,7 @@
 
             <footer>
                 <div class="footer-content">
-                    <div class="footer-section about">
-                        <h3>Sobre Nós</h3>
-                        <p>O Cruzeiro Academy é a rede oficial de escolas de futebol do Cruzeiro, dedicada a formar novos talentos e promover o esporte em todo o Brasil.</p>
-                    </div>
+                    
                     <div class="footer-section links">
                         <h2>O Maior Campeão</h2>
                         <ul>
@@ -219,7 +248,7 @@
                     </div>
 
                     <div class="autoral-rights">
-                        <p>&copy; 2024 Cruzeiro Academy. Todos os direitos reservados.</p>
+                        <p>&copy; 2025 Cruzeiro Academy. Todos os direitos reservados.</p>
                     </div>
                 </div>
             </footer>

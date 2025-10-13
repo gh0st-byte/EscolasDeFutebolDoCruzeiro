@@ -126,6 +126,7 @@ function initMap() {
   
   loadSchools();
   setupMapButtons();
+  setupMapSearch();
   
   // Forçar redimensionamento do mapa
   setTimeout(() => {
@@ -214,6 +215,105 @@ function setupMapButtons() {
   });
 }
 
+// --- Map search UI ---
+function setupMapSearch() {
+  const input = document.getElementById('mapSearch');
+  const resultsList = document.getElementById('mapSearchResults');
+  if (!input || !resultsList) return;
+
+  function clearResults() {
+    resultsList.innerHTML = '';
+    resultsList.style.display = 'none';
+  }
+
+  function showResults(items) {
+    resultsList.innerHTML = items.map(item => `<li data-id="${escapeHtml(item.id || '')}">${escapeHtml(item.nome || item.cidade || item.endereco_encontrado || item.title || '')}</li>`).join('');
+    resultsList.style.display = items.length ? 'block' : 'none';
+  }
+
+  input.addEventListener('input', debounce(async (e) => {
+    const q = e.target.value.trim().toLowerCase();
+    if (!q) { clearResults(); return; }
+
+    // local search in loaded schools
+    const local = schools.filter(s => {
+      const fields = ((s.nome||'') + ' ' + (s.cidade||'') + ' ' + (s.endereco_encontrado||'') + ' ' + (s.bairro||'')).toLowerCase();
+      return fields.includes(q);
+    }).slice(0, 8);
+
+    if (local.length) {
+      showResults(local);
+      return;
+    }
+
+    // fallback: geocode via Nominatim
+    try {
+      const resp = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q)}&limit=6`);
+      const data = await resp.json();
+      if (Array.isArray(data) && data.length) {
+        const mapped = data.map((d, i)=>({ id: 'geocode-'+i, nome: d.display_name, lat: d.lat, lng: d.lon }));
+        showResults(mapped);
+      } else {
+        clearResults();
+      }
+    } catch (err) {
+      console.error('Geocode error', err);
+      clearResults();
+    }
+  }, 300));
+
+  // click on results
+  resultsList.addEventListener('click', (ev) => {
+    const li = ev.target.closest('li');
+    if (!li) return;
+    const id = li.dataset.id;
+    // find in local schools first
+    const found = schools.find(s => (s.id && String(s.id) === id) || s.id === id || ('geocode-'+(s._geocodeIndex||'') === id));
+    if (found) {
+      if (found.lat && found.lng) {
+        map.setView([found.lat, found.lng], 14);
+        // find marker and open popup
+        markers.eachLayer(layer => {
+          if (layer.getLatLng && layer.getLatLng().lat === Number(found.lat) && layer.getLatLng().lng === Number(found.lng)) {
+            layer.openPopup();
+          }
+        });
+      }
+      clearResults();
+      input.value = '';
+      return;
+    }
+
+    // if not local, it's geocode result (we stored lat/lng in the li text mapping above)
+    const text = li.textContent;
+    // attempt to find lat/lon by re-querying Nominatim for that exact display name
+    (async () => {
+      try {
+        const resp = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(text)}&limit=1`);
+        const data = await resp.json();
+        if (data && data[0]) {
+          const lat = Number(data[0].lat), lng = Number(data[0].lon);
+          map.setView([lat, lng], 14);
+          L.marker([lat, lng]).addTo(map).bindPopup(text).openPopup();
+        }
+      } catch (err) { console.error(err); }
+      clearResults();
+      input.value = '';
+    })();
+  });
+
+  // click outside to close
+  document.addEventListener('click', (e)=>{
+    if (!e.target.closest('.map-search')) clearResults();
+  });
+}
+
+// small debounce helper
+function debounce(fn, wait=200){
+  let t;
+  return function(...args){ clearTimeout(t); t = setTimeout(()=>fn.apply(this,args), wait); };
+}
+
 // Inicializar carrossel de notícias
 function initNewsCarousel() {
   const track = document.querySelector('.news-cards');
@@ -278,7 +378,9 @@ function initNewsCarousel() {
 
     controls.appendChild(prevBtn);
     controls.appendChild(nextBtn);
-    track.parentElement.appendChild(controls);
+    // Prefer to append controls to the explicit wrapper (.news-carousel) if present
+    const wrapper = track.closest('.news-carousel') || track.parentElement;
+    wrapper.appendChild(controls);
   }
 
   // Responsive handling: recalc on resize
