@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
-    <link rel="icon" type="image/png" href="https://imagens.cruzeiro.com.br/Escudos/Cruzeiro.png">
+    <link rel="icon" type="image/png" href="assets/img/ESCUDO CRUZEIRO 512x512.png">
     <style>
         .custom-cluster {
             border: none !important;
@@ -61,7 +61,7 @@
 
                     <div class="logo">
                         <a href="index.html">
-                            <img src="https://logodetimes.com/times/cruzeiro/logo-cruzeiro-4096.png" alt="Cruzeiro Logo">
+                            <img src="assets/img/ESCUDO CRUZEIRO 512x512.png" alt="Cruzeiro Logo">
                         </a>
                     </div>
                     <div class="dropdown d-md-none">
@@ -105,7 +105,7 @@
 
                 </div>
                 <div class="hero-image">
-                    <img class="hero-img" src="https://i.pinimg.com/736x/43/18/76/431876a4d67902e8374101ed79bd071b.jpg" alt="Imagem de destaque">
+                    <img class="hero-img" src="assets/img/CRIAS DA TOCA 1032x696.png" alt="Imagem de destaque">
                 </div>
 
             </div>
@@ -126,38 +126,45 @@
                
             </div>
 
-            <div class="Metodologia" id="metodologia">
+            <div class="Metodologia" id="metodologia" style="background: url('assets/img/FUNDO AZUL TEXTURIZADO 1921x1080.png')">
                 <h1>
                     Metodologia
                 </h1>
 
-                <div class="metodologia-text">
-
-                    <div class="card-metodologia">
-                        <h3>Exclusividade</h3>
-                        <p>Descrição da metodologia 1...</p>
-
+                <div class="metodologia-carousel">
+                    <div class="metodologia-text">
+                    <div class="card-metodologia" style="background-image: url('assets/img/EXCLUSIVIDADE.png'); f;">
+                        <button class="btn-saiba-mais" onclick="toggleDropdown(this)">Saiba Mais</button>
+                        <div class="dropdown-content">
+                            <p>Metodologia única desenvolvida pelos profissionais do Cruzeiro para formar atletas de excelência.</p>
+                        </div>
                     </div>
-                    <div class="card-metodologia">
-                        <h3>Formação</h3>
-                        <p>Descrição da metodologia 2...</p>
-
+                    <div class="card-metodologia" style="background-image: url('assets/img/FORMAÇÃO.png');">
+                        <button class="btn-saiba-mais" onclick="toggleDropdown(this)">Saiba Mais</button>
+                        <div class="dropdown-content">
+                            <p>Desenvolvimento técnico e tático baseado na tradição vitoriosa do clube mais vencedor de Minas.</p>
+                        </div>
                     </div>
-                    <div class="card-metodologia">
-                        <h3>Desenvolvimento</h3>
-                        <p>Descrição da metodologia 3...</p>
+                    <div class="card-metodologia" style="background-image: url('assets/img/DESENVOLVIMENTO.png');">
+                        <button class="btn-saiba-mais" onclick="toggleDropdown(this)">Saiba Mais</button>
+                        <div class="dropdown-content">
+                            <p>Crescimento integral do atleta, focando aspectos físicos, mentais e sociais.</p>
+                        </div>
                     </div>
-                    <div class="card-metodologia">
-                        <h3>Atributos</h3>
-                        <p>Descrição da metodologia 4...</p>
+                    <div class="card-metodologia" style="background-image: url('assets/img/ATRIBUTOS.png');">
+                        <button class="btn-saiba-mais" onclick="toggleDropdown(this)">Saiba Mais</button>
+                        <div class="dropdown-content">
+                            <p>Fortalecimento dos valores e características que definem um verdadeiro cruzeirense.</p>
+                        </div>
                     </div>
                 </div>
+            </div>
             </div>
 
             <div class="crias">
 
                 <div class="crias-image">
-                    <img src="assets/img/crias.png" alt="Imagem Crias da Toca"> 
+                    <img src="assets/img/CRIAS DA TOCA 1032x696.png" alt="Imagem Crias da Toca"> 
                 </div>
 
             </div>
@@ -177,8 +184,11 @@
 
             <div class="cta-2">
                 <h2>SEJA UM FRANQUEADO</h2>
-                <p>Junte-se à rede de escolas de futebol do Cruzeiro e faça parte de um projeto vencedor!</p>
+                
                 <a href="#" class="btn-footer" role="button">Quero ser Franqueado</a>
+            </div>
+            <div class="cta-2-text">
+                <p>Junte-se à rede de escolas de futebol do Cruzeiro e faça parte de um projeto vencedor!</p>
             </div>
 
             <footer>

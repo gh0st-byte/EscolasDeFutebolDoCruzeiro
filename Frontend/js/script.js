@@ -33,8 +33,8 @@ function loadIndexNews() {
         `;
       }).join('');
       
-      // Inicializar carrossel após carregar notícias
-      setTimeout(() => initNewsCarousel(), 100);
+      // Inicializar carrossel após carregar imagens das notícias
+      waitForImages(container).then(() => initNewsCarousel()).catch(() => initNewsCarousel());
     })
     .catch(error => {
       console.error('Erro ao carregar notícias:', error);
@@ -49,6 +49,27 @@ function loadIndexNews() {
         `;
       }
     });
+}
+
+// Aguarda as imagens dentro de um container serem carregadas
+function waitForImages(container) {
+  const imgs = Array.from(container.querySelectorAll('img'));
+  if (imgs.length === 0) return Promise.resolve();
+
+  const promises = imgs.map(img => {
+    // If image is already complete and decoded, resolve
+    if (img.complete) {
+      // try decode for better reliability
+      if (img.decode) return img.decode().catch(() => {});
+      return Promise.resolve();
+    }
+    return new Promise(resolve => {
+      img.addEventListener('load', resolve);
+      img.addEventListener('error', resolve);
+    });
+  });
+
+  return Promise.all(promises);
 }
 
 // Header scroll effect
@@ -199,44 +220,78 @@ function initNewsCarousel() {
   const cards = document.querySelectorAll('.card');
   
   if (!track || cards.length === 0) return;
-  
   let currentIndex = 0;
-  const cardWidth = cards[0].offsetWidth + 20; // incluindo margin
-  const visibleCards = Math.floor(track.parentElement.offsetWidth / cardWidth);
-  const maxIndex = Math.max(0, cards.length - visibleCards);
-  
-  // Criar botões de navegação
-  const prevBtn = document.createElement('button');
-  prevBtn.innerHTML = '‹';
-  prevBtn.className = 'carousel-btn prev-btn';
-  
-  const nextBtn = document.createElement('button');
-  nextBtn.innerHTML = '›';
-  nextBtn.className = 'carousel-btn next-btn';
-  
-  track.parentElement.appendChild(prevBtn);
-  track.parentElement.appendChild(nextBtn);
-  
-  function updateCarousel() {
-    track.style.transform = `translateX(-${currentIndex * cardWidth}px)`;
-    prevBtn.disabled = currentIndex === 0;
-    nextBtn.disabled = currentIndex >= maxIndex;
+
+  // Ensure we don't create controls more than once
+  const controlsClass = 'news-carousel-controls';
+  let controls = track.parentElement.querySelector('.' + controlsClass);
+
+  function calculateLayout() {
+    const firstCard = track.querySelector('.card');
+    const cardRect = firstCard.getBoundingClientRect();
+    const style = window.getComputedStyle(firstCard);
+    const marginRight = parseFloat(style.marginRight || '0');
+    const cardWidth = Math.round(cardRect.width + marginRight);
+    const containerWidth = track.parentElement.clientWidth || track.parentElement.offsetWidth;
+    const visibleCards = Math.max(1, Math.floor(containerWidth / cardWidth));
+    const maxIndex = Math.max(0, cards.length - visibleCards);
+    return { cardWidth, visibleCards, maxIndex };
   }
-  
-  prevBtn.addEventListener('click', () => {
-    if (currentIndex > 0) {
-      currentIndex--;
-      updateCarousel();
-    }
-  });
-  
-  nextBtn.addEventListener('click', () => {
-    if (currentIndex < maxIndex) {
-      currentIndex++;
-      updateCarousel();
-    }
-  });
-  
+
+  function updateCarousel() {
+    const { cardWidth, maxIndex } = calculateLayout();
+    if (currentIndex > maxIndex) currentIndex = maxIndex;
+    track.style.transition = 'transform 300ms ease';
+    track.style.transform = `translateX(-${currentIndex * cardWidth}px)`;
+
+    const prev = controls.querySelector('.prev-btn');
+    const next = controls.querySelector('.next-btn');
+    if (prev) prev.disabled = currentIndex === 0;
+    if (next) next.disabled = currentIndex >= maxIndex;
+  }
+
+  if (!controls) {
+    controls = document.createElement('div');
+    controls.className = controlsClass;
+    const prevBtn = document.createElement('button');
+    prevBtn.innerHTML = '‹';
+    prevBtn.className = 'carousel-btn prev-btn';
+
+    const nextBtn = document.createElement('button');
+    nextBtn.innerHTML = '›';
+    nextBtn.className = 'carousel-btn next-btn';
+
+    prevBtn.addEventListener('click', () => {
+      if (currentIndex > 0) {
+        currentIndex--;
+        updateCarousel();
+      }
+    });
+
+    nextBtn.addEventListener('click', () => {
+      const { maxIndex } = calculateLayout();
+      if (currentIndex < maxIndex) {
+        currentIndex++;
+        updateCarousel();
+      }
+    });
+
+    controls.appendChild(prevBtn);
+    controls.appendChild(nextBtn);
+    track.parentElement.appendChild(controls);
+  }
+
+  // Responsive handling: recalc on resize
+  if (!window._newsCarouselInitialized) {
+    window.addEventListener('resize', () => {
+      // small debounce
+      clearTimeout(window._newsCarouselResizeTimer);
+      window._newsCarouselResizeTimer = setTimeout(updateCarousel, 120);
+    });
+    window._newsCarouselInitialized = true;
+  }
+
+  // initial layout
   updateCarousel();
 }
 
@@ -356,3 +411,100 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         });
+
+// Função para controlar dropdown da metodologia
+function toggleDropdown(button) {
+    const dropdownContent = button.nextElementSibling;
+    const isActive = dropdownContent.classList.contains('active');
+    
+    if (isActive) {
+        dropdownContent.classList.remove('active');
+        button.textContent = 'Saiba Mais';
+    } else {
+        dropdownContent.classList.add('active');
+        button.textContent = 'X';
+    }
+}
+// Inicializar carousel da metodologia em mobile
+function initMetodologiaCarousel() {
+    if (window.innerWidth <= 700) {
+        const carousel = document.querySelector('.metodologia-carousel');
+        const track = document.querySelector('.metodologia-text');
+        const cards = document.querySelectorAll('.card-metodologia');
+        
+        if (!carousel || !track || cards.length === 0) return;
+        
+    let currentIndex = 0;
+
+    // Avoid duplicated controls
+    if (!carousel.querySelector('.metodologia-controls')) {
+      const controls = document.createElement('div');
+      controls.className = 'metodologia-controls';
+
+      const prevBtn = document.createElement('button');
+      prevBtn.innerHTML = '‹';
+      prevBtn.className = 'carousel-btn prev-btn';
+
+      const nextBtn = document.createElement('button');
+      nextBtn.innerHTML = '›';
+      nextBtn.className = 'carousel-btn next-btn';
+
+      controls.appendChild(prevBtn);
+      controls.appendChild(nextBtn);
+      carousel.appendChild(controls);
+
+      function calculate() {
+        const cardRect = cards[0].getBoundingClientRect();
+        const style = window.getComputedStyle(cards[0]);
+        const marginRight = parseFloat(style.marginRight || '0');
+        const cardWidth = Math.round(cardRect.width + marginRight);
+        const maxIndex = Math.max(0, cards.length - 1);
+        return { cardWidth, maxIndex };
+      }
+
+      function updateCarousel() {
+        const { cardWidth, maxIndex } = calculate();
+        if (currentIndex > maxIndex) currentIndex = maxIndex;
+        track.style.transition = 'transform 300ms ease';
+        track.style.transform = `translateX(-${currentIndex * cardWidth}px)`;
+        prevBtn.disabled = currentIndex === 0;
+        nextBtn.disabled = currentIndex >= maxIndex;
+      }
+
+      prevBtn.addEventListener('click', () => {
+        if (currentIndex > 0) {
+          currentIndex--;
+          updateCarousel();
+        }
+      });
+
+      nextBtn.addEventListener('click', () => {
+        const { maxIndex } = calculate();
+        if (currentIndex < maxIndex) {
+          currentIndex++;
+          updateCarousel();
+        }
+      });
+
+      // responsive resize handling
+      if (!window._metodologiaCarouselInitialized) {
+        window.addEventListener('resize', () => {
+          clearTimeout(window._metodologiaCarouselResizeTimer);
+          window._metodologiaCarouselResizeTimer = setTimeout(updateCarousel, 120);
+        });
+        window._metodologiaCarouselInitialized = true;
+      }
+
+      updateCarousel();
+    }
+    }
+}
+
+// Inicializar no carregamento e redimensionamento
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(initMetodologiaCarousel, 100);
+});
+
+window.addEventListener('resize', () => {
+    setTimeout(initMetodologiaCarousel, 100);
+});

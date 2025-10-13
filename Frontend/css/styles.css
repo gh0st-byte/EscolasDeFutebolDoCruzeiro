@@ -7,7 +7,7 @@
 
 body {
     font-family: 'Montserrat', Arial, sans-serif;
-    background: url('https://i0.wp.com/multarte.com.br/wp-content/uploads/2019/01/ceu-estrelado.jpg?fit=2560%2C1707&ssl=1') center/cover fixed;
+    background: linear-gradient(135deg, #001a4d 0%, #002080 50%, #0033a0 100%);
     color: #050a30;
     overflow-x: hidden;
     padding-top: 92px ;
@@ -235,7 +235,7 @@ nav button:hover::before {
     display: flex;
     flex-direction: row;
     align-items: center;
-    background: linear-gradient(135deg, #052688 10%, #163077c6 100%);
+    background: linear-gradient(135deg, #052688 10%, #16307796 100%);
     color: #ffffff;
     padding: 64px 0;
     min-height: 60vh;
@@ -504,12 +504,8 @@ a button {
     margin: 0 8px;
     cursor: pointer;
     transition: background 0.2s, color 0.2s;
-    justify-content: start;
-    align-self: start;
     font-weight: bold;
-    left: 0;
-    position: relative;
-    margin-top: 20px;
+    /* positioning handled by .carousel-btn (absolute) or parent container */
 }
 
 .btn-next:hover, .btn-prev:hover {
@@ -520,7 +516,6 @@ a button {
 /* METODOLOGIA */
 .Metodologia {
     padding: 80px 0 60px 0;
-    background: url('https://images.pexels.com/photos/24291554/pexels-photo-24291554.jpeg');
     background-size: cover;
     background-position: center;
     color: #fff;
@@ -570,18 +565,16 @@ a button {
     transition: all 0.4s ease;
     border: none;
     background-size: cover;
-    background-image: linear-gradient(rgba(13, 53, 184, 0.7), rgba(30,60,160,0.7)),
-     url(https://i.pinimg.com/736x/cd/d4/31/cdd431f32de28d03b856ae9d0dab9a06.jpg);
+    
     background-position: center;
     background-repeat: no-repeat;
     cursor: pointer;
 }
 
 .card-metodologia:hover {
-    transform: translateY(-8px) scale(1.05);
+    transform: translateY(-2px) scale(1.01);
     box-shadow: 0 12px 40px rgba(0,51,160,0.3);
     background-image: linear-gradient(rgba(13, 53, 184, 0.9), rgba(30,60,160,0.9)),
-     url(https://i.pinimg.com/736x/cd/d4/31/cdd431f32de28d03b856ae9d0dab9a06.jpg);
 }
 
 .card-metodologia h3 {
@@ -601,7 +594,62 @@ a button {
 }
 
 .card-metodologia img {
-    display: none;
+    display: block;
+    filter: brightness(0) invert(1);
+    transition: all 0.3s ease;
+}
+
+.card-metodologia:hover img {
+    filter: brightness(0) invert(1) drop-shadow(0 0 10px rgba(255,255,255,0.8));
+    transform: scale(1.1);
+}
+
+.btn-saiba-mais {
+    background-color: #001973d4;
+    border: 1px solid #0033a0;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-saiba-mais:hover {
+    background: #fff;
+    color: #0033a0;
+    border: 1px solid #0033a0;
+    transform: translateY(-2px);
+}
+
+.dropdown-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    margin-top: 12px;
+}
+
+.dropdown-content.active {
+    max-height: 200px;
+    background-color: #050a3097;
+    border: 1px solid #0033a0;
+    border-radius: 10%;
+    font-weight: 900;
+    font-size: larger;
+    width: fit-content;
+}
+
+.dropdown-content p {
+    font-size: 0.95rem;
+    line-height: 1.4;
+    color: #e0e6f7;
+    text-align: center;
+    margin: 0;
+    padding: 12px 8px 0 8px;
 }
 
 /* CRIAS DA TOCA */
@@ -788,11 +836,32 @@ a button {
     color: #0033a0;
     padding: 64px 0;
     text-align: left;
-    min-height: 320px;
+    max-height: 120px;
     display: flex;
     align-items: flex-start;
     justify-content: flex-start;
     position: relative;
+}
+.cta-2-text{
+    background: #f4f4f4;
+    color: #0033a0;
+    padding: 64px 0;
+    text-align: left;
+    max-height: 120px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    position: relative;
+    
+
+}
+.cta-2-text p{
+    max-width: 600px;
+    margin: 10px 6vw 6vw 6vw;
+
+    font-size: larger;
+    font-weight: 600;
+    text-transform: uppercase;
 }
 
 .cta-2 h2 {
@@ -1122,15 +1191,80 @@ footer ul {
         padding: 50px 0;
     }
 
-    .metodologia-text {
-        grid-template-columns: 1fr;
-        gap: 20px;
+    .metodologia-carousel {
+        position: relative;
+        width: 100%;
+        overflow: hidden;
         padding: 0 20px;
     }
 
+    /* Ensure news section is a positioned container for absolute controls */
+    .news {
+        position: relative;
+    }
+
+    /* Position the controls inside the news container */
+    .news .news-carousel-controls {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        transform: translateY(-50%);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 12px;
+        pointer-events: none; /* allow clicks only on buttons */
+        z-index: 5;
+    }
+
+    .news .news-carousel-controls .carousel-btn {
+        pointer-events: auto;
+    }
+
+    .metodologia-text {
+        display: flex;
+        gap: 20px;
+        transition: transform 0.5s ease;
+        width: fit-content;
+    }
+
     .card-metodologia {
+        min-width: 280px;
+        max-width: 280px;
         aspect-ratio: 9/16;
-        margin: 0 auto;
+        flex-shrink: 0;
+    }
+
+    .carousel-btn {
+        background: transparent;
+        color: gold;
+        border: 2px solid gold;
+        border-radius: 15%;
+        width: 44px;
+        height: 44px;
+        font-size: 1.5rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: bold;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 10;
+        font-weight: 900;
+    }
+
+    .carousel-btn:hover {
+        background: gold;
+        color: #0033a0;
+    }
+
+    .prev-btn {
+        left: 10px;
+    }
+
+    .next-btn {
+        right: 10px;
     }
 
     .hero {
