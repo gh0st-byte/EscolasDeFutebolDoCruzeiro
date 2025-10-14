@@ -227,79 +227,66 @@ function setupMapSearch() {
   }
 
   function showResults(items) {
-    resultsList.innerHTML = items.map(item => `<li data-id="${escapeHtml(item.id || '')}">${escapeHtml(item.nome || item.cidade || item.endereco_encontrado || item.title || '')}</li>`).join('');
+    resultsList.innerHTML = items.map((item, index) => `<li data-index="${index}" data-lat="${item.lat || ''}" data-lng="${item.lng || ''}">${escapeHtml(item.nome || item.cidade || item.endereco_encontrado || item.title || '')}</li>`).join('');
     resultsList.style.display = items.length ? 'block' : 'none';
+    resultsList._currentItems = items;
   }
 
-  input.addEventListener('input', debounce(async (e) => {
+  input.addEventListener('input', debounce((e) => {
     const q = e.target.value.trim().toLowerCase();
     if (!q) { clearResults(); return; }
 
-    // local search in loaded schools
-    const local = schools.filter(s => {
+    // Search only in loaded schools from schools.json
+    const results = schools.filter(s => {
       const fields = ((s.nome||'') + ' ' + (s.cidade||'') + ' ' + (s.endereco_encontrado||'') + ' ' + (s.bairro||'')).toLowerCase();
-      return fields.includes(q);
+      return fields.includes(q) && s.lat && s.lng;
     }).slice(0, 8);
 
-    if (local.length) {
-      showResults(local);
-      return;
-    }
-
-    // fallback: geocode via Nominatim
-    try {
-      const resp = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q)}&limit=6`);
-      const data = await resp.json();
-      if (Array.isArray(data) && data.length) {
-        const mapped = data.map((d, i)=>({ id: 'geocode-'+i, nome: d.display_name, lat: d.lat, lng: d.lon }));
-        showResults(mapped);
-      } else {
-        clearResults();
-      }
-    } catch (err) {
-      console.error('Geocode error', err);
-      clearResults();
-    }
+    showResults(results);
   }, 300));
 
   // click on results
   resultsList.addEventListener('click', (ev) => {
     const li = ev.target.closest('li');
     if (!li) return;
-    const id = li.dataset.id;
-    // find in local schools first
-    const found = schools.find(s => (s.id && String(s.id) === id) || s.id === id || ('geocode-'+(s._geocodeIndex||'') === id));
-    if (found) {
-      if (found.lat && found.lng) {
-        map.setView([found.lat, found.lng], 14);
-        // find marker and open popup
-        markers.eachLayer(layer => {
-          if (layer.getLatLng && layer.getLatLng().lat === Number(found.lat) && layer.getLatLng().lng === Number(found.lng)) {
-            layer.openPopup();
+    
+    const index = parseInt(li.dataset.index);
+    const items = resultsList._currentItems || [];
+    const selected = items[index];
+    
+    if (selected && selected.lat && selected.lng) {
+      const lat = Number(selected.lat);
+      const lng = Number(selected.lng);
+      
+      // Center map on location
+      map.setView([lat, lng], 15);
+      
+      // Find and open the corresponding marker popup
+      let markerFound = false;
+      markers.eachLayer(layer => {
+        if (layer.getLatLng && !markerFound) {
+          const markerLat = layer.getLatLng().lat;
+          const markerLng = layer.getLatLng().lng;
+          
+          // Check if coordinates match (with tolerance for floating point)
+          if (Math.abs(markerLat - lat) < 0.001 && Math.abs(markerLng - lng) < 0.001) {
+            setTimeout(() => layer.openPopup(), 200);
+            markerFound = true;
           }
-        });
-      }
-      clearResults();
-      input.value = '';
-      return;
-    }
-
-    // if not local, it's geocode result (we stored lat/lng in the li text mapping above)
-    const text = li.textContent;
-    // attempt to find lat/lon by re-querying Nominatim for that exact display name
-    (async () => {
-      try {
-        const resp = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(text)}&limit=1`);
-        const data = await resp.json();
-        if (data && data[0]) {
-          const lat = Number(data[0].lat), lng = Number(data[0].lon);
-          map.setView([lat, lng], 14);
-          L.marker([lat, lng]).addTo(map).bindPopup(text).openPopup();
         }
-      } catch (err) { console.error(err); }
-      clearResults();
-      input.value = '';
-    })();
+      });
+      
+      // If no marker found, create temporary popup
+      if (!markerFound && selected.nome) {
+        const tempMarker = L.marker([lat, lng], {icon: createBlueCircleIcon()})
+          .bindPopup(`<div><h4>${escapeHtml(selected.nome)}</h4></div>`)
+          .addTo(map);
+        setTimeout(() => tempMarker.openPopup(), 200);
+      }
+    }
+    
+    clearResults();
+    input.value = '';
   });
 
   // click outside to close
@@ -527,86 +514,34 @@ function toggleDropdown(button) {
         button.textContent = 'X';
     }
 }
-// Inicializar carousel da metodologia em mobile
-function initMetodologiaCarousel() {
-    if (window.innerWidth <= 700) {
-        const carousel = document.querySelector('.metodologia-carousel');
-        const track = document.querySelector('.metodologia-text');
-        const cards = document.querySelectorAll('.card-metodologia');
-        
-        if (!carousel || !track || cards.length === 0) return;
-        
-    let currentIndex = 0;
+// Carousel da metodologia
+let metodologiaCurrentIndex = 0;
 
-    // Avoid duplicated controls
-    if (!carousel.querySelector('.metodologia-controls')) {
-      const controls = document.createElement('div');
-      controls.className = 'metodologia-controls';
-
-      const prevBtn = document.createElement('button');
-      prevBtn.innerHTML = '‹';
-      prevBtn.className = 'carousel-btn prev-btn';
-
-      const nextBtn = document.createElement('button');
-      nextBtn.innerHTML = '›';
-      nextBtn.className = 'carousel-btn next-btn';
-
-      controls.appendChild(prevBtn);
-      controls.appendChild(nextBtn);
-      carousel.appendChild(controls);
-
-      function calculate() {
-        const cardRect = cards[0].getBoundingClientRect();
-        const style = window.getComputedStyle(cards[0]);
-        const marginRight = parseFloat(style.marginRight || '0');
-        const cardWidth = Math.round(cardRect.width + marginRight);
-        const maxIndex = Math.max(0, cards.length - 1);
-        return { cardWidth, maxIndex };
-      }
-
-      function updateCarousel() {
-        const { cardWidth, maxIndex } = calculate();
-        if (currentIndex > maxIndex) currentIndex = maxIndex;
-        track.style.transition = 'transform 300ms ease';
-        track.style.transform = `translateX(-${currentIndex * cardWidth}px)`;
-        prevBtn.disabled = currentIndex === 0;
-        nextBtn.disabled = currentIndex >= maxIndex;
-      }
-
-      prevBtn.addEventListener('click', () => {
-        if (currentIndex > 0) {
-          currentIndex--;
-          updateCarousel();
-        }
-      });
-
-      nextBtn.addEventListener('click', () => {
-        const { maxIndex } = calculate();
-        if (currentIndex < maxIndex) {
-          currentIndex++;
-          updateCarousel();
-        }
-      });
-
-      // responsive resize handling
-      if (!window._metodologiaCarouselInitialized) {
-        window.addEventListener('resize', () => {
-          clearTimeout(window._metodologiaCarouselResizeTimer);
-          window._metodologiaCarouselResizeTimer = setTimeout(updateCarousel, 120);
-        });
-        window._metodologiaCarouselInitialized = true;
-      }
-
-      updateCarousel();
-    }
+function prevSlide() {
+    const track = document.getElementById('metodologiaCarousel');
+    const cards = track.querySelectorAll('.metodologia-cards');
+    if (metodologiaCurrentIndex > 0) {
+        metodologiaCurrentIndex--;
+        updateMetodologiaCarousel();
     }
 }
 
-// Inicializar no carregamento e redimensionamento
-document.addEventListener('DOMContentLoaded', () => {
-    setTimeout(initMetodologiaCarousel, 100);
-});
+function nextSlide() {
+    const track = document.getElementById('metodologiaCarousel');
+    const cards = track.querySelectorAll('.metodologia-cards');
+    if (metodologiaCurrentIndex < cards.length - 1) {
+        metodologiaCurrentIndex++;
+        updateMetodologiaCarousel();
+    }
+}
 
-window.addEventListener('resize', () => {
-    setTimeout(initMetodologiaCarousel, 100);
+function updateMetodologiaCarousel() {
+    const track = document.getElementById('metodologiaCarousel');
+    const cardWidth = 320; // width + gap
+    track.style.transform = `translateX(-${metodologiaCurrentIndex * cardWidth}px)`;
+}
+
+// Inicializar carousel da metodologia
+document.addEventListener('DOMContentLoaded', () => {
+    updateMetodologiaCarousel();
 });
