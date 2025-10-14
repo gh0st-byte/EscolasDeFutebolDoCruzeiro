@@ -290,33 +290,26 @@ function setupMapSearch() {
       
       // Find and open the corresponding marker popup
       let markerFound = false;
-
-      // 1) try to match by id if available
-      if (selected.id) {
-        markers.eachLayer(layer => {
-          if (markerFound) return;
-          if (layer.schoolId && String(layer.schoolId) === String(selected.id)) {
-            setTimeout(() => layer.openPopup(), 200);
-            markerFound = true;
-          }
-        });
-      }
-
-      // 2) fallback: match by coordinates with looser tolerance
-      if (!markerFound) {
-        markers.eachLayer(layer => {
-          if (markerFound) return;
-          if (!layer.getLatLng) return;
+      markers.eachLayer(layer => {
+        if (layer.getLatLng && !markerFound) {
           const markerLat = layer.getLatLng().lat;
           const markerLng = layer.getLatLng().lng;
-          if (Math.abs(markerLat - lat) < 0.01 && Math.abs(markerLng - lng) < 0.01) {
-            setTimeout(() => { layer.openPopup(); }, 200);
+          
+          // Check if coordinates match (with tolerance for floating point)
+          if (Math.abs(markerLat - lat) < 0.0001 && Math.abs(markerLng - lng) < 0.0001) {
+            setTimeout(() => {
+              layer.openPopup();
+              console.log('Popup aberto para:', selected.nome);
+            }, 300);
             markerFound = true;
           }
-        });
+        }
+      });
+      
+      // If no marker found, log for debugging
+      if (!markerFound) {
+        console.log('Marcador não encontrado para:', selected.nome, lat, lng);
       }
-
-      if (!markerFound) console.log('Marcador não encontrado para:', selected.nome, selected.id, lat, lng);
     }
     
     clearResults();

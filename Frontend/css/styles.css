@@ -2036,8 +2036,8 @@ footer ul {
     text-align: justify;
 }
 
-/* Additional fixes for consistency */
-/* Ensure buttons are consistent */
+/* Additional responsive improvements */
+/* Ensure buttons are consistent and touch-friendly */
 nav button,
 .cta-1,
 .cta-2 button,
@@ -2048,6 +2048,10 @@ nav button,
 .read-more-btn {
     font-family: 'Montserrat', Arial, sans-serif;
     text-decoration: none !important;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* Fix hover state issues */
@@ -2059,27 +2063,430 @@ nav button,
     z-index: 1;
 }
 
-/* Clean up duplicate styles */
-/* Remove redundant backdrop-filter definitions */
-.cta-1,
-.container-hero::before,
-.dropdown-menu-end {
-    /* (cleanup placeholder) - intentionally left without visual rules to avoid duplicating styles */
-}
-
-/* Fix for dropdown menu */
+/* Responsive dropdown menu */
 .dropdown-menu {
     position: absolute;
     top: 100%;
     left: 0;
     right: 0;
     z-index: 1050;
+    min-width: 200px;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0,51,160,0.15);
+    border: 1px solid rgba(0,51,160,0.1);
+}
+
+.dropdown-item {
+    padding: 12px 20px;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+}
+
+.dropdown-item:hover {
+    background: linear-gradient(135deg, #0033a0, #1e5bb8);
+    color: white;
+}
+
+/* Responsive improvements for small screens */
+@media (max-width: 576px) {
+    .dropdown-toggle {
+        min-width: 44px;
+        min-height: 44px;
+        padding: 8px;
+        font-size: 1.2rem;
+    }
+    
+    .news-item {
+        margin-bottom: 20px;
+        padding: 20px;
+    }
+    
+    .news-item h2 {
+        font-size: 1.3rem;
+        margin-bottom: 10px;
+    }
+    
+    .news-item .date {
+        font-size: 0.85rem;
+        margin-bottom: 12px;
+    }
+    
+    .news-item p {
+        font-size: 0.95rem;
+        margin-bottom: 16px;
+    }
+    
+    .read-more-btn {
+        padding: 10px 20px;
+        font-size: 0.85rem;
+        width: 100%;
+        margin-top: 8px;
+    }
+    
+    .carousel-btn {
+        width: 44px;
+        height: 44px;
+        font-size: 1.5rem;
+        border-radius: 50%;
+    }
+    
+    .fechar-noticia {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        width: 44px;
+        height: 44px;
+        font-size: 1.5rem;
+        z-index: 1060;
+        background: rgba(0,0,0,0.7);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+/* Landscape orientation adjustments */
+@media (max-width: 768px) and (orientation: landscape) {
+    .container-hero {
+        padding: 30px 24px;
+    }
+    
+    .hero h1 {
+        font-size: 2rem;
+        margin-bottom: 12px;
+    }
+    
+    .hero p {
+        font-size: 0.95rem;
+        margin-bottom: 16px;
+    }
+    
+    #map {
+        height: 35vh;
+    }
+    
+    .news-modal-container {
+        padding: 30px 20px;
+    }
+    
+    .news-modal-title {
+        font-size: 1.8rem;
+        margin-bottom: 20px;
+    }
+}
+
+/* High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .logo img {
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+    }
+    
+    .icon-social {
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+    }
+}
+
+/* Extra small devices optimization */
+@media (max-width: 360px) {
+    .hero h1 {
+        font-size: 1.7rem;
+    }
+    
+    .news h2,
+    .map-section h1,
+    .cta-2 h2 {
+        font-size: 1.8rem;
+    }
+    
+    .Metodologia h1 {
+        font-size: 1.9rem;
+    }
+    
+    .card {
+        min-width: 240px;
+        width: 240px;
+    }
+    
+    .menu-map {
+        max-width: 240px;
+    }
+    
+    .menu-map button {
+        padding: 8px 12px;
+        font-size: 0.8rem;
+    }
+    
+    .container-logo {
+        padding: 8px 12px;
+    }
+    
+    .logo img {
+        height: 32px;
+    }
+}
+
+/* Print styles */
+@media print {
+    .dropdown,
+    .carousel-btn,
+    .btn-saiba-mais,
+    .read-more-btn,
+    .cta-1,
+    .btn-footer,
+    .fechar-noticia {
+        display: none !important;
+    }
+    
+    body {
+        padding-top: 0;
+        font-size: 12pt;
+        line-height: 1.4;
+    }
+    
+    .news-modal-container {
+        padding: 20px;
+    }
+    
+    .news-modal-title {
+        font-size: 18pt;
+        color: #000;
+    }
+    
+    .news-content p {
+        font-size: 11pt;
+        color: #000;
+    }
 }
 
 
-/* Estilos mobile até 480px */
-@media (max-width: 480px) {
+/* Large tablet and small desktop - 769px to 1024px */
+@media (max-width: 1024px) and (min-width: 769px) {
+    /* Optimize for larger tablets */
+    .container-hero {
+        padding: 60px 32px;
+    }
+    
+    .hero {
+        gap: 40px;
+    }
+    
+    .hero h1 {
+        font-size: 2.8rem;
+    }
+    
+    .news-cards {
+        padding: 0 32px;
+        gap: 20px;
+    }
+    
+    .card {
+        min-width: 280px;
+        width: 280px;
+    }
+    
+    .metodologia-text {
+        padding: 0 32px;
+        gap: 20px;
+    }
+    
+    .map-search {
+        padding: 0 32px;
+    }
+    
+    .footer-content {
+        padding: 0 32px;
+        gap: 40px;
+    }
+}
 
+/* Tablet breakpoint - 481px to 768px */
+@media (max-width: 768px) and (min-width: 481px) {
+    body {
+        padding-top: 70px;
+    }
+    
+    header {
+        min-height: 70px;
+    }
+    
+    .container-logo {
+        padding: 12px 24px;
+    }
+    
+    .logo img {
+        height: 40px;
+    }
+    
+    .container-hero {
+        padding: 50px 24px;
+    }
+    
+    .hero {
+        flex-direction: column;
+        gap: 30px;
+        text-align: center;
+    }
+    
+    .hero h1 {
+        font-size: 2.4rem;
+        margin-bottom: 20px;
+        line-height: 1.2;
+    }
+    
+    .hero p {
+        font-size: 1.1rem;
+        margin-bottom: 24px;
+        max-width: 600px;
+    }
+    
+    .cta-1 {
+        padding: 16px 32px;
+        font-size: 1rem;
+    }
+    
+    .news {
+        padding: 60px 0;
+    }
+    
+    .news h2 {
+        font-size: 2.4rem;
+        margin-bottom: 40px;
+    }
+    
+    .news-cards {
+        padding: 0 24px;
+        gap: 18px;
+        justify-content: center;
+    }
+    
+    .card {
+        min-width: 300px;
+        width: 300px;
+    }
+    
+    .Metodologia {
+        padding: 70px 0;
+    }
+    
+    .Metodologia h1 {
+        font-size: 2.6rem;
+        margin-bottom: 50px;
+    }
+    
+    .metodologia-text {
+        padding: 0 24px;
+        gap: 18px;
+    }
+    
+    .card-metodologia {
+        aspect-ratio: 3/4;
+        padding: 35px 25px;
+    }
+    
+    .map-section {
+        padding: 60px 0;
+    }
+    
+    .map-section h1 {
+        font-size: 2.4rem;
+        margin-bottom: 40px;
+    }
+    
+    .menu-map {
+        max-width: 320px;
+        margin: 0 auto 24px;
+    }
+    
+    .menu-map button {
+        padding: 12px 20px;
+        font-size: 0.9rem;
+    }
+    
+    .map-search {
+        padding: 0 24px;
+        margin-bottom: 20px;
+    }
+    
+    .map-search input[type="search"] {
+        padding: 16px 20px;
+        font-size: 1rem;
+    }
+    
+    #map {
+        width: calc(100% - 48px);
+        height: 45vh;
+        margin: 0 auto;
+    }
+    
+    .cta-2 {
+        padding: 60px 24px;
+    }
+    
+    .cta-2 h2 {
+        font-size: 2.4rem;
+        margin-bottom: 20px;
+    }
+    
+    .cta-2-text p {
+        font-size: 1.1rem;
+        margin-bottom: 28px;
+    }
+    
+    .cta-2 .btn-footer {
+        padding: 16px 36px;
+        font-size: 1rem;
+    }
+    
+    .footer-content {
+        padding: 0 24px;
+        gap: 35px;
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .footer-section h2, .footer-section h3 {
+        font-size: 1.2rem;
+        margin-bottom: 18px;
+    }
+    
+    .footer-section p, .footer-section li {
+        font-size: 0.95rem;
+    }
+    
+    .icon-social {
+        width: 40px;
+        height: 40px;
+        margin: 0 8px;
+    }
+    
+    .autoral-rights {
+        margin-top: 35px;
+        padding-top: 20px;
+        font-size: 0.9rem;
+        grid-column: 1 / -1;
+    }
+    
+    .news-modal-container {
+        padding: 60px 40px;
+    }
+    
+    .news-modal-title {
+        font-size: 2.6rem;
+        margin-bottom: 40px;
+    }
+    
+    .news-content p {
+        font-size: 1.1rem;
+        line-height: 1.7;
+    }
+}
+
+/* Mobile breakpoint - up to 480px */
+@media (max-width: 480px) {
     .news-modal-title {
         font-size: 2rem;
         display: flex;
@@ -2087,7 +2494,10 @@ nav button,
         justify-content: center;
         text-align: center;
         max-width: 90%;
+        line-height: 1.1;
+        margin-bottom: 30px;
     }
+    
     body {
         padding-top: 65px;
     }
@@ -2107,6 +2517,12 @@ nav button,
     .container-hero {
         padding: 40px 16px;
     }
+    
+    .hero {
+        flex-direction: column;
+        gap: 24px;
+        text-align: center;
+    }
 
     .hero h1 {
         font-size: 1.9rem;
@@ -2117,11 +2533,14 @@ nav button,
     .hero p {
         font-size: 1rem;
         margin-bottom: 20px;
+        line-height: 1.5;
     }
     
     .cta-1 {
         padding: 14px 28px;
         font-size: 0.95rem;
+        width: fit-content;
+        margin: 0 auto;
     }
 
     .news {
@@ -2131,16 +2550,22 @@ nav button,
     .news h2 {
         font-size: 2rem;
         margin-bottom: 35px;
+        padding: 0 16px;
     }
 
     .news-cards {
         padding: 0 16px;
         gap: 16px;
+        justify-content: flex-start;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
     }
 
     .card {
         min-width: 260px;
         width: 260px;
+        flex-shrink: 0;
+        scroll-snap-align: start;
     }
 
     .Metodologia {
@@ -2150,6 +2575,7 @@ nav button,
     .Metodologia h1 {
         font-size: 2.1rem;
         margin-bottom: 40px;
+        padding: 0 16px;
     }
 
     .metodologia-text {
@@ -2169,16 +2595,19 @@ nav button,
     .map-section h1 {
         font-size: 2rem;
         margin-bottom: 35px;
+        padding: 0 16px;
     }
 
     .menu-map {
         max-width: 260px;
         margin: 0 auto 20px;
+        padding: 0 16px;
     }
 
     .menu-map button {
         padding: 10px 16px;
         font-size: 0.85rem;
+        flex: 1;
     }
     
     .map-search {
@@ -2189,6 +2618,7 @@ nav button,
     .map-search input[type="search"] {
         padding: 14px 18px;
         font-size: 0.95rem;
+        width: 100%;
     }
     
     #map {
@@ -2199,6 +2629,7 @@ nav button,
 
     .cta-2 {
         padding: 50px 16px;
+        text-align: center;
     }
 
     .cta-2 h2 {
@@ -2209,16 +2640,21 @@ nav button,
     .cta-2-text p {
         font-size: 1rem;
         margin-bottom: 24px;
+        line-height: 1.5;
     }
     
     .cta-2 .btn-footer {
         padding: 14px 32px;
         font-size: 0.95rem;
+        display: inline-block;
     }
     
     .footer-content {
         padding: 0 16px;
-        gap: 20px;
+        gap: 25px;
+        max-width: 100%;
+        grid-template-columns: 1fr;
+        text-align: center;
     }
     
     .footer-section h2, .footer-section h3 {
@@ -2228,6 +2664,12 @@ nav button,
     
     .footer-section p, .footer-section li {
         font-size: 0.9rem;
+        line-height: 1.4;
+    }
+    
+    .footer-section ul {
+        padding: 0;
+        list-style: none;
     }
     
     .icon-social {
@@ -2240,6 +2682,131 @@ nav button,
         margin-top: 30px;
         padding-top: 16px;
         font-size: 0.85rem;
+        text-align: center;
+    }
+    
+    .news-modal-container {
+        padding: 40px 20px;
+        height: auto;
+        min-height: 100vh;
+    }
+    
+    .news-modal-image img {
+        border-radius: 12px;
+    }
+    
+    .news-content p {
+        font-size: 1rem;
+        line-height: 1.6;
+        text-align: left;
+    }
+    
+    .news-date {
+        font-size: 0.9rem;
+        margin-bottom: 20px;
+    }
+    
+    .pagination-container {
+        flex-direction: column;
+        gap: 8px;
+        padding: 12px 16px;
+    }
+    
+    .pagination-container .btn,
+    .pagination-container button {
+        width: 100%;
+        max-width: 200px;
+        margin: 0 auto;
+    }
+    
+    .pagination-container #pageInfo {
+        order: 0;
+        margin-bottom: 8px;
+    }
+    
+    /* Improve hero image responsiveness */
+    .hero-image {
+        width: 100%;
+        max-width: 300px;
+        margin: 0 auto;
+    }
+    
+    .hero-img {
+        width: 100%;
+        height: auto;
+        border-radius: 12px;
+    }
+    
+    /* Better carousel controls */
+    .metodologia-carousel {
+        position: relative;
+    }
+    
+    .carousel-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(0,51,160,0.8);
+        color: white;
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        font-size: 1.2rem;
+        cursor: pointer;
+        z-index: 10;
+        transition: all 0.3s ease;
+    }
+    
+    .prev-btn {
+        left: 10px;
+    }
+    
+    .next-btn {
+        right: 10px;
+    }
+    
+    .carousel-btn:hover {
+        background: rgba(0,51,160,1);
+        transform: translateY(-50%) scale(1.1);
+    }
+    
+    /* Improve dropdown content */
+    .dropdown-content {
+        padding: 12px 16px;
+        font-size: 0.9rem;
+        line-height: 1.4;
+    }
+    
+    .btn-saiba-mais {
+        width: 100%;
+        padding: 10px 16px;
+        font-size: 0.9rem;
+        margin-top: 8px;
+    }
+    
+    /* Better search results */
+    .map-search-results {
+        max-height: 200px;
+        overflow-y: auto;
+        border-radius: 8px;
+        margin-top: 4px;
+    }
+    
+    .map-search-results li {
+        padding: 10px 16px;
+        font-size: 0.9rem;
+        border-bottom: 1px solid rgba(0,51,160,0.1);
+    }
+    
+    /* Improve footer layout */
+    .footer-section.social {
+        text-align: center;
+        margin-top: 20px;
+    }
+    
+    .footer-section.social .icon-social {
+        margin: 0 8px 8px 8px;
     }
 }
 

@@ -54,6 +54,26 @@
         .leaflet-marker-shadow {
             z-index: 999 !important;
         }
+        
+        /* Estilos para popups do mapa */
+        .leaflet-popup-content-wrapper {
+            border-radius: 12px !important;
+            box-shadow: 0 8px 32px rgba(0,51,160,0.2) !important;
+        }
+        
+        .leaflet-popup-content {
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+        
+        .escola-popup-card a {
+            transition: all 0.3s ease !important;
+        }
+        
+        .escola-popup-card a:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2) !important;
+        }
     </style>
 </head>
 <body>
@@ -232,11 +252,10 @@
                             <li><a href="news.html">Notícias</a></li>
                         </ul>
                     </div>
-                    <div class="footer-section links">
+                    <div class="footer-section contact">
                         <h3>Contato</h3>
                         <p> <a href="mailto:escolas@cruzeiro.com.br">escolas@cruzeiro.com.br</a></p>
                     </div>
-                    <br>
                     <div class="footer-section social">
                         <h3>Siga-nos</h3>
                         <a href="#"><img class="icon-social" src="assets/img/facebook-icon.png" alt="Facebook"></a>
