@@ -19,12 +19,8 @@ body {
 /* HEADER */
 header {
     background: linear-gradient(135deg, #0033a061 0%, #1e5bb8 100%);
-    -webkit-backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    -moz-backdrop-filter: blur(10px);
-    -ms-backdrop-filter: blur(10px);
-    -o-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     color: #fff;
     width: 100%;
     padding: 0;
@@ -52,7 +48,6 @@ header.scrolled {
     margin: 0 auto;
     padding: 16px 24px;
     flex-wrap: nowrap;
-    width: 100%;
 }
 
 .logo img {
@@ -924,11 +919,8 @@ a button {
     cursor: pointer;
     transition: all 0.3s ease;
     flex: 1;
-    -webkit-backdrop-filter: blur(10px);
-    -moz-backdrop-filter: blur(10px);
-    -ms-backdrop-filter: blur(10px);
-    -o-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 
 .menu-map button + button {
@@ -939,7 +931,6 @@ a button {
     background: gold;
     color: #0033a0;
     font-weight: 700;
-
 }
 
 #map {
@@ -962,16 +953,15 @@ a button {
 .map-search input[type="search"] {
     width: 100%;
     padding: 16px 20px;
+    border-radius: 50px;
     border:none;
-    height: 48px;
-    border-bottom: #0044ff 4px solid;
-    background: rgba(4, 80, 233, 0);
+    background: rgba(4, 80, 233, 0.091);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
     font-size: 1rem;
     color: yellow;
     font-weight: 900;
-    text-transform: uppercase;
 
 }
 
@@ -984,34 +974,17 @@ a button {
     color: rgb(0, 255, 229);
 }
 
-.map-search::before {
-    content: '';
-    position: absolute;
-    right: 44px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 20px;
-    height: 20px;
-    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%2300FFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    pointer-events: none;
-    z-index: 10;
-    opacity: 0.8;
-}
-
 .map-search-results {
     list-style: none;
     margin: 6px 0 0 0;
     padding: 6px 0;
     position: absolute;
-    font-weight: 900;
-    color: yellow;
+    font
     left: 0;
     right: 0;
-    background: linear-gradient(135deg, #0033a0 0%, #1e5bb8 100%);
+    background: #0044ff;
     border-radius: 8px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
     max-height: 240px;
     overflow-y: auto;
     z-index: 1100;

@@ -171,7 +171,7 @@ function renderizarEscolas(escolas) {
         const nome = escapeHtml(escola.nome || escola.cidade || 'Escola do Cruzeiro');
         const endereco = escapeHtml(escola.endereco_encontrado || escola.endereco || 'Endereço não informado');
         const telefone = escapeHtml(escola.telefone || '');
-
+        const mapUrl = escapeHtml(escola.map_URL || 'Erro 403, favor contatar o suporte');
         const whatsappUrl = escola.whatsapp && escola.whatsapp.trim() && escola.whatsapp !== 'null' ? escola.whatsapp : '';
         let instagramUrl = '';
         if (escola.instagram_url && escola.instagram_url.trim() && escola.instagram_url !== 'null') {
@@ -198,7 +198,6 @@ function renderizarEscolas(escolas) {
                 ${telefone ? `<p><strong>Telefone:</strong> ${telefone}</p>` : ''}
                 <p><strong>Endereço:</strong> ${endereco}</p>
                 <div class="btn-container">
-                    <a href="https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(endereco)}" target="_blank" class="btn-maps">Como Chegar</a>
                     ${whatsappUrl ? `<a href="${escapeHtml(whatsappUrl)}" target="_blank" class="btn-whatsapp">WhatsApp</a>` : ''}
                     ${instagramUrl ? `<a href="${escapeHtml(instagramUrl)}" target="_blank" class="btn-instagram">Instagram</a>` : ''}
                 </div>

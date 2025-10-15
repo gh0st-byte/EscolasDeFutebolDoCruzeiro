@@ -166,7 +166,7 @@
 }
 
 .filtros button::after {
-    content: '';
+    content: '✨';
     position: absolute;
     right: 12px;
     top: 50%;
@@ -300,7 +300,6 @@
 
 .btn-maps {
     background: linear-gradient(135deg, #4285F4, #1a73e8);
-    white-space: nowrap;
 }
 
 .btn-maps::before {

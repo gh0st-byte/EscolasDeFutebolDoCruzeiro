@@ -96,10 +96,7 @@
     padding: 20px 24px;
     background: rgba(255,255,255,0.1);
     -webkit-backdrop-filter: blur(10px);
-    -moz-backdrop-filter: blur(10px);
-    -ms-backdrop-filter: blur(10px);
-    -o-backdrop-filter: blur(10px);
-    backdrop-filter: blur(10px);
+    
     border-radius: 20px;
     box-shadow: 0 8px 32px rgba(0,51,160,0.15);
 }
@@ -166,7 +163,7 @@
 }
 
 .filtros button::after {
-    content: '';
+    content: '✨';
     position: absolute;
     right: 12px;
     top: 50%;
@@ -203,7 +200,6 @@
 
 .escola-card {
     background: white;
-    max-width: 420px;
     padding: 32px;
     border-radius: 20px;
     box-shadow: 0 8px 32px rgba(0,51,160,0.1);
@@ -275,13 +271,10 @@
     border-top: 1px solid rgba(0,51,160,0.1);
 }
 
-.btn-whatsapp, .btn-instagram, .btn-maps {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+.btn-whatsapp, .btn-instagram {
+    display: inline-block;
     margin-top: 0;
-    padding: 0 20px;
-    height: 44px;
+    padding: 12px 20px;
     border-radius: 50px;
     color: white;
     font-weight: 600;
@@ -295,34 +288,6 @@
     text-align: center;
     font-size: 0.9rem;
     box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    min-height: 44px;
-}
-
-.btn-maps {
-    background: linear-gradient(135deg, #4285F4, #1a73e8);
-    white-space: nowrap;
-}
-
-.btn-maps::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: left 0.5s;
-    z-index: 1;
-}
-
-.btn-maps:hover {
-    background: linear-gradient(135deg, #1a73e8, #1557b0);
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(66,133,244,0.4);
-}
-
-.btn-maps:hover::before {
-    left: 100%;
 }
 .escola-card .btn-whatsapp {
     background: linear-gradient(135deg, #25D366, #128C7E);
@@ -383,29 +348,6 @@
 
 .escola-card:hover img {
     transform: scale(1.05);
-}
-
-.embed-map-responsive {
-    position: relative;
-    width: 100%;
-    height: 200px;
-    margin-bottom: 20px;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 4px 15px rgba(0,51,160,0.1);
-    transition: all 0.3s ease;
-}
-
-.embed-map-responsive:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0,51,160,0.2);
-}
-
-.embed-map-responsive iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-    border-radius: 12px;
 }
 
 @media (max-width: 900px) {
@@ -571,15 +513,8 @@
         margin-bottom: 16px;
     }
     
-    .embed-map-responsive {
-        height: 160px;
-        margin-bottom: 16px;
-    }
-    
-    .btn-whatsapp, .btn-instagram, .btn-maps {
-        padding: 0 16px;
-        height: 40px;
-        min-height: 40px;
+    .btn-whatsapp, .btn-instagram {
+        padding: 10px 16px;
         font-size: 0.85rem;
     }
 }

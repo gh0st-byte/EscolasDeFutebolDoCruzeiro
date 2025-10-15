@@ -142,7 +142,7 @@ if ($_POST && isset($_POST['acao']) && isset($_POST['arquivo'])) {
                         'lng' => (float)$_POST['lng'],
                         'nome' => $_POST['nome'] ?? null,
                         'cidade' => $_POST['cidade'] ?? null,
-                        'map_URL' => $_POST['map_URL'] ?? '<div class="embed-map-fixed"><div class="embed-map-container"><iframe class="embed-map-frame" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?width=600&height=400&hl=en&q=cruzeiro%20toca%202&t=&z=14&ie=UTF8&iwloc=B&output=embed"></iframe><a href="https://sprunkiretake.net" style="font-size:2px!important;color:gray!important;position:absolute;bottom:0;left:0;z-index:1;max-height:1px;overflow:hidden">sprunki retake</a></div><style>.embed-map-fixed{position:relative;text-align:right;width:600px;height:400px;}.embed-map-container{overflow:hidden;background:none!important;width:600px;height:400px;}.embed-map-frame{width:600px!important;height:400px!important;}</style></div>',
+
                         'endereco_encontrado' => $_POST['endereco_encontrado'],
                         'ComoChegar' => $_POST['ComoChegar'] ?? 'google.com/maps',
                         'region' => $_POST['region'] ?? 'Brasil'
@@ -206,7 +206,7 @@ if ($_POST && isset($_POST['acao']) && isset($_POST['arquivo'])) {
                         $dados[$index]['lng'] = (float)$_POST['lng'];
                         $dados[$index]['nome'] = $_POST['nome'] ?: null;
                         $dados[$index]['cidade'] = $_POST['cidade'] ?: null;
-                        $dados[$index]['map_URL'] = $_POST['map_URL'] ?: '<div class="embed-map-fixed"><div class="embed-map-container"><iframe class="embed-map-frame" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?width=600&height=400&hl=en&q=cruzeiro%20toca%202&t=&z=14&ie=UTF8&iwloc=B&output=embed"></iframe><a href="https://sprunkiretake.net" style="font-size:2px!important;color:gray!important;position:absolute;bottom:0;left:0;z-index:1;max-height:1px;overflow:hidden">sprunki retake</a></div><style>.embed-map-fixed{position:relative;text-align:right;width:600px;height:400px;}.embed-map-container{overflow:hidden;background:none!important;width:600px;height:400px;}.embed-map-frame{width:600px!important;height:400px!important;}</style></div>';
+
                         $dados[$index]['endereco_encontrado'] = $_POST['endereco_encontrado'];
                         $dados[$index]['ComoChegar'] = $_POST['ComoChegar'] ?: 'google.com/maps';
                         $dados[$index]['region'] = $_POST['region'] ?? 'Brasil';
@@ -387,14 +387,7 @@ if ($tab_atual === 'news.json' || $tab_atual === 'news_draft.json') {
                             <label> Cidade *</label>
                             <input type="text" name="cidade" placeholder="Ex: Belo Horizonte" required>
                         </div>
-                        <div class="field-group">
-                            <label> Mapa Embed da Escola</label>
-                            
-                            <input type="url" name="map_URL" placeholder="Insira aqui o texto copiado da pagina">
-                            <small style="color: #e74c3c; font-weight: 900;"> Após clicar no botão ative a opção<br> "Make responsive" <br>Copie e cole o codigo gerado na caixa de texto logo acima.</small>
-                            <a href="https://www.mapembed.org/?gad_source=1&gad_campaignid=22280139497&gbraid=0AAAAA98a5IP3RTdeHHLDaAYXkZ8h50b_F&gclid=EAIaIQobChMI49aI18SSkAMVWGZIAB15LhcJEAAYAiAAEgIe3vD_BwE" style="text-decoration: none; color: #fff; display: inline-block; background-color: #007bff; border: 1px solid #007bff; padding: 10px 20px; border-radius: 5px; font-family: Arial, sans-serif; font-weight: bold; text-align: center; cursor: pointer; " target="_blank">Clique aqui para gerar o mapa</a>
 
-                        </div>
                         <div class="field-group">
                             <label> Latitude *</label>
                             
@@ -778,8 +771,7 @@ if ($tab_atual === 'news.json' || $tab_atual === 'news_draft.json') {
                             <input type="text" name="cidade" value="${escapeHtml(item.cidade || '')}" required>
                         </div>
                         <div class="field-group">
-                            <label> Map Embed</label>
-                            <input type="text" name="map_URL" value="${escapeHtml(item.map_URL || '<div class="embed-map-fixed"><div class="embed-map-container"><iframe class="embed-map-frame" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?width=600&height=400&hl=en&q=cruzeiro%20toca%202&t=&z=14&ie=UTF8&iwloc=B&output=embed"></iframe><a href="https://sprunkiretake.net" style="font-size:2px!important;color:gray!important;position:absolute;bottom:0;left:0;z-index:1;max-height:1px;overflow:hidden">sprunki retake</a></div><style>.embed-map-fixed{position:relative;text-align:right;width:600px;height:400px;}.embed-map-container{overflow:hidden;background:none!important;width:600px;height:400px;}.embed-map-frame{width:600px!important;height:400px!important;}</style></div>')}" placeholder="https://exemplo.com/foto.jpg">
+
                         </div>
                         <div class="field-group">
                             <label>Latitude *</label>

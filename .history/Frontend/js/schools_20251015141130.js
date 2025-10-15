@@ -56,16 +56,8 @@ function preencherFiltros() {
         filtroRegiao.innerHTML += `<option value="${regiao}">${regiao}</option>`;
     });
     
-    // Estados brasileiros válidos
-    const estadosBrasileiros = ['AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO'];
-    
-    // Extrair apenas estados brasileiros das escolas
-    const estados = [...new Set(todasEscolas
-        .filter(e => e.region === 'Brasil' && estadosBrasileiros.includes(e.estado))
-        .map(e => e.estado)
-        .filter(Boolean)
-    )];
-    
+    // Extrair estados únicos
+    const estados = [...new Set(todasEscolas.map(e => e.estado).filter(Boolean))];
     estados.sort().forEach(estado => {
         filtroEstado.innerHTML += `<option value="${estado}">${estado}</option>`;
     });
@@ -170,8 +162,8 @@ function renderizarEscolas(escolas) {
     container.innerHTML = escolas.map(escola => {
         const nome = escapeHtml(escola.nome || escola.cidade || 'Escola do Cruzeiro');
         const endereco = escapeHtml(escola.endereco_encontrado || escola.endereco || 'Endereço não informado');
-        const telefone = escapeHtml(escola.telefone || '');
-
+        const telefone = escapeHtml(escola.telefone || 'N/A');
+        const mapUrl = escapeHtml(escola.map_URL || 'Erro 403, favor contatar o suporte');
         const whatsappUrl = escola.whatsapp && escola.whatsapp.trim() && escola.whatsapp !== 'null' ? escola.whatsapp : '';
         let instagramUrl = '';
         if (escola.instagram_url && escola.instagram_url.trim() && escola.instagram_url !== 'null') {
@@ -195,10 +187,9 @@ function renderizarEscolas(escolas) {
                 </div>
                 <br>
                 <h3>${nome}</h3>
-                ${telefone ? `<p><strong>Telefone:</strong> ${telefone}</p>` : ''}
+                <p><strong>Telefone:</strong> ${telefone}</p>
                 <p><strong>Endereço:</strong> ${endereco}</p>
                 <div class="btn-container">
-                    <a href="https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(endereco)}" target="_blank" class="btn-maps">Como Chegar</a>
                     ${whatsappUrl ? `<a href="${escapeHtml(whatsappUrl)}" target="_blank" class="btn-whatsapp">WhatsApp</a>` : ''}
                     ${instagramUrl ? `<a href="${escapeHtml(instagramUrl)}" target="_blank" class="btn-instagram">Instagram</a>` : ''}
                 </div>

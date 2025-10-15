@@ -19,7 +19,7 @@ body {
 /* HEADER */
 header {
     background: linear-gradient(135deg, #0033a061 0%, #1e5bb8 100%);
-    -webkit-backdrop-filter: blur(10px);
+    -webkit-backdrop-filter]: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     -moz-backdrop-filter: blur(10px);
     -ms-backdrop-filter: blur(10px);
