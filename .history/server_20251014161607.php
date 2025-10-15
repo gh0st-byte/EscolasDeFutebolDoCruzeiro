@@ -13,7 +13,7 @@ function isPathSafe($file, $basePath) {
 if (strpos($uri, '/Frontend/') === 0) {
     $file = __DIR__ . $uri;
     if (isPathSafe($file, $basePath) && file_exists($file)) {
-        $allowedExtensions = ['html', 'css', 'js', 'svg', 'png', 'jpg', 'jpeg'];
+        $allowedExtensions = ['html', 'css', 'js', 'svg'];
         $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
         
         if (in_array($ext, $allowedExtensions)) {
@@ -22,9 +22,6 @@ if (strpos($uri, '/Frontend/') === 0) {
                 case 'css': header('Content-Type: text/css'); break;
                 case 'js': header('Content-Type: application/javascript'); break;
                 case 'svg': header('Content-Type: image/svg+xml'); break;
-                case 'png': header('Content-Type: image/png'); break;
-                case 'jpg': case 'jpeg': header('Content-Type: image/jpeg'); break;
-                default: header('Content-Type: application/octet-stream');
             }
             readfile($file);
             exit;

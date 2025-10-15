@@ -379,15 +379,9 @@ a button {
     letter-spacing: 1px;
     text-transform: uppercase;
     line-height: 1.1;
-    background: white;
+    background: white
     -webkit-background-clip: text;
-    -moz-background-clip: text;
-    -o-background-clip: text;
-    -ms-background-clip: text;
     -webkit-text-fill-color: transparent;
-    -moz-text-fill-color: transparent;
-    -o-text-fill-color: transparent;
-    -ms-text-fill-color: transparent;
     background-clip: text;
 }
 
@@ -517,7 +511,6 @@ a button {
 
 .news-carousel {
     width: 100%;
-    height: 600px;
     max-width: 1400px;
     margin: 0 auto;
     overflow: hidden;
@@ -594,94 +587,22 @@ a button {
     font-size: 1rem;
 }
 
-/* Setas do carousel de notícias */
-.news-carousel-controls .carousel-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: transparent;
+.next-btn, .prev-btn {
+    background: rgba(0, 0, 255, 0);
     color: gold;
     border: 2px solid gold;
-    border-radius: 8px;
+    border-radius: 30%;
     width: 44px;
     height: 44px;
     font-size: 1.5rem;
+    margin: 0 8px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: background 0.2s, color 0.2s;
     font-weight: bold;
-    z-index: 10;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    /* positioning handled by .carousel-btn (absolute) or parent container */
 }
 
-.news-carousel-controls .carousel-btn:hover {
-    background: #0033a0;
-    color: white;
-    border-color: #0033a0;
-    transform: translateY(-50%) scale(1.1);
-}
-
-.news-carousel-controls .prev-btn {
-    left: 10px;
-}
-
-.news-carousel-controls .next-btn {
-    right: 10px;
-}
-
-/* Setas do carousel de metodologia */
-.metodologia-carousel .carousel-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(0,51,160,0.8);
-    color: white;
-    border: none;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    font-size: 1.2rem;
-    cursor: pointer;
-    z-index: 10;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.metodologia-carousel .carousel-btn:hover {
-    background: rgba(0,51,160,1);
-    transform: translateY(-50%) scale(1.1);
-}
-
-.metodologia-carousel .prev-btn {
-    left: 10px;
-}
-
-.metodologia-carousel .next-btn {
-    right: 10px;
-}ify-content: center;
-}
-
-.carousel-btn:hover {
-    background: #0033a0;
-    color: white;
-    border-color: #0033a0;
-    transform: translateY(-50%) scale(1.1);
-}
-
-.prev-btn {
-    left: 10px;
-}
-
-.next-btn {
-    right: 10px;
-}
-
-.news-carousel-controls {
-    position: relative;
-}ver, .btn-prev:hover {
+.btn-next:hover, .btn-prev:hover {
     background: gold;
     color: #0033a0;
 }
@@ -2238,17 +2159,11 @@ nav button,
         margin-top: 8px;
     }
     
-    .news-carousel-controls .carousel-btn {
-        width: 40px;
-        height: 40px;
-        font-size: 1.3rem;
-        border-radius: 6px;
-    }
-    
-    .metodologia-carousel .carousel-btn {
-        width: 36px;
-        height: 36px;
-        font-size: 1.1rem;
+    .carousel-btn {
+        width: 44px;
+        height: 44px;
+        font-size: 1.5rem;
+        border-radius: 50%;
     }
     
     .fechar-noticia {

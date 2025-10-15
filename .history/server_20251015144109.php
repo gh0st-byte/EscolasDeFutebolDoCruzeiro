@@ -22,9 +22,6 @@ if (strpos($uri, '/Frontend/') === 0) {
                 case 'css': header('Content-Type: text/css'); break;
                 case 'js': header('Content-Type: application/javascript'); break;
                 case 'svg': header('Content-Type: image/svg+xml'); break;
-                case 'png': header('Content-Type: image/png'); break;
-                case 'jpg': case 'jpeg': header('Content-Type: image/jpeg'); break;
-                default: header('Content-Type: application/octet-stream');
             }
             readfile($file);
             exit;

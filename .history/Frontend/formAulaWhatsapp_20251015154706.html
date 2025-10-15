@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aula Experimental - Escolas de Futebol do Cruzeiro</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/schools-styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="assets/img/ESCUDO CRUZEIRO 512x512.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <main>
+        <section class="base">
+            <header>
+                <div class="container-logo">
+                    <div class="logo">
+                       <a href="index.html"> <img src="assets/img/logo-escola-em-aprovação.png" alt="Cruzeiro Logo"></a>
+                    </div>
+                    <div class="dropdown d-md-none">
+                        <button class="btn btn-link dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            ☰
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="index.html">Home</a></li>
+                            <li><a class="dropdown-item" href="benefits.html">Benefícios</a></li>
+                            <li><a class="dropdown-item" href="schools.html">Unidades</a></li>
+                            <li><a class="dropdown-item" href="news.html">Notícias</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#">Quero ser Franqueado</a></li>
+                        </ul>
+                    </div>
+                    <nav class="d-none d-md-flex">
+                        <ul class="nav-links">
+                            <li><a href="index.html" class="nav-item">Home</a></li>
+                            <li><a href="benefits.html" class="nav-item">Benefícios</a></li>
+                            <li><a href="schools.html" class="nav-item">Unidades</a></li>
+                            <li><a href="news.html" class="nav-item">Notícias</a></li>
+                            <li><a href="#" class="btn-franqueado nav-franqueado"><button>Quero ser Franqueado</button></a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </header>
+            
+           <div class="container-hero-secundary">
+                <div class="hero-secundary">
+                    <h1>Aula Experimental Gratuita</h1>
+                    <p>
+                        Venha conhecer a metodologia exclusiva das Escolas do Cruzeiro! Agende sua aula experimental gratuita e descubra por que somos referência na formação de jovens talentos.
+                    </p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="escolas">
+            <h2>Agende sua Aula Experimental</h2>
+            <div class="escolas-grid" style="max-width: 700px; margin: 0 auto;">
+                <div class="escola-card" style="padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,51,160,0.1);">
+                    <div class="text-center mb-4">
+                        <h3 style="color: #0033a0; margin-bottom: 15px;">Preencha seus dados</h3>
+                        <p style="color: #666; font-size: 14px;">Entraremos em contato via WhatsApp para confirmar sua aula</p>
+                    </div>
+                    
+                    <form id="whatsappForm">
+                        <div class="mb-3">
+                            <label for="nome" class="form-label fw-bold">Nome Completo *</label>
+                            <input type="text" class="form-control form-control-lg" id="nome" placeholder="Digite seu nome completo" required style="border-radius: 10px; border: 2px solid #e9ecef;">
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="cidade" class="form-label fw-bold">Cidade *</label>
+                                <input type="text" class="form-control form-control-lg" id="cidade" placeholder="Sua cidade" required style="border-radius: 10px; border: 2px solid #e9ecef;">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="estado" class="form-label fw-bold">Estado *</label>
+                                <select class="form-select form-select-lg" id="estado" required style="border-radius: 10px; border: 2px solid #e9ecef;">
+                                    <option value="" disabled selected>Selecione o estado</option>
+                                    <option value="MG">Minas Gerais</option>
+                                    <option value="SP">São Paulo</option>
+                                    <option value="RJ">Rio de Janeiro</option>
+                                    <option value="ES">Espírito Santo</option>
+                                    <option value="GO">Goiás</option>
+                                    <option value="DF">Distrito Federal</option>
+                                    <option value="BA">Bahia</option>
+                                    <option value="PR">Paraná</option>
+                                    <option value="SC">Santa Catarina</option>
+                                    <option value="RS">Rio Grande do Sul</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="unidade" class="form-label fw-bold">Unidade *</label>
+                            <select class="form-select form-select-lg" id="unidade" required disabled style="border-radius: 10px; border: 2px solid #e9ecef;">
+                                <option value="" disabled selected>Primeiro selecione cidade e estado</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="telefone" class="form-label fw-bold">WhatsApp *</label>
+                            <input type="tel" class="form-control form-control-lg" id="telefone" placeholder="(31) 99999-9999" required style="border-radius: 10px; border: 2px solid #e9ecef;">
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="mensagem" class="form-label fw-bold">Observações</label>
+                            <textarea class="form-control" id="mensagem" rows="3" placeholder="Informações adicionais sobre o interesse na aula experimental" style="border-radius: 10px; border: 2px solid #e9ecef;"></textarea>
+                        </div>
+                        
+                        <div class="d-grid gap-3">
+                            <button type="submit" class="btn btn-lg" style="background: linear-gradient(135deg, #25D366, #128C7E); color: white; border: none; border-radius: 50px; padding: 15px; font-weight: bold; font-size: 16px; transition: all 0.3s ease;">
+                                Enviar pelo WhatsApp
+                            </button>
+                            <a href="index.html" class="btn btn-outline-primary btn-lg" style="border-radius: 50px; border: 2px solid #0033a0; color: #0033a0; font-weight: bold;">Voltar ao Início</a>
+                        </div>
+                        
+                        <div class="text-center mt-3">
+                            <small class="text-muted">Seus dados estão seguros conosco</small>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+        
+        <footer>
+            <div class="footer-content">
+                <div class="footer-section about">
+                    <h3>Sobre Nós</h3>
+                    <p>O Cruzeiro Academy é a rede oficial de escolas de futebol do Cruzeiro, dedicada a formar novos talentos e promover o esporte em todo o Brasil.</p>
+                </div>
+                <div class="footer-section links">
+                    <h2>O Maior Campeão</h2>
+                    <ul>
+                        <li><a href="#metodologia">Metodologia</a></li>
+                        <li><a href="#">Benefícios</a></li>
+                        <li><a href="#">#CriasDaToca</a></li>
+                        <li><a href="schools.html">Unidades</a></li>
+                        <li><a href="news.html">Notícias</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section contact">
+                    <h3>Contato</h3>
+                    <p> <a href="mailto:escolas@cruzeiro.com.br">escolas@cruzeiro.com.br</a></p>
+                </div>
+                <div class="footer-section social">
+                    <h3>Siga-nos</h3>
+                    <a href="#"><img class="icon-social" src="assets/img/facebook-icon.png" alt="Facebook"></a>
+                    <a href="#"><img class="icon-social" src="assets/img/instagram-icon.png" alt="Instagram"></a>
+                    <a href="#"><img class="icon-social" src="assets/img/youtube-icon.png" alt="YouTube"></a>
+                </div>
+
+                <div class="autoral-rights">
+                    <p>&copy; 2025 Cruzeiro Academy. Todos os direitos reservados.</p>
+                </div>
+            </div>
+        </footer>
+    </main>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>

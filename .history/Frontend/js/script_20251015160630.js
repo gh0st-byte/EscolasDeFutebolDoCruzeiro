@@ -614,6 +614,7 @@ function initFormularioContato() {
     
     if (mensagem) texto += `%0AObservações: ${mensagem}%0A`;
     
+    texto += `%0AGostaria de agendar uma aula experimental gratuita!`;
     
     const url = `https://wa.me/${whatsappLimpo}?text=${texto}`;
     window.open(url, '_blank');

@@ -609,11 +609,12 @@ function initFormularioContato() {
     const whatsappLimpo = whatsappUnidade.replace(/\D/g, '');
     
     let texto = `Olá me chamo ${nome}, muito prazer, sou de ${cidade} este é meu WhatsApp vim do site das ESCOLAS DO CRUZEIRO%0A%0A`;
-    texto += `Eu gostaria de marcar a aula experimental na sua unidade ${unidade}%0A se possível`;
+    texto += `Eu gostaria de marcar a aula experimental na sua unidade se possível: ${unidade}%0A`;
 
     
     if (mensagem) texto += `%0AObservações: ${mensagem}%0A`;
     
+    texto += `%0AGostaria de agendar uma aula experimental gratuita!`;
     
     const url = `https://wa.me/${whatsappLimpo}?text=${texto}`;
     window.open(url, '_blank');
