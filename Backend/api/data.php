@@ -6,7 +6,8 @@ $allowedOrigins = [
     'http://localhost:8000',
     'http://127.0.0.1:8000',
     'http://localhost:3000',
-    'http://127.0.0.1:3000'
+    'http://127.0.0.1:3000',
+    'https://calvus-sylvester-limply.ngrok-free.dev'
 ];
 
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
@@ -30,7 +31,8 @@ $allowed_files = [
     'news_draft.json', 
     '.user.json',
     'BRfilters.json',
-    'allRegionsFilters.json'
+    'allRegionsFilters.json',
+    'licenciadosProposta.json'
 ];
 
 if (!$file || !in_array($file, $allowed_files)) {

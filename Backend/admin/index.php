@@ -35,7 +35,7 @@ if (isset($_GET['logout'])) {
 
 // Funções para manipular JSON
 function lerJSON($arquivo) {
-    $allowed_files = ['schools.json', 'failed_addresses.json', 'news.json', 'news_draft.json', '.user.json'];
+    $allowed_files = ['schools.json', 'failed_addresses.json', 'news.json', 'news_draft.json', '.user.json', 'licenciadosProposta.json'];
     if (!in_array($arquivo, $allowed_files)) return [];
     
     $caminho = "../data/Json/$arquivo";
@@ -46,7 +46,7 @@ function lerJSON($arquivo) {
 }
 
 function salvarJSON($arquivo, $dados) {
-    $allowed_files = ['schools.json', 'failed_addresses.json', 'news.json', 'news_draft.json', '.user.json'];
+    $allowed_files = ['schools.json', 'failed_addresses.json', 'news.json', 'news_draft.json', '.user.json', 'licenciadosProposta.json'];
     if (!in_array($arquivo, $allowed_files)) return false;
     
     $caminho = "../data/Json/$arquivo";
@@ -92,6 +92,104 @@ if ($_POST) {
     error_log('POST recebido: ' . print_r($_POST, true));
 }
 
+// Processar propostas de licenciamento
+if ((isset($_POST['action']) && $_POST['action'] === 'save_proposta') || 
+    (strpos(file_get_contents('php://input'), 'save_proposta') !== false)) {
+    header('Content-Type: application/json');
+    
+    $input = json_decode(file_get_contents('php://input'), true);
+    
+    // Log para debug
+    error_log('Recebendo proposta: ' . print_r($input, true));
+    
+    if (!$input || !isset($input['nome']) || !isset($input['email']) || !isset($input['telefone'])) {
+        http_response_code(400);
+        echo json_encode(['error' => 'Dados obrigatórios não fornecidos']);
+        exit;
+    }
+    
+    $filepath = '../data/Json/licenciadosProposta.json';
+    
+    if (!file_exists($filepath)) {
+        file_put_contents($filepath, '[]');
+    }
+    
+    $data = json_decode(file_get_contents($filepath), true) ?: [];
+    
+    $newId = count($data) > 0 ? max(array_column($data, 'id')) + 1 : 1;
+    
+    $newEntry = [
+        'id' => $newId,
+        'name' => $input['nome'],
+        'email' => $input['email'],
+        'whatsapp' => $input['telefone'],
+        'cidade de interesse' => $input['cidade'] ?? '',
+        'bairro de interesse' => $input['bairro'] ?? '',
+        'estado de interesse' => $input['estado'] ?? '',
+        'experiencia' => $input['experiencia'] ?? '',
+        'capital disponível' => $input['investimento'] ?? '',
+        'mensagem' => $input['mensagem'] ?? '',
+        'status' => 'Em análise',
+        'timestamp' => date('Y-m-d H:i:s')
+    ];
+    
+    $data[] = $newEntry;
+    
+    if (file_put_contents($filepath, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE))) {
+        error_log('Proposta salva com sucesso. ID: ' . $newId);
+        echo json_encode(['success' => true, 'id' => $newId]);
+    } else {
+        error_log('Erro ao salvar proposta no arquivo');
+        http_response_code(500);
+        echo json_encode(['error' => 'Erro ao salvar dados']);
+    }
+    exit;
+}
+
+// Atualizar status de proposta
+if ($_POST && isset($_POST['action']) && $_POST['action'] === 'update_status') {
+    header('Content-Type: application/json');
+    
+    if (!isset($_POST['id']) || !isset($_POST['status'])) {
+        http_response_code(400);
+        echo json_encode(['error' => 'ID e status são obrigatórios']);
+        exit;
+    }
+    
+    $filepath = '../data/Json/licenciadosProposta.json';
+    
+    if (!file_exists($filepath)) {
+        http_response_code(404);
+        echo json_encode(['error' => 'Arquivo não encontrado']);
+        exit;
+    }
+    
+    $data = json_decode(file_get_contents($filepath), true) ?: [];
+    
+    $found = false;
+    foreach ($data as &$item) {
+        if ($item['id'] == $_POST['id']) {
+            $item['status'] = $_POST['status'];
+            $found = true;
+            break;
+        }
+    }
+    
+    if (!$found) {
+        http_response_code(404);
+        echo json_encode(['error' => 'Proposta não encontrada']);
+        exit;
+    }
+    
+    if (file_put_contents($filepath, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE))) {
+        echo json_encode(['success' => true]);
+    } else {
+        http_response_code(500);
+        echo json_encode(['error' => 'Erro ao atualizar status']);
+    }
+    exit;
+}
+
 // Processar ações administrativas
 if ($_POST && isset($_POST['acao']) && isset($_POST['arquivo'])) {
     $acao = $_POST['acao'] ?? '';
@@ -106,7 +204,7 @@ if ($_POST && isset($_POST['acao']) && isset($_POST['arquivo'])) {
     }
     
     // Validar arquivo permitido
-    $allowed_files = ['schools.json', 'failed_addresses.json', 'news.json', 'news_draft.json', '.user.json'];
+    $allowed_files = ['schools.json', 'failed_addresses.json', 'news.json', 'news_draft.json', '.user.json', 'licenciadosProposta.json'];
     if (!in_array($arquivo, $allowed_files)) {
         http_response_code(400);
         header('Content-Type: application/json');
@@ -236,22 +334,35 @@ if ($_POST && isset($_POST['acao']) && isset($_POST['arquivo'])) {
         }
     }
     
-    // Redirecionamento (mantido)
-    if ($acao === 'publicar') {
-        header('Location: index.php?tab=news_draft.json');
-    } else {
-        header('Location: index.php?tab=' . ($_POST['arquivo'] ?? 'schools.json'));
+    // Redirecionamento com mensagem de sucesso
+    $message = '';
+    switch($acao) {
+        case 'adicionar':
+            $message = 'Item adicionado com sucesso!';
+            break;
+        case 'editar':
+            $message = 'Item editado com sucesso!';
+            break;
+        case 'deletar':
+            $message = 'Item deletado com sucesso!';
+            break;
+        case 'publicar':
+            $message = 'Notícia publicada com sucesso!';
+            break;
     }
+    
+    $redirect_tab = ($acao === 'publicar') ? 'news_draft.json' : ($_POST['arquivo'] ?? 'schools.json');
+    header('Location: index.php?tab=' . $redirect_tab . '&msg=' . urlencode($message) . '&type=success');
     exit;
 }
 
 
-$allowed_tabs = ['schools.json', 'failed_addresses.json', 'news.json', 'news_draft.json', '.user.json'];
+$allowed_tabs = ['schools.json', 'failed_addresses.json', 'news.json', 'news_draft.json', '.user.json', 'licenciadosProposta.json'];
 $tab_atual = in_array($_GET['tab'] ?? '', $allowed_tabs) ? $_GET['tab'] : 'schools.json';
 $dados = lerJSON($tab_atual);
 
-// Inverter ordem para notícias (mais recentes primeiro)
-if ($tab_atual === 'news.json' || $tab_atual === 'news_draft.json') {
+// Inverter ordem para notícias e propostas (mais recentes primeiro)
+if ($tab_atual === 'news.json' || $tab_atual === 'news_draft.json' || $tab_atual === 'licenciadosProposta.json') {
     $dados = array_reverse($dados);
 }
 ?>
@@ -264,6 +375,43 @@ if ($tab_atual === 'news.json' || $tab_atual === 'news_draft.json') {
     <title>Sistema de Gerenciamento - Escolas Cruzeiro</title>
      <link rel="icon" type="image/png" href="https://imagens.cruzeiro.com.br/Escudos/Cruzeiro.png">
     <link rel="stylesheet" href="style.css">
+    <style>
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            z-index: 1000;
+            min-width: 300px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+        .notification.show {
+            transform: translateX(0);
+        }
+        .notification.success {
+            background: linear-gradient(135deg, #28a745, #20c997);
+        }
+        .notification.error {
+            background: linear-gradient(135deg, #dc3545, #e74c3c);
+        }
+        .notification.warning {
+            background: linear-gradient(135deg, #ffc107, #fd7e14);
+        }
+        .notification .close-btn {
+            float: right;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -290,10 +438,13 @@ if ($tab_atual === 'news.json' || $tab_atual === 'news_draft.json') {
         <a href="?tab=.user.json" class="<?= $tab_atual === '.user.json' ? 'active' : '' ?>">
             Usuários (<?= count(lerJSON('.user.json')) ?>)
         </a>
-        
+        <a href="?tab=licenciadosProposta.json" class="<?= $tab_atual === 'licenciadosProposta.json' ? 'active' : '' ?>">
+            Propostas (<?= count(lerJSON('licenciadosProposta.json')) ?>)
+        </a>
     </nav>
 
     <main>
+        <?php if ($tab_atual !== 'licenciadosProposta.json'): ?>
         <!-- Formulário de Adição -->
         <div class="form-container">
             <h3>Adicionar Novo Item</h3>
@@ -495,9 +646,18 @@ if ($tab_atual === 'news.json' || $tab_atual === 'news_draft.json') {
                 <button type="submit">Adicionar</button>
             </form>
         </div>
+        <?php endif; ?>
 
         <!-- Lista de Dados -->
         <div class="data-container">
+            <?php if ($tab_atual === 'licenciadosProposta.json'): ?>
+                <div class="propostas-tabs">
+                    <button class="proposta-tab active" onclick="filtrarPropostas('all')">Todas (<?= count($dados) ?>)</button>
+                    <button class="proposta-tab em-analise" onclick="filtrarPropostas('Em análise')">Em Análise (<?= count(array_filter($dados, fn($p) => ($p['status'] ?? 'Em análise') === 'Em análise')) ?>)</button>
+                    <button class="proposta-tab aprovado" onclick="filtrarPropostas('Aprovado')">Aprovadas (<?= count(array_filter($dados, fn($p) => ($p['status'] ?? '') === 'Aprovado')) ?>)</button>
+                    <button class="proposta-tab recusado" onclick="filtrarPropostas('Recusado')">Recusadas (<?= count(array_filter($dados, fn($p) => ($p['status'] ?? '') === 'Recusado')) ?>)</button>
+                </div>
+            <?php endif; ?>
             <h3><?= ucfirst(str_replace(['.json', '_'], ['', ' '], $tab_atual)) ?> (<?= count($dados) ?> itens)</h3>
             
             <?php if ($tab_atual === 'news.json' || $tab_atual === 'news_draft.json'): ?>
@@ -541,6 +701,60 @@ if ($tab_atual === 'news.json' || $tab_atual === 'news_draft.json') {
                                                 echo $index;
                                             }
                                         ?>">
+                                        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>">
+                                        <button type="submit">Deletar</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            <?php elseif ($tab_atual === 'licenciadosProposta.json'): ?>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Email</th>
+                                <th>WhatsApp</th>
+                                <th>Cidade</th>
+                                <th>Estado</th>
+                                <th>Status</th>
+                                <th>Data</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach($dados as $index => $item): ?>
+                            <tr class="proposta-row" data-status="<?= htmlspecialchars($item['status'] ?? 'Em análise') ?>">
+                                <td><?= htmlspecialchars($item['name'] ?? '') ?></td>
+                                <td><?= htmlspecialchars($item['email'] ?? '') ?></td>
+                                <td><?= htmlspecialchars($item['whatsapp'] ?? '') ?></td>
+                                <td><?= htmlspecialchars($item['cidade de interesse'] ?? '') ?></td>
+                                <td><?= htmlspecialchars($item['estado de interesse'] ?? '') ?></td>
+                                <td>
+                                    <span class="status-badge status-<?= strtolower(str_replace(' ', '-', $item['status'] ?? 'Em análise')) ?>" style="white-space: nowrap;">
+                                        <?= htmlspecialchars($item['status'] ?? 'Em análise') ?>
+                                    </span>
+                                </td>
+                                <td><?= isset($item['timestamp']) ? date('d/m/Y H:i', strtotime($item['timestamp'])) : '-' ?></td>
+                                <td class="actions">
+                                    <button onclick="visualizarProposta(<?= $index ?>)">Ver</button>
+                                    <?php 
+                                    $status = $item['status'] ?? 'Em análise';
+                                    if ($status === 'Em análise'): ?>
+                                        <button onclick="atualizarStatus(<?= $item['id'] ?>, 'Aprovado')" style="background: #1e3a8a; color: white;">Aceitar</button>
+                                        <button onclick="atualizarStatus(<?= $item['id'] ?>, 'Recusado')" style="background: #dc2626; color: white;">Recusar</button>
+                                    <?php elseif ($status === 'Aprovado'): ?>
+                                        <button onclick="atualizarStatus(<?= $item['id'] ?>, 'Em análise')" style="background: #f59e0b; color: white; font-size: 12px;">Reanalisar</button>
+                                    <?php elseif ($status === 'Recusado'): ?>
+                                        <button onclick="atualizarStatus(<?= $item['id'] ?>, 'Em análise')" style="background: #f59e0b; color: white; font-size: 12px;">Reanalisar</button>
+                                    <?php endif; ?>
+                                    <form method="POST" style="display:inline;" onsubmit="return confirm('Deletar proposta?')">
+                                        <input type="hidden" name="acao" value="deletar">
+                                        <input type="hidden" name="arquivo" value="<?= $tab_atual ?>">
+                                        <input type="hidden" name="index" value="<?= count(lerJSON($tab_atual)) - 1 - $index ?>">
                                         <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>">
                                         <button type="submit">Deletar</button>
                                     </form>
@@ -672,6 +886,17 @@ if ($tab_atual === 'news.json' || $tab_atual === 'news_draft.json') {
             </div>
             <div class="modal-actions">
                 <button type="button" onclick="fecharModalNoticia()">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Visualização de Proposta -->
+    <div id="propostaModal" class="modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <h3>Detalhes da Proposta</h3>
+            <div id="propostaContent"></div>
+            <div class="modal-actions">
+                <button type="button" onclick="fecharModalProposta()">Fechar</button>
             </div>
         </div>
     </div>
@@ -890,15 +1115,167 @@ if ($tab_atual === 'news.json' || $tab_atual === 'news_draft.json') {
             document.getElementById('newsModal').style.display = 'none';
         }
         
+        function visualizarProposta(index) {
+            const item = dados[index];
+            const statusClass = (item.status || 'Em análise').toLowerCase().replace(' ', '-').replace('á', 'a');
+            const content = `
+                <div class="proposta-details-enhanced">
+                    <div class="proposta-header">
+                        <h4 style="color: #0033a0; margin-bottom: 10px;">${escapeHtml(item.name || 'Nome não informado')}</h4>
+                        <span class="status-badge status-${statusClass}" style="font-size: 12px; padding: 4px 12px;">${escapeHtml(item.status || 'Em análise')}</span>
+                    </div>
+                    
+                    <div class="proposta-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0;">
+                        <div class="info-card">
+                            <h5 style="color: #666; font-size: 14px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">Contato</h5>
+                            <p style="margin: 5px 0;"><strong>Email:</strong> <a href="mailto:${escapeHtml(item.email || '')}" style="color: #0033a0;">${escapeHtml(item.email || 'Não informado')}</a></p>
+                            <p style="margin: 5px 0;"><strong>WhatsApp:</strong> <a href="https://wa.me/${escapeHtml(item.whatsapp || '').replace(/\D/g, '')}" target="_blank" style="color: #25D366;">${escapeHtml(item.whatsapp || 'Não informado')}</a></p>
+                        </div>
+                        
+                        <div class="info-card">
+                            <h5 style="color: #666; font-size: 14px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">Localização</h5>
+                            <p style="margin: 5px 0;"><strong>Cidade:</strong> ${escapeHtml(item['cidade de interesse'] || 'Não informado')}</p>
+                            <p style="margin: 5px 0;"><strong>Bairro:</strong> ${escapeHtml(item['bairro de interesse'] || 'Não informado')}</p>
+                            <p style="margin: 5px 0;"><strong>Estado:</strong> ${escapeHtml(item['estado de interesse'] || 'Não informado')}</p>
+                        </div>
+                        
+                        <div class="info-card">
+                            <h5 style="color: #666; font-size: 14px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">Perfil</h5>
+                            <p style="margin: 5px 0;"><strong>Experiência:</strong> ${escapeHtml(item.experiencia || 'Não informado')}</p>
+                            <p style="margin: 5px 0;"><strong>Investimento:</strong> ${escapeHtml(item['capital disponível'] || 'Não informado')}</p>
+                        </div>
+                        
+                        <div class="info-card">
+                            <h5 style="color: #666; font-size: 14px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">Informações</h5>
+                            <p style="margin: 5px 0;"><strong>Data:</strong> ${item.timestamp ? new Date(item.timestamp).toLocaleString('pt-BR') : 'Não informado'}</p>
+                            <p style="margin: 5px 0;"><strong>ID:</strong> #${item.id || 'N/A'}</p>
+                        </div>
+                    </div>
+                    
+                    ${item.mensagem ? `
+                        <div class="mensagem-card" style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-top: 20px;">
+                            <h5 style="color: #666; font-size: 14px; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px;">Mensagem</h5>
+                            <p style="line-height: 1.6; color: #333;">${escapeHtml(item.mensagem).replace(/\n/g, '<br>')}</p>
+                        </div>
+                    ` : ''}
+                    
+                    <div class="proposta-actions" style="margin-top: 20px; text-align: center; border-top: 1px solid #eee; padding-top: 20px;">
+                        ${(item.status || 'Em análise') === 'Em análise' ? `
+                            <button onclick="atualizarStatus(${item.id}, 'Aprovado'); fecharModalProposta();" style="background: #1e3a8a; color: white; padding: 10px 20px; border: none; border-radius: 5px; margin: 0 5px; cursor: pointer;">Aceitar Proposta</button>
+                            <button onclick="atualizarStatus(${item.id}, 'Recusado'); fecharModalProposta();" style="background: #dc2626; color: white; padding: 10px 20px; border: none; border-radius: 5px; margin: 0 5px; cursor: pointer;">Recusar Proposta</button>
+                        ` : (item.status === 'Aprovado' ? `
+                            <button onclick="atualizarStatus(${item.id}, 'Em análise'); fecharModalProposta();" style="background: #f59e0b; color: white; padding: 10px 20px; border: none; border-radius: 5px; margin: 0 5px; cursor: pointer;">Voltar para Análise</button>
+                            <button onclick="atualizarStatus(${item.id}, 'Recusado'); fecharModalProposta();" style="background: #dc2626; color: white; padding: 10px 20px; border: none; border-radius: 5px; margin: 0 5px; cursor: pointer;">Recusar</button>
+                        ` : `
+                            <button onclick="atualizarStatus(${item.id}, 'Em análise'); fecharModalProposta();" style="background: #f59e0b; color: white; padding: 10px 20px; border: none; border-radius: 5px; margin: 0 5px; cursor: pointer;">Voltar para Análise</button>
+                            <button onclick="atualizarStatus(${item.id}, 'Aprovado'); fecharModalProposta();" style="background: #1e3a8a; color: white; padding: 10px 20px; border: none; border-radius: 5px; margin: 0 5px; cursor: pointer;">Aprovar</button>
+                        `)}
+                    </div>
+
+                </div>
+            `;
+            document.getElementById('propostaContent').innerHTML = content;
+            document.getElementById('propostaModal').style.display = 'flex';
+        }
+        
+        function fecharModalProposta() {
+            document.getElementById('propostaModal').style.display = 'none';
+        }
+        
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                ${message}
+                <button class="close-btn" onclick="this.parentElement.remove()">&times;</button>
+            `;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => notification.classList.add('show'), 100);
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 300);
+            }, 4000);
+        }
+        
+        function atualizarStatus(id, status) {
+            const statusText = status === 'Aprovado' ? 'aprovar' : status === 'Recusado' ? 'recusar' : 'colocar em análise';
+            if (!confirm(`Confirma ${statusText} esta proposta?`)) return;
+            
+            const formData = new FormData();
+            formData.append('action', 'update_status');
+            formData.append('id', id);
+            formData.append('status', status);
+            
+            fetch('index.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                try {
+                    const result = JSON.parse(data);
+                    if (result.success) {
+                        showNotification(`Proposta ${status.toLowerCase()} com sucesso!`, 'success');
+                        setTimeout(() => location.reload(), 1000);
+                    } else {
+                        showNotification('Erro ao atualizar status: ' + (result.error || 'Erro desconhecido'), 'error');
+                    }
+                } catch (e) {
+                    console.error('Resposta não é JSON:', data);
+                    showNotification('Status atualizado com sucesso!', 'success');
+                    setTimeout(() => location.reload(), 1000);
+                }
+            })
+            .catch(error => {
+                showNotification('Erro ao atualizar status', 'error');
+                console.error(error);
+            });
+        }
+        
+        function filtrarPropostas(status) {
+            const rows = document.querySelectorAll('.proposta-row');
+            const tabs = document.querySelectorAll('.proposta-tab');
+            
+            tabs.forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            rows.forEach(row => {
+                if (status === 'all' || row.dataset.status === status) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+        
+        // Mostrar notificação se houver mensagem na URL
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const message = urlParams.get('msg');
+            const type = urlParams.get('type') || 'success';
+            
+            if (message) {
+                showNotification(decodeURIComponent(message), type);
+                // Limpar URL
+                const newUrl = window.location.pathname + '?tab=' + (urlParams.get('tab') || 'schools.json');
+                window.history.replaceState({}, '', newUrl);
+            }
+        });
+        
         // Fechar modal clicando fora
         window.onclick = function(event) {
             const editModal = document.getElementById('editModal');
             const newsModal = document.getElementById('newsModal');
+            const propostaModal = document.getElementById('propostaModal');
             if (event.target === editModal) {
                 fecharModal();
             }
             if (event.target === newsModal) {
                 fecharModalNoticia();
+            }
+            if (event.target === propostaModal) {
+                fecharModalProposta();
             }
         }
     </script>

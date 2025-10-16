@@ -9,7 +9,7 @@ function escapeHtml(text) {
 // Carregar notícias para o index
 function loadIndexNews() {
   
-  fetch('/Backend/api/data.php?file=news.json')
+  fetch('https://calvus-sylvester-limply.ngrok-free.dev/Backend/api/data.php?file=news.json')
     .then(response => response.json())
     .then(data => {
       const container = document.getElementById('newsCardsContainer');
@@ -143,7 +143,7 @@ function initMap() {
 
 // Carregar escolas
 function loadSchools() {
-  fetch("/Backend/api/data.php?file=schools.json")
+  fetch("https://calvus-sylvester-limply.ngrok-free.dev/Backend/api/data.php?file=schools.json")
     .then(res => {
       if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
       return res.json();
@@ -586,7 +586,7 @@ function initFormularioContato() {
     const telefone = telefoneInput.value.trim();
     const mensagem = document.getElementById('mensagem').value.trim();
 
-    if (!nome || !cidade || !estado || !unidade || !telefone) {
+    if (!nome || !cidade  || !estado || !unidade || !telefone) {
       alert('Por favor, preencha todos os campos obrigatórios.');
       return;
     }
@@ -620,6 +620,216 @@ function initFormularioContato() {
   });
 }
 
+// Função para salvar dados da proposta
+function salvarDadosLicenciado(dados) {
+  // Tentar diferentes URLs baseado no ambiente
+  const urls = [
+    'https://calvus-sylvester-limply.ngrok-free.dev/Backend/admin/index.php',
+    '/Backend/admin/index.php',
+    '../Backend/admin/index.php',
+    'Backend/admin/index.php'
+  ];
+  
+  async function tentarEnvio(urlIndex = 0) {
+    if (urlIndex >= urls.length) {
+      throw new Error('Todas as URLs falharam');
+    }
+    
+    try {
+      const response = await fetch(urls[urlIndex], {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'ngrok-skip-browser-warning': 'true'
+        },
+        body: JSON.stringify({...dados, action: 'save_proposta'})
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+      
+      return await response.json();
+    } catch (error) {
+      console.log(`Tentativa ${urlIndex + 1} falhou:`, error.message);
+      return tentarEnvio(urlIndex + 1);
+    }
+  }
+  
+  return tentarEnvio()
+
+    .then(result => {
+      // Salvar no localStorage para backup
+      const timestamp = new Date().toISOString();
+      const dadosComTimestamp = { ...dados, timestamp, id: result.id };
+      
+      let licenciados = JSON.parse(localStorage.getItem('licenciados') || '[]');
+      licenciados.push(dadosComTimestamp);
+      localStorage.setItem('licenciados', JSON.stringify(licenciados));
+      
+      return { ok: true };
+    })
+    .catch(error => {
+      console.error('Erro ao salvar:', error);
+      // Fallback: salvar apenas no localStorage
+      const timestamp = new Date().toISOString();
+      const dadosComTimestamp = { ...dados, timestamp };
+      
+      let licenciados = JSON.parse(localStorage.getItem('licenciados') || '[]');
+      licenciados.push(dadosComTimestamp);
+      localStorage.setItem('licenciados', JSON.stringify(licenciados));
+      
+      throw error;
+    });
+}
+
+// Formulário de licenciado - formLicenciado.html
+function initFormularioLicenciado() {
+  const telefoneInput = document.getElementById('telefone');
+  const form = document.getElementById('licenciadoForm');
+  
+  if (!telefoneInput || !form) {
+    console.log('Elementos do formulário não encontrados');
+    return;
+  }
+  
+  console.log('Formulário de licenciado inicializado');
+  
+  // Máscara para telefone
+  telefoneInput.addEventListener('input', function(e) {
+    let value = e.target.value.replace(/\D/g, '');
+    if (value.length >= 11) {
+      value = value.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+    } else if (value.length >= 7) {
+      value = value.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
+    } else if (value.length >= 3) {
+      value = value.replace(/(\d{2})(\d{0,5})/, '($1) $2');
+    }
+    e.target.value = value;
+  });
+
+  // Validação e envio
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const nome = document.getElementById('nome').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const telefone = telefoneInput.value.trim();
+    const cidade = document.getElementById('cidade').value.trim();
+    const estado = document.getElementById('estado').value;
+    const experiencia = document.getElementById('experiencia').value;
+    const investimento = document.getElementById('investimento').value;
+    const mensagem = document.getElementById('mensagem').value.trim();
+
+    if (!nome || !email || !telefone || !cidade || !estado) {
+      alert('Por favor, preencha todos os campos obrigatórios.');
+      return;
+    }
+
+    if (telefone.replace(/\D/g, '').length < 10) {
+      alert('Por favor, digite um número de WhatsApp válido.');
+      return;
+    }
+
+    // Dados para envio
+    const dados = {
+      nome,
+      email,
+      telefone,
+      cidade,
+      bairro: document.getElementById('bairro')?.value?.trim() || '',
+      estado,
+      experiencia,
+      investimento,
+      mensagem,
+      status: 'Em análise'
+    };
+
+    // Desabilitar botão durante envio
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const originalText = submitBtn.textContent;
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Enviando...';
+
+    // Salvar dados
+    console.log('Enviando dados:', dados);
+    salvarDadosLicenciado(dados)
+      .then(response => {
+        console.log('Resposta recebida:', response);
+        mostrarMensagemSucesso();
+        form.reset();
+      })
+      .catch(error => {
+        console.error('Erro ao enviar:', error);
+        mostrarMensagemErro();
+      })
+      .finally(() => {
+        // Reabilitar botão
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+      });
+  });
+}
+
+// Funções para mostrar mensagens
+function mostrarMensagemSucesso() {
+  const modal = criarModal(
+    '✓ Proposta Enviada com Sucesso!',
+    'Sua solicitação de licenciamento foi recebida e está sendo analisada pela nossa equipe. Entraremos em contato em breve caso a gente tenha interesse na sua proposta.',
+    '#28a745'
+  );
+  document.body.appendChild(modal);
+  setTimeout(() => modal.style.display = 'flex', 100);
+}
+
+function mostrarMensagemErro() {
+  const modal = criarModal(
+    '⚠ Erro no Envio',
+    'Houve um problema ao enviar sua proposta. Seus dados foram salvos localmente. Tente novamente em alguns minutos.',
+    '#dc3545'
+  );
+  document.body.appendChild(modal);
+  setTimeout(() => modal.style.display = 'flex', 100);
+}
+
+function criarModal(titulo, mensagem, cor) {
+  const modal = document.createElement('div');
+  modal.style.cssText = `
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+    background: rgba(0,0,0,0.5); display: none; align-items: center; 
+    justify-content: center; z-index: 10000;
+  `;
+  
+  modal.innerHTML = `
+    <div style="
+      background: white; padding: 40px; border-radius: 15px; 
+      max-width: 500px; margin: 20px; text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    ">
+      <div style="
+        width: 80px; height: 80px; border-radius: 50%; 
+        background: ${cor}; margin: 0 auto 20px; 
+        display: flex; align-items: center; justify-content: center;
+        font-size: 40px; color: white; font-weight: bold;
+      ">${titulo.charAt(0)}</div>
+      <h2 style="color: #333; margin-bottom: 15px; font-size: 24px;">${titulo}</h2>
+      <p style="color: #666; line-height: 1.6; margin-bottom: 30px; font-size: 16px;">${mensagem}</p>
+      <button onclick="this.closest('div').parentElement.remove()" style="
+        background: ${cor}; color: white; border: none; 
+        padding: 12px 30px; border-radius: 25px; 
+        font-size: 16px; font-weight: 600; cursor: pointer;
+        transition: all 0.3s ease;
+      ">Entendi</button>
+    </div>
+  `;
+  
+  modal.onclick = (e) => {
+    if (e.target === modal) modal.remove();
+  };
+  
+  return modal;
+}
+
 // Inicialização principal
 document.addEventListener('DOMContentLoaded', () => {
   // Carregar notícias se estivermos na página index
@@ -630,6 +840,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // Inicializar formulário de contato se estivermos na página
   if (document.getElementById('whatsappForm')) {
     initFormularioContato();
+  }
+  
+  // Inicializar formulário de licenciado se estivermos na página
+  if (document.getElementById('licenciadoForm')) {
+    initFormularioLicenciado();
   }
   
   // Aguardar um pouco antes de inicializar o mapa
@@ -646,7 +861,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         async function loadNews() {
             try {
-                const response = await fetch('/Backend/api/data.php?file=news.json');
+                const response = await fetch('https://calvus-sylvester-limply.ngrok-free.dev/Backend/api/data.php?file=news.json');
 
                 if (!response.ok) throw new Error('Erro ao carregar notícias');
                 

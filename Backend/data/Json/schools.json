@@ -686,20 +686,5 @@
         "instagram_url": "https:\/\/www.instagram.com\/arena_max-neves",
         "estado": "MG",
         "ComoChegar": "https:\/\/maps.app.goo.gl\/uwX5pD1EHPzY9Svo6"
-    },
-    {
-        "lat": -19.767,
-        "lng": -44.087,
-        "nome": "test de api",
-        "cidade": "Ribeirão das Neves",
-        "endereco_encontrado": "Centro, Ribeirão das Neves - MG",
-        "ComoChegar": "",
-        "region": "Brasil",
-        "endereco": "Toca 2",
-        "telefone": "31996762690",
-        "whatsapp": "55031996762690",
-        "instagram": "",
-        "instagram_url": "",
-        "estado": "MG"
     }
 ]
