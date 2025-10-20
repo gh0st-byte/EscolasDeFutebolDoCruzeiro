@@ -706,7 +706,13 @@ a button {
     min-height: 45vh;
 }
 
-
+.Metodologia::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; right: 0; bottom: 0;
+    background-image: url('../assets/img/FUNDO_AZUL_TEXTURIZADO_1921x1080.png') !important;
+    z-index: 0;
+}
 
 .Metodologia h1 {
     font-size: 3rem;

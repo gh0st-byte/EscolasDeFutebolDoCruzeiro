@@ -746,6 +746,7 @@ a button {
     z-index: 2;
     padding: 0 24px 80px 24px;
     margin: 0 auto;
+    margin: 35px;
 }
 
 @media (min-width: 971px) {

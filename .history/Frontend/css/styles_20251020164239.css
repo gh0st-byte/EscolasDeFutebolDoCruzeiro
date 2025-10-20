@@ -695,18 +695,29 @@ a button {
 
 /* METODOLOGIA */
 .Metodologia {
-    padding: 50px 0;
-    background: url('../assets/img/FUNDO AZUL TEXTURIZADO 1921x1080.png') no-repeat center center/cover;
+    padding: 20px 0;
     background-size: cover;
     background-position: center;
-    background-attachment: fixed;
     color: #fff;
     text-align: center;
     position: relative;
-    min-height: 45vh;
+    background-attachment: fixed;
+    height: max-content;
+    min-width: none;
+    min-height: 100% !important;
+    z-index: 0;
+    background: url('assets/img/FUNDO AZUL TEXTURIZADO 1921x1080.png')
+
+
 }
 
-
+.Metodologia::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; right: 0; bottom: 0;
+    background-image: url('../assets/img/FUNDO_AZUL_TEXTURIZADO_1921x1080.png') !important;
+    z-index: 0;
+}
 
 .Metodologia h1 {
     font-size: 3rem;
@@ -715,7 +726,7 @@ a button {
     letter-spacing: 1px;
     text-transform: uppercase;
     position: relative;
-    z-index: 2;
+    bottom: 20px;
 }
 
 .Metodologia h1::after {
@@ -739,13 +750,15 @@ a button {
 
 .metodologia-text {
     display: flex;
+    
+    height: 100%;
     gap: 40px;
     transition: transform 0.5s ease;
     width: fit-content;
     position: relative;
-    z-index: 2;
-    padding: 0 24px 80px 24px;
-    margin: 0 auto;
+    z-index: 1;
+    padding: 150px 24px 100px 24px;
+    bottom: 30px;
 }
 
 @media (min-width: 971px) {
@@ -755,7 +768,7 @@ a button {
         gap: 40px;
         max-width: 1400px;
         margin: 0 auto;
-        padding: 0 24px 80px 24px;
+        padding: 0 24px;
         width: 100%;
     }
     
@@ -787,6 +800,7 @@ a button {
     -webkit-backdrop-filter: blur(5px);
     min-width: 280px;
     flex-shrink: 0;
+    z-index: 1;
 }
 
 .card-metodologia:hover {
@@ -802,7 +816,6 @@ a button {
     text-transform: uppercase;
     letter-spacing: 0.5px;
     color: #fff;
-    padding-bottom: 12px;
 }
 
 .card-metodologia p {
