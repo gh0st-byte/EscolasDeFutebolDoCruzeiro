@@ -549,8 +549,7 @@ a button {
     transition: all 0.3s ease;
     border: 1px solid rgba(0,51,160,0.1);
     overflow: hidden;
-    max-height: 400px;
-    min-height: 400px;
+    max-height: ;
 }
 
 .card:hover {

@@ -8,8 +8,8 @@ function escapeHtml(text) {
 
 // Carregar notícias para o index
 function loadIndexNews() {
-
-  fetch('http://localhost:8000/Backend/api/data.php?file=news.json')
+  
+  fetch('https://calvus-sylvester-limply.ngrok-free.dev/Backend/api/data.php?file=news.json')
     .then(response => response.json())
     .then(data => {
       const container = document.getElementById('newsCardsContainer');

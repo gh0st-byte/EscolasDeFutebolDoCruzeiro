@@ -8,8 +8,8 @@ function escapeHtml(text) {
 
 // Carregar notícias para o index
 function loadIndexNews() {
-
-  fetch('http://localhost:8000/Backend/api/data.php?file=news.json')
+  
+  fetch('https://calvus-sylvester-limply.ngrok-free.dev/Backend/api/data.php?file=news.json')
     .then(response => response.json())
     .then(data => {
       const container = document.getElementById('newsCardsContainer');
@@ -143,7 +143,7 @@ function initMap() {
 
 // Carregar escolas
 function loadSchools() {
-  fetch("http://localhost:8000/Backend/api/data.php?file=schools.json")
+  fetch("loa/Backend/api/data.php?file=schools.json")
     .then(res => {
       if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
       return res.json();

@@ -286,6 +286,7 @@ a button {
     left: 0;
     right: 0;
     bottom: 0;
+    background: url('pattern.png') repeat;
     opacity: 0.1;
     z-index: 1;
 }
@@ -549,8 +550,6 @@ a button {
     transition: all 0.3s ease;
     border: 1px solid rgba(0,51,160,0.1);
     overflow: hidden;
-    max-height: 400px;
-    min-height: 400px;
 }
 
 .card:hover {
@@ -621,10 +620,6 @@ a button {
     color: white;
     border-color: #0033a0;
     transform: translateY(-50%) scale(1.1);
-    -webkit-transform: translateY(-50%) scale(1.1);
-    -moz-transform: translateY(-50%) scale(1.1);
-    -ms-transform: translateY(-50%) scale(1.1);
-    -o-transform: translateY(-50%) scale(1.1);
 }
 
 .news-carousel-controls .prev-btn {
@@ -666,7 +661,7 @@ a button {
 
 .metodologia-carousel .next-btn {
     right: 10px;
-    justify-content: center;
+}justify-content: center;
 }
 
 .carousel-btn:hover {
@@ -755,7 +750,7 @@ a button {
     z-index: 1;
 }
 
-@media (min-width: 971px) {
+@media (min-width: 901px) {
     .metodologia-text {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -771,7 +766,7 @@ a button {
     }
     
     .carousel-btn {
-        display: none !important;
+        display: none;
     }
 }
 
