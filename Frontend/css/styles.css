@@ -38,6 +38,7 @@ header {
     z-index: 1005;
     min-height: 80px;
     transition: all 0.3s ease;
+    overflow: hidden;
 }
 
 /* Header quando rolar */
@@ -462,15 +463,16 @@ a button {
 /* NOTÍCIAS */
 .news {
     background: #fff;
-    padding: 10px 0;
+    padding: 10px 0 ;
     text-align: center;
     position: relative;
     overflow: hidden;
+
 }
 
 .news-footer {
     text-align: center;
-    margin-top: 40px;
+    margin-top: 4px;
     padding: 0 20px;
 }
 
@@ -518,7 +520,7 @@ a button {
 
 .news-carousel {
     width: 100%;
-    height: 450px;
+    height: 480px;
     max-width: 1400px;
     margin: 0 auto;
     overflow: hidden;
@@ -553,12 +555,27 @@ a button {
     overflow: hidden;
     max-height: 400px;
     min-height: 400px;
+    margin-top: 14px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    -webkit-transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    -moz-transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    -ms-transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    -o-transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .card:hover {
-    transform: translateY(-12px);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateY(-14px);
     box-shadow: 0 20px 60px rgba(0,51,160,0.2);
     border-color: gold;
+    -webkit-transform: translateY(-14px);
+    -moz-transform: translateY(-14px);
+    -ms-transform: translateY(-14px);
+    -o-transform: translateY(-14px);
+    -webkit-transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    -moz-transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    -ms-transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    -o-transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .card img {
@@ -604,7 +621,7 @@ a button {
     transform: translateY(-50%);
     background: transparent;
     color: gold;
-    border: 2px solid gold;
+    border: 4px solid gold;
     border-radius: 8px;
     width: 44px;
     height: 44px;
@@ -612,21 +629,38 @@ a button {
     cursor: pointer;
     transition: all 0.3s ease;
     font-weight: bold;
-    z-index: 10;
+    z-index: 1000;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-weight: 900;
+    margin-top: 30px;
+    padding: 23px;
+    font-size: 1.8rem;
 }
+
+
+.carousel-controls .carousel-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 6px rgba(255,215,0,0.5);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    
+}
+
 
 .news-carousel-controls .carousel-btn:hover {
     background: #0033a0;
     color: white;
     border-color: #0033a0;
-    transform: translateY(-50%) scale(1.1);
-    -webkit-transform: translateY(-50%) scale(1.1);
-    -moz-transform: translateY(-50%) scale(1.1);
-    -ms-transform: translateY(-50%) scale(1.1);
-    -o-transform: translateY(-50%) scale(1.1);
+    transform: translateY(-45%) scale(1.0);
+    -webkit-transform: translateY(-45%) scale(1.0);
+    -moz-transform: translateY(-45%) scale(1.0);
+    -ms-transform: translateY(-45%) scale(1.0);
+    -o-transform: translateY(-45%) scale(1.0);
 }
 
 .news-carousel-controls .prev-btn {
@@ -634,7 +668,7 @@ a button {
 }
 
 .news-carousel-controls .next-btn {
-    right: 10px;
+    left: 64px;
 }
 
 /* Setas do carousel de metodologia */
@@ -642,33 +676,43 @@ a button {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: rgba(0,51,160,0.8);
-    color: white;
-    border: none;
-    width: 40px;
-    height: 40px;
+    background: linear-gradient(135deg, rgba(0,51,160,0.9), rgba(0,51,160,0.7));
+    color: gold;
+    border: 3px solid gold;
     border-radius: 50%;
-    font-size: 1.2rem;
+    width: 60px;
+    height: 60px;
+    font-size: 1.5rem;
     cursor: pointer;
-    z-index: 10;
-    transition: all 0.3s ease;
+    z-index: 1000;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     display: flex;
     align-items: center;
     justify-content: center;
+    font-weight: 900;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
 }
 
 .metodologia-carousel .carousel-btn:hover {
-    background: rgba(0,51,160,1);
+    background: linear-gradient(135deg, gold, #ffcc00);
+    color: #0033a0;
+    border-color: #0033a0;
     transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 15px 40px rgba(255,215,0,0.4);
+}
+
+.metodologia-carousel .carousel-btn:active {
+    transform: translateY(-50%) scale(0.95);
 }
 
 .metodologia-carousel .prev-btn {
-    left: 10px;
+    left: 20px;
 }
 
 .metodologia-carousel .next-btn {
-    right: 10px;
-    justify-content: center;
+    right: 20px;
 }
 
 .carousel-btn:hover {
@@ -688,27 +732,23 @@ a button {
 
 .news-carousel-controls {
     position: relative;
-}ver, .btn-prev:hover {
-    background: gold;
-    color: #0033a0;
 }
 
 /* METODOLOGIA */
-.Metodologia {
-    padding: 50px 0;
-    background: url('../assets/img/FUNDO AZUL TEXTURIZADO 1921x1080.png') no-repeat center center/cover;
+.metodologia {
+    padding-top: 10px;
+    background: url('../assets/img/FUNDO AZUL TEXTURIZADO 1921x1080.png') no-repeat center center;
     background-size: cover;
     background-position: center;
-    background-attachment: fixed;
     color: #fff;
     text-align: center;
     position: relative;
-    min-height: 45vh;
+    min-height: 500px;
+    z-index: 1;
+    padding-bottom: 100px;
 }
 
-
-
-.Metodologia h1 {
+.metodologia h1 {
     font-size: 3rem;
     font-weight: 900;
     margin-bottom: 60px;
@@ -718,7 +758,7 @@ a button {
     z-index: 2;
 }
 
-.Metodologia h1::after {
+.metodologia h1::after {
     content: '';
     position: absolute;
     bottom: -16px;
@@ -732,65 +772,196 @@ a button {
 
 .metodologia-carousel {
     position: relative;
-    overflow: hidden;
     margin: 0 auto;
-    padding: 0 60px;
+    overflow: hidden;
+    perspective: 1200px;
+    height: 600px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 80px;
+}
+
+/* Responsive carousel padding */
+@media (max-width: 768px) {
+    .metodologia-carousel {
+        padding: 0 40px;
+        height: auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .metodologia-carousel {
+        padding: 0 20px;
+        height: auto;
+    }
 }
 
 .metodologia-text {
     display: flex;
-    gap: 40px;
-    transition: transform 0.5s ease;
-    width: fit-content;
+    gap: 30px;
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    width: max-content;
     position: relative;
     z-index: 2;
-    padding: 0 24px 80px 24px;
-    margin: 0 auto;
+    padding: 0;
+    margin: 0;
+    transform-style: preserve-3d;
+    /* for mobile touch snapping */
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
 }
 
-@media (min-width: 971px) {
+.metodologia-text.scrollable {
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+}
+
+.metodologia-cards {
+    position: relative;
+    transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transform-style: preserve-3d;
+    scroll-snap-align: center;
+    flex: 0 0 auto;
+}
+
+.metodologia-cards.active {
+    transform: scale(1.05) translateZ(50px);
+    z-index: 10;
+}
+
+.metodologia-cards.prev {
+    transform: scale(0.85) translateX(-20px) rotateY(25deg) translateZ(-100px);
+    opacity: 0.6;
+    filter: blur(1px);
+}
+
+.metodologia-cards.next {
+    transform: scale(0.85) translateX(20px) rotateY(-25deg) translateZ(-100px);
+    opacity: 0.6;
+    filter: blur(1px);
+}
+
+.metodologia-cards.far {
+    transform: scale(0.7) translateZ(-200px);
+    opacity: 0.3;
+    filter: blur(2px);
+}
+
+/* Responsive gap */
+@media (max-width: 480px) {
     .metodologia-text {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 40px;
-        max-width: 1400px;
-        margin: 0 auto;
-        padding: 0 24px 80px 24px;
-        width: 100%;
+        gap: 20px;
+        padding: 0 16px 80px 16px;
     }
-    
-    .metodologia-carousel {
-        padding: 0 24px;
-    }
-    
-    .carousel-btn-metodologia {
-        display: none !important;
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+    .metodologia-text {
+        gap: 30px;
     }
 }
 
 .card-metodologia {
-    border-radius: 24px;
-    box-shadow: 0 12px 48px rgba(0,0,0,0.3);
+    border-radius: 28px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.1);
     padding: 40px 24px;
     aspect-ratio: 4/5;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    transition: all 0.4s ease;
-    border: 2px solid rgba(255,255,255,0.1);
+    transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    border: 2px solid rgba(255,255,255,0.2);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     cursor: pointer;
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-    min-width: 280px;
-    flex-shrink: 0;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    overflow: hidden;
+    position: relative;
+    transform-style: preserve-3d;
+    width: 350px;
+    min-width: 220px;
+}
+
+.card-metodologia::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(0,51,160,0.1), rgba(255,215,0,0.1));
+    opacity: 0;
+    transition: opacity 0.6s ease;
+    border-radius: 28px;
+}
+
+.card-metodologia::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, gold, #0033a0, gold);
+    background-size: 300% 300%;
+    border-radius: 30px;
+    z-index: -1;
+    opacity: 0;
+    animation: gradientShift 3s ease infinite;
+    transition: opacity 0.6s ease;
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.metodologia-cards.active .card-metodologia::before {
+    opacity: 1;
+}
+
+.metodologia-cards.active .card-metodologia::after {
+    opacity: 1;
+}
+
+.metodologia-cards.active .card-metodologia {
+    box-shadow: 0 30px 80px rgba(0,0,0,0.5), 0 0 50px rgba(255,215,0,0.3);
+    border-color: gold;
+    transform: translateY(-10px);
+}
+
+/* Responsive card sizes */
+@media (max-width: 480px) {
+    .card-metodologia {
+        width: 250px;
+        padding: 30px 20px;
+    }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+    .card-metodologia {
+        width: 300px;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    .card-metodologia {
+        width: 320px;
+    }
+}
+
+@media (min-width: 1025px) {
+    .card-metodologia {
+        width: 350px;
+    }
 }
 
 .card-metodologia:hover {
-    transform: translateY(-8px) scale(1.02);
     box-shadow: 0 20px 60px rgba(0,0,0,0.4);
     border-color: gold;
 }
@@ -810,6 +981,7 @@ a button {
     line-height: 1.5;
     color: #e0e6f7;
     text-align: center;
+    margin: 0;
 }
 
 .card-metodologia img {
@@ -823,72 +995,70 @@ a button {
     transform: scale(1.1);
 }
 
-.btn-saiba-mais {
-    background-color: rgb(255, 217, 0);
-    border: 1px solid #0033a0;
-    color: #001973d4;
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-size: 0.9rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin-top: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.btn-saiba-mais:hover {
-    background: #fff;
-    color: #0033a0;
-    border: 1px solid #0033a0;
-    transform: translateY(-2px);
-}
-.cals {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    top: -35px;
-    position: relative;
-}
-
-.dropdown-content {
-    max-height: 0;
-    overflow: hidden;
-    padding: 25px 8px 0 8px;
-
-    margin-top: 12px;
-}
-
-
-.dropdown-content.active {
-    max-height: 200px;
-    background-color: #050a3097;
-    border: 1px solid #0033a0;
-    border-radius: 10%;
-    font-weight: 900;
-    font-size: larger;
-    max-width: fit-content;
-    position: visible;
-    top: 40px;
+/* Carousel controls */
+.carousel-btn {
     position: absolute;
-    padding: 0 8px 12px 8px;
-    box-shadow: rgba(9, 71, 187, 0.863) 0px 0px 8px;
-    
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(0,0,0,0.5);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 20;
+    font-size: 28px;
+    line-height: 1;
+    transition: background 0.2s ease;
 }
 
-.dropdown-content p {
-    font-size: 0.95rem;
-    line-height: 1.4;
-    color: #e0e6f7;
-    text-align: center;
-    margin: 0;
-    padding: 12px 8px 0 8px;
+.carousel-btn:hover,
+.carousel-btn:focus {
+    background: rgba(0,0,0,0.7);
+}
+
+.prev-btn { left: 16px; }
+.next-btn { right: 16px; }
+
+/* Indicators */
+.metodologia-indicators {
+    position: absolute;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    z-index: 20;
+}
+
+.metodologia-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.35);
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.metodologia-indicator.active {
+    background: gold;
+    transform: scale(1.15);
+}
+
+@media (max-width: 900px) {
+    .carousel-btn {
+        display: none;
+    }
 }
 
 /* CRIAS DA TOCA */
 .crias {
-    background: linear-gradient(135deg, #002080 0%, #0033a0 100%);
+    background: transparent;
     padding: 80px 0;
     color: #fff;
     display: flex;
@@ -897,7 +1067,6 @@ a button {
     min-height: 400px;
     position: relative;
     overflow: hidden;
-    top: 30px;
 }
 
 .crias::before {
@@ -1466,19 +1635,39 @@ footer ul {
         grid-template-columns: 1fr;
         gap: 40px;
         text-align: center;
+        padding: 0 20px;
     }
     
     .hero-image {
         order: -1;
+        max-width: 400px;
+        margin: 0 auto;
     }
     
     .news-carousel {
         position: relative;
+        padding: 0 20px;
     }
     
     .metodologia-text {
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
         gap: 30px;
+        padding: 0 20px;
+    }
+    
+    .card-metodologia {
+        width: 280px;
+        min-width: 280px;
+    }
+    
+    .container-logo {
+        padding: 16px 20px;
+    }
+    
+    .nav-links {
+        gap: 24px;
     }
 }
 
@@ -1490,14 +1679,18 @@ footer ul {
         box-shadow: 0 8px 32px rgba(0,0,0,0.2);
         backdrop-filter: blur(15px);
         -webkit-backdrop-filter: blur(15px);
+        right: 10px;
+        left: auto;
+        min-width: 200px;
     }
     
     .dropdown-item {
         color: #fff !important;
-        padding: 16px 24px;
+        padding: 14px 20px;
         transition: all 0.3s ease;
-        border-radius: 12px;
-        margin: 4px 8px;
+        border-radius: 10px;
+        margin: 3px 6px;
+        font-size: 0.95rem;
     }
     
     .dropdown-item:hover {
@@ -1508,30 +1701,54 @@ footer ul {
     
     .dropdown-divider {
         border-color: rgba(255, 255, 255, 0.2);
-        margin: 8px 0;
+        margin: 6px 0;
     }
 
     .container-hero {
-        padding: 60px 24px;
+        padding: 50px 20px;
+        min-height: 60vh;
     }
     
     .hero {
         grid-template-columns: 1fr;
-        gap: 40px;
+        gap: 30px;
         text-align: center;
+        max-width: 100%;
     }
     
     .hero h1 {
-        font-size: 2.5rem;
+        font-size: 2.4rem;
+        line-height: 1.2;
+    }
+    
+    .hero p {
+        font-size: 1.1rem;
+        max-width: 500px;
+        margin: 0 auto 24px;
+    }
+    
+    .hero-image {
+        max-width: 350px;
+        margin: 0 auto;
+    }
+
+    .news {
+        padding: 60px 0;
+    }
+    
+    .news h2 {
+        font-size: 2.4rem;
+        padding: 0 20px;
     }
 
     .news-cards {
-        gap: 24px;
-        padding: 0 24px;
+        gap: 20px;
+        padding: 0 20px;
         overflow-x: auto;
         scroll-behavior: smooth;
         -ms-overflow-style: none;
         scrollbar-width: none;
+        scroll-snap-type: x mandatory;
     }
 
     .news-cards::-webkit-scrollbar {
@@ -1539,187 +1756,273 @@ footer ul {
     }
     
     .card {
-        min-width: 300px;
-        margin: 0 12px;
+        min-width: 280px;
+        width: 280px;
         flex-shrink: 0;
+        scroll-snap-align: start;
     }
 
     .crias {
-        flex-direction: column;
-        align-items: center;
-        padding: 80px 24px;
+        padding: 60px 20px;
         text-align: center;
+    }
+    
+    .crias-image {
+        max-width: 400px;
+        margin: 0 auto;
     }
 
     .metodologia-text {
-        grid-template-columns: 1fr;
-        gap: 24px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+        padding: 0 20px;
     }
     
     .card-metodologia {
+        width: 260px;
+        min-width: 260px;
         aspect-ratio: 3/4;
     }
 
     .menu-map {
-        max-width: 300px;
-        margin: 0 auto 32px;
+        max-width: 320px;
+        margin: 0 auto 24px;
+        padding: 0 20px;
     }
 
     .menu-map button {
-        padding: 14px 24px;
-        font-size: 0.95rem;
+        padding: 12px 20px;
+        font-size: 0.9rem;
     }
     
     #map {
-        height: 50vh;
+        height: 45vh;
+        width: calc(100% - 40px);
+    }
+    
+    .map-search {
+        padding: 0 20px;
     }
     
     .footer-content {
-        grid-template-columns: 1fr;
-        gap: 30px;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 25px;
+        padding: 0 20px;
+    }
+    
+    .autoral-rights {
+        grid-column: 1 / -1;
         text-align: center;
     }
 }
 
 @media (max-width: 700px) {
     body {
-        padding-top: 70px;
+        padding-top: 65px;
     }
     
     header {
-        min-height: 70px;
+        min-height: 65px;
     }
     
     .container-logo {
-        padding: 12px 20px;
+        padding: 10px 16px;
+        justify-content: space-between;
     }
     
     .logo img {
-        height: 42px;
+        height: 38px;
+    }
+    
+    .dropdown-toggle {
+        padding: 8px 12px !important;
+        font-size: 1.3rem !important;
+        min-width: 44px;
+        min-height: 44px;
     }
     
     .nav-franqueado button {
-        padding: 10px 20px;
-        font-size: 0.9rem;
-        margin-left: 12px;
+        padding: 8px 16px;
+        font-size: 0.85rem;
+        margin-left: 8px;
     }
 
     .container-hero {
-        padding: 50px 20px;
+        padding: 40px 16px;
+        min-height: 50vh;
     }
     
     .hero {
-        padding: 0;
+        gap: 24px;
+        max-width: 100%;
     }
 
     .hero h1 {
-        font-size: 2.2rem;
-        margin-bottom: 20px;
+        font-size: 2rem;
+        margin-bottom: 16px;
+        line-height: 1.1;
     }
     
     .hero p {
-        font-size: 1.1rem;
-        margin-bottom: 24px;
+        font-size: 1rem;
+        margin-bottom: 20px;
+        line-height: 1.5;
+    }
+    
+    .hero-image {
+        max-width: 300px;
     }
     
     .cta-1 {
-        padding: 16px 32px;
-        font-size: 1rem;
+        padding: 14px 28px;
+        font-size: 0.95rem;
+        width: fit-content;
+        margin: 0 auto;
     }
 
     .news {
-        padding: 60px 0;
+        padding: 50px 0;
     }
 
     .news h2 {
-        font-size: 2.2rem;
-        margin-bottom: 40px;
+        font-size: 2rem;
+        margin-bottom: 35px;
+        padding: 0 16px;
     }
 
     .news-cards {
-        gap: 20px;
-        padding: 0 20px;
+        gap: 16px;
+        padding: 0 16px;
+        justify-content: flex-start;
     }
 
     .card {
-        min-width: 280px;
-        width: 280px;
+        min-width: 260px;
+        width: 260px;
+        max-height: 380px;
+        min-height: 380px;
+    }
+    
+    .card h3 {
+        font-size: 1.2rem;
+        margin: 20px 16px 12px 16px;
+    }
+    
+    .card p {
+        padding: 0 16px;
+        font-size: 0.95rem;
     }
 
     .Metodologia {
-        padding: 70px 0;
-    }
-    
-    .Metodologia h1 {
-        font-size: 2.4rem;
-        margin-bottom: 50px;
-    }
-
-    .metodologia-text {
-        padding: 0 20px;
-        gap: 20px;
-    }
-    
-    .card-metodologia {
-        aspect-ratio: 3/4;
-    }
-
-    .map-section {
         padding: 60px 0;
     }
     
-    .map-section h1 {
-        font-size: 2.2rem;
+    .Metodologia h1 {
+        font-size: 2.1rem;
         margin-bottom: 40px;
+        padding: 0 16px;
+    }
+
+    .metodologia-text {
+        padding: 0 16px;
+        gap: 16px;
+    }
+    
+    .card-metodologia {
+        width: 240px;
+        min-width: 240px;
+        aspect-ratio: 3/4;
+        padding: 25px 18px;
+    }
+    
+    .card-metodologia h3 {
+        font-size: 1.1rem;
+    }
+    
+    .card-metodologia p {
+        font-size: 0.95rem;
+    }
+
+    .map-section {
+        padding: 50px 0;
+    }
+    
+    .map-section h1 {
+        font-size: 2rem;
+        margin-bottom: 35px;
+        padding: 0 16px;
     }
 
     .menu-map {
-        max-width: 280px;
-        margin: 0 auto 24px;
+        max-width: 260px;
+        margin: 0 auto 20px;
+        padding: 0 16px;
     }
 
     .menu-map button {
-        padding: 12px 20px;
-        font-size: 0.9rem;
+        padding: 10px 16px;
+        font-size: 0.85rem;
     }
     
     .map-search {
-        padding: 0 20px;
-        margin-bottom: 20px;
+        padding: 0 16px;
+        margin-bottom: 16px;
+    }
+    
+    .map-search input[type="search"] {
+        padding: 12px 16px;
+        font-size: 0.9rem;
     }
     
     #map {
-        width: calc(100% - 40px);
-        height: 45vh;
+        width: calc(100% - 32px);
+        height: 40vh;
         margin: 0 auto;
     }
 
     .cta-2 {
-        padding: 60px 20px;
+        padding: 50px 16px;
+        text-align: center;
     }
 
     .cta-2 h2 {
-        font-size: 2.2rem;
-        margin-bottom: 20px;
+        font-size: 2rem;
+        margin-bottom: 16px;
     }
     
     .cta-2-text p {
-        font-size: 1.1rem;
-        margin-bottom: 28px;
+        font-size: 1rem;
+        margin-bottom: 24px;
+        line-height: 1.5;
     }
     
     .cta-2 .btn-footer {
-        padding: 16px 40px;
-        font-size: 1rem;
+        padding: 14px 32px;
+        font-size: 0.95rem;
     }
     
     .footer-content {
-        padding: 0 20px;
-        gap: 25px;
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding: 0 16px;
+        text-align: center;
     }
     
     .footer-section h2, .footer-section h3 {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
+        margin-bottom: 16px;
+    }
+    
+    .footer-section p, .footer-section li {
+        font-size: 0.9rem;
+    }
+    
+    .icon-social {
+        width: 36px;
+        height: 36px;
+        margin: 0 6px;
     }
 }
 
@@ -2611,325 +2914,335 @@ nav button,
 /* Mobile breakpoint - up to 480px */
 @media (max-width: 480px) {
     .news-modal-title {
-        font-size: 2rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        max-width: 90%;
+        font-size: 1.8rem;
         line-height: 1.1;
-        margin-bottom: 30px;
+        margin-bottom: 25px;
+        padding: 0 10px;
     }
     
     body {
-        padding-top: 65px;
+        padding-top: 60px;
     }
     
     header {
-        min-height: 65px;
+        min-height: 60px;
     }
 
     .container-logo {
-        padding: 10px 16px;
+        padding: 8px 12px;
+        justify-content: space-between;
     }
 
     .logo img {
-        height: 36px;
+        height: 32px;
+    }
+    
+    .dropdown-toggle {
+        padding: 6px 10px !important;
+        font-size: 1.2rem !important;
+        min-width: 40px;
+        min-height: 40px;
+    }
+    
+    .dropdown-menu-end {
+        right: 5px;
+        min-width: 180px;
+    }
+    
+    .dropdown-item {
+        padding: 12px 16px;
+        font-size: 0.9rem;
     }
 
     .container-hero {
-        padding: 40px 16px;
+        padding: 30px 12px;
+        min-height: 45vh;
     }
     
     .hero {
-        flex-direction: column;
-        gap: 24px;
-        text-align: center;
+        gap: 20px;
     }
 
     .hero h1 {
-        font-size: 1.9rem;
-        margin-bottom: 16px;
-        line-height: 1.2;
+        font-size: 1.7rem;
+        margin-bottom: 12px;
+        line-height: 1.1;
     }
 
     .hero p {
-        font-size: 1rem;
-        margin-bottom: 20px;
-        line-height: 1.5;
+        font-size: 0.95rem;
+        margin-bottom: 18px;
+        line-height: 1.4;
+    }
+    
+    .hero-image {
+        max-width: 250px;
     }
     
     .cta-1 {
-        padding: 14px 28px;
-        font-size: 0.95rem;
+        padding: 12px 24px;
+        font-size: 0.9rem;
         width: fit-content;
         margin: 0 auto;
     }
 
     .news {
-        padding: 50px 0;
+        padding: 40px 0;
     }
 
     .news h2 {
-        font-size: 2rem;
-        margin-bottom: 35px;
-        padding: 0 16px;
+        font-size: 1.8rem;
+        margin-bottom: 30px;
+        padding: 0 12px;
     }
 
     .news-cards {
-        padding: 0 16px;
-        gap: 16px;
+        padding: 0 12px;
+        gap: 12px;
         justify-content: flex-start;
-        overflow-x: auto;
-        scroll-snap-type: x mandatory;
     }
 
     .card {
-        min-width: 260px;
-        width: 260px;
-        flex-shrink: 0;
-        scroll-snap-align: start;
+        min-width: 240px;
+        width: 240px;
+        max-height: 360px;
+        min-height: 360px;
+        padding: 0 0 24px 0;
+    }
+    
+    .card img {
+        height: 160px;
+    }
+    
+    .card h3 {
+        font-size: 1.1rem;
+        margin: 16px 12px 10px 12px;
+    }
+    
+    .card p {
+        padding: 0 12px;
+        font-size: 0.9rem;
+        margin-bottom: 12px;
     }
 
     .Metodologia {
-        padding: 60px 0;
-    }
-    
-    .Metodologia h1 {
-        font-size: 2.1rem;
-        margin-bottom: 40px;
-        padding: 0 16px;
-    }
-
-    .metodologia-text {
-        padding: 0 16px;
-        gap: 16px;
-    }
-    
-    .card-metodologia {
-        aspect-ratio: 3/4;
-        padding: 30px 20px;
-    }
-
-    .map-section {
         padding: 50px 0;
     }
     
-    .map-section h1 {
-        font-size: 2rem;
+    .Metodologia h1 {
+        font-size: 1.9rem;
         margin-bottom: 35px;
-        padding: 0 16px;
+        padding: 0 12px;
     }
 
-    .menu-map {
-        max-width: 260px;
-        margin: 0 auto 20px;
-        padding: 0 16px;
-    }
-
-    .menu-map button {
-        padding: 10px 16px;
-        font-size: 0.85rem;
-        flex: 1;
+    .metodologia-text {
+        padding: 0 12px;
+        gap: 12px;
     }
     
-    .map-search {
-        padding: 0 16px;
-        margin-bottom: 16px;
+    .card-metodologia {
+        width: 220px;
+        min-width: 220px;
+        aspect-ratio: 3/4;
+        padding: 20px 15px;
     }
     
-    .map-search input[type="search"] {
-        padding: 14px 18px;
-        font-size: 0.95rem;
-        width: 100%;
-    }
-    
-    #map {
-        width: calc(100% - 32px);
-        height: 40vh;
-        margin: 0 auto;
-    }
-
-    .cta-2 {
-        padding: 50px 16px;
-        text-align: center;
-    }
-
-    .cta-2 h2 {
-        font-size: 2rem;
-        margin-bottom: 16px;
-    }
-    
-    .cta-2-text p {
+    .card-metodologia h3 {
         font-size: 1rem;
-        margin-bottom: 24px;
-        line-height: 1.5;
+        margin-bottom: 12px;
     }
     
-    .cta-2 .btn-footer {
-        padding: 14px 32px;
-        font-size: 0.95rem;
-        display: inline-block;
-    }
-    
-    .footer-content {
-        padding: 0 16px;
-        gap: 25px;
-        max-width: 100%;
-        grid-template-columns: 1fr;
-        text-align: center;
-    }
-    
-    .footer-section h2, .footer-section h3 {
-        font-size: 1.1rem;
-        margin-bottom: 16px;
-    }
-    
-    .footer-section p, .footer-section li {
-        font-size: 0.9rem;
-        line-height: 1.4;
-    }
-    
-    .footer-section ul {
-        padding: 0;
-        list-style: none;
-    }
-    
-    .icon-social {
-        width: 36px;
-        height: 36px;
-        margin: 0 6px;
-    }
-    
-    .autoral-rights {
-        margin-top: 30px;
-        padding-top: 16px;
-        font-size: 0.85rem;
-        text-align: center;
-    }
-    
-    .news-modal-container {
-        padding: 40px 20px;
-        height: auto;
-        min-height: 100vh;
-    }
-    
-    .news-modal-image img {
-        border-radius: 12px;
-    }
-    
-    .news-content p {
-        font-size: 1rem;
-        line-height: 1.6;
-        text-align: left;
-    }
-    
-    .news-date {
-        font-size: 0.9rem;
-        margin-bottom: 20px;
-    }
-    
-    .pagination-container {
-        flex-direction: column;
-        gap: 8px;
-        padding: 12px 16px;
-    }
-    
-    .pagination-container .btn,
-    .pagination-container button {
-        width: 100%;
-        max-width: 200px;
-        margin: 0 auto;
-    }
-    
-    .pagination-container #pageInfo {
-        order: 0;
-        margin-bottom: 8px;
-    }
-    
-    /* Improve hero image responsiveness */
-    .hero-image {
-        width: 100%;
-        max-width: 300px;
-        margin: 0 auto;
-    }
-    
-    .hero-img {
-        width: 100%;
-        height: auto;
-        border-radius: 12px;
-    }
-    
-    /* Better carousel controls */
-    .metodologia-carousel {
-        position: relative;
-    }
-    
-    .carousel-btn {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        background: rgba(0,51,160,0.8);
-        color: white;
-        border: none;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        font-size: 1.2rem;
-        cursor: pointer;
-        z-index: 10;
-        transition: all 0.3s ease;
-    }
-    
-    .prev-btn {
-        left: 10px;
-    }
-    
-    .next-btn {
-        right: 10px;
-    }
-    
-    .carousel-btn:hover {
-        background: rgba(0,51,160,1);
-        transform: translateY(-50%) scale(1.1);
-    }
-    
-    /* Improve dropdown content */
-    .dropdown-content {
-        padding: 12px 16px;
+    .card-metodologia p {
         font-size: 0.9rem;
         line-height: 1.4;
     }
     
     .btn-saiba-mais {
-        width: 100%;
-        padding: 10px 16px;
-        font-size: 0.9rem;
-        margin-top: 8px;
+        padding: 8px 14px;
+        font-size: 0.85rem;
+        margin-top: 10px;
     }
     
-    /* Better search results */
+    .dropdown-content {
+        padding: 10px 12px;
+        font-size: 0.85rem;
+        line-height: 1.3;
+        max-width: 200px;
+    }
+
+    .map-section {
+        padding: 40px 0;
+    }
+    
+    .map-section h1 {
+        font-size: 1.8rem;
+        margin-bottom: 30px;
+        padding: 0 12px;
+    }
+
+    .menu-map {
+        max-width: 240px;
+        margin: 0 auto 16px;
+        padding: 0 12px;
+    }
+
+    .menu-map button {
+        padding: 8px 12px;
+        font-size: 0.8rem;
+    }
+    
+    .map-search {
+        padding: 0 12px;
+        margin-bottom: 12px;
+    }
+    
+    .map-search input[type="search"] {
+        padding: 10px 14px;
+        font-size: 0.85rem;
+    }
+    
+    #map {
+        width: calc(100% - 24px);
+        height: 35vh;
+        margin: 0 auto;
+    }
+    
     .map-search-results {
-        max-height: 200px;
-        overflow-y: auto;
-        border-radius: 8px;
-        margin-top: 4px;
+        max-height: 180px;
+        border-radius: 6px;
+        margin-top: 3px;
     }
     
     .map-search-results li {
-        padding: 10px 16px;
-        font-size: 0.9rem;
-        border-bottom: 1px solid rgba(0,51,160,0.1);
+        padding: 8px 12px;
+        font-size: 0.85rem;
     }
-    
-    /* Improve footer layout */
-    .footer-section.social {
+
+    .cta-2 {
+        padding: 40px 12px;
         text-align: center;
-        margin-top: 20px;
+    }
+
+    .cta-2 h2 {
+        font-size: 1.8rem;
+        margin-bottom: 12px;
     }
     
-    .footer-section.social .icon-social {
-        margin: 0 8px 8px 8px;
+    .cta-2-text p {
+        font-size: 0.95rem;
+        margin-bottom: 20px;
+        line-height: 1.4;
+    }
+    
+    .cta-2 .btn-footer {
+        padding: 12px 28px;
+        font-size: 0.9rem;
+    }
+    
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: 18px;
+        padding: 0 12px;
+        text-align: center;
+    }
+    
+    .footer-section h2, .footer-section h3 {
+        font-size: 1rem;
+        margin-bottom: 12px;
+    }
+    
+    .footer-section p, .footer-section li {
+        font-size: 0.85rem;
+        line-height: 1.3;
+    }
+    
+    .icon-social {
+        width: 32px;
+        height: 32px;
+        margin: 0 4px;
+    }
+    
+    .autoral-rights {
+        margin-top: 25px;
+        padding-top: 12px;
+        font-size: 0.8rem;
+    }
+    
+    .news-modal-container {
+        padding: 30px 15px;
+        height: auto;
+        min-height: 100vh;
+    }
+    
+    .news-content p {
+        font-size: 0.95rem;
+        line-height: 1.5;
+        text-align: left;
+    }
+    
+    .news-date {
+        font-size: 0.85rem;
+        margin-bottom: 16px;
+    }
+    
+    .pagination-container {
+        flex-direction: column;
+        gap: 6px;
+        padding: 10px 12px;
+    }
+    
+    .pagination-container .btn,
+    .pagination-container button {
+        width: 100%;
+        max-width: 180px;
+        margin: 0 auto;
+        padding: 8px 16px !important;
+        font-size: 0.9rem !important;
+    }
+    
+    .pagination-container #pageInfo {
+        order: 0;
+        margin-bottom: 6px;
+        font-size: 0.9rem;
+    }
+    
+    /* Carousel controls */
+    .news-carousel-controls .carousel-btn,
+    .metodologia-carousel .carousel-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 1.1rem;
+        border-radius: 6px;
+    }
+    
+    .news-carousel-controls .prev-btn {
+        left: 5px;
+    }
+    
+    .news-carousel-controls .next-btn {
+        left: 50px;
+    }
+    
+    .metodologia-carousel .prev-btn {
+        left: 5px;
+    }
+    
+    .metodologia-carousel .next-btn {
+        right: 5px;
+    }
+    
+    .fechar-noticia {
+        position: fixed;
+        top: 15px;
+        right: 15px;
+        width: 40px;
+        height: 40px;
+        font-size: 1.3rem;
+        z-index: 1060;
+        background: rgba(0,0,0,0.7);
+        color: white;
+        border: none;
+        border-radius: 50%;
     }
 }
 

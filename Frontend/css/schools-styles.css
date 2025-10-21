@@ -194,16 +194,18 @@
 
 .escolas-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 32px;
     max-width: 1400px;
     margin: 0 auto;
     padding: 0 24px;
+    justify-items: center;
 }
 
 .escola-card {
     background: white;
     max-width: 420px;
+    width: 100%;
     padding: 32px;
     border-radius: 20px;
     box-shadow: 0 8px 32px rgba(0,51,160,0.1);
@@ -214,6 +216,7 @@
     border: 1px solid rgba(0,51,160,0.1);
     overflow: hidden;
     position: relative;
+    margin: 0 auto;
 }
 
 .escola-card::before {
@@ -410,12 +413,22 @@
 
 @media (max-width: 900px) {
     .container-hero-secundary {
-        padding: 60px 0;
-        min-height: 40vh;
+        padding: 50px 20px;
+        min-height: 45vh;
+    }
+    
+    .hero-secundary {
+        padding: 0;
     }
     
     .hero-secundary h1 {
-        font-size: 2.5rem;
+        font-size: 2.4rem;
+        line-height: 1.2;
+    }
+    
+    .hero-secundary p {
+        font-size: 1.1rem;
+        max-width: 500px;
     }
     
     .escolas {
@@ -425,140 +438,108 @@
     .escolas h2 {
         font-size: 2.4rem;
         margin-bottom: 50px;
+        padding: 0 20px;
     }
     
     .filtros {
         gap: 12px;
         margin-bottom: 50px;
         padding: 16px 20px;
+        max-width: 100%;
+        flex-wrap: wrap;
     }
     
     .filtros select, .filtros button {
-        min-width: 160px;
-        padding: 14px 24px;
-        font-size: 0.95rem;
+        min-width: 140px;
+        padding: 12px 20px;
+        font-size: 0.9rem;
+        flex: 1;
+        max-width: 200px;
     }
     
     .escolas-grid {
         gap: 24px;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        padding: 0 20px;
     }
     
     .escola-card {
         padding: 24px;
+        max-width: 100%;
+    }
+    
+    .btn-container {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .btn-whatsapp, .btn-instagram, .btn-maps {
+        flex: none;
+        width: 100%;
     }
 }
 
 @media (max-width: 700px) {
     .container-hero-secundary {
-        padding: 50px 0;
+        padding: 40px 16px;
+        min-height: 40vh;
     }
     
     .hero-secundary {
-        padding: 0 20px;
-    }
-    
-    .hero-secundary h1 {
-        font-size: 2.2rem;
-        margin-bottom: 20px;
-    }
-    
-    .hero-secundary p {
-        font-size: 1.1rem;
-        margin-bottom: 28px;
-    }
-    
-    .escolas {
-        padding: 50px 0;
-    }
-    
-    .escolas h2 {
-        font-size: 2.2rem;
-        margin-bottom: 40px;
-    }
-    
-    .filtros {
-        flex-direction: column;
-        align-items: center;
-        gap: 12px;
-        margin-bottom: 40px;
-        padding: 20px;
-        border-radius: 16px;
-    }
-    
-    .filtros select, .filtros button {
-        width: 100%;
-        max-width: 320px;
-        min-width: auto;
-    }
-    
-    .escolas-grid {
-        grid-template-columns: 1fr;
-        gap: 20px;
-        padding: 0 20px;
-    }
-    
-    .escola-card {
-        padding: 20px;
-    }
-    
-    .btn-container {
-        flex-direction: column;
-        gap: 10px;
-    }
-    
-    .btn-whatsapp, .btn-instagram {
-        flex: none;
-    }
-}
-
-@media (max-width: 480px) {
-    .container-hero-secundary {
-        padding: 40px 0;
-    }
-    
-    .hero-secundary {
-        padding: 0 16px;
+        padding: 0;
     }
     
     .hero-secundary h1 {
         font-size: 2rem;
         margin-bottom: 16px;
+        line-height: 1.1;
     }
     
     .hero-secundary p {
         font-size: 1rem;
         margin-bottom: 24px;
+        line-height: 1.5;
     }
     
     .escolas {
-        padding: 40px 0;
+        padding: 50px 0;
     }
     
     .escolas h2 {
         font-size: 2rem;
         margin-bottom: 35px;
+        padding: 0 16px;
     }
     
     .filtros {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
         margin-bottom: 35px;
         padding: 16px;
         border-radius: 12px;
+        max-width: calc(100% - 32px);
+        margin-left: auto;
+        margin-right: auto;
     }
     
     .filtros select, .filtros button {
-        max-width: 280px;
-        padding: 12px 20px;
-        font-size: 0.95rem;
+        width: 100%;
+        max-width: none;
+        min-width: auto;
+        padding: 12px 16px;
+        font-size: 0.9rem;
     }
     
     .escolas-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
         padding: 0 16px;
-        gap: 16px;
     }
     
     .escola-card {
-        padding: 16px;
+        padding: 20px;
+        max-width: 100%;
     }
     
     .escola-card h3 {
@@ -567,19 +548,119 @@
     }
     
     .escola-card img {
-        height: 160px;
+        height: 180px;
         margin-bottom: 16px;
     }
     
     .embed-map-responsive {
-        height: 160px;
+        height: 180px;
         margin-bottom: 16px;
     }
     
+    .btn-container {
+        flex-direction: column;
+        gap: 8px;
+        padding-top: 16px;
+    }
+    
     .btn-whatsapp, .btn-instagram, .btn-maps {
-        padding: 0 16px;
+        flex: none;
+        width: 100%;
         height: 40px;
         min-height: 40px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container-hero-secundary {
+        padding: 30px 12px;
+        min-height: 35vh;
+    }
+    
+    .hero-secundary {
+        padding: 0;
+    }
+    
+    .hero-secundary h1 {
+        font-size: 1.7rem;
+        margin-bottom: 12px;
+        line-height: 1.1;
+    }
+    
+    .hero-secundary p {
+        font-size: 0.95rem;
+        margin-bottom: 20px;
+        line-height: 1.4;
+    }
+    
+    .escolas {
+        padding: 40px 0;
+    }
+    
+    .escolas h2 {
+        font-size: 1.8rem;
+        margin-bottom: 30px;
+        padding: 0 12px;
+    }
+    
+    .filtros {
+        margin-bottom: 30px;
+        padding: 12px;
+        border-radius: 10px;
+        max-width: calc(100% - 24px);
+        gap: 8px;
+    }
+    
+    .filtros select, .filtros button {
+        padding: 10px 14px;
         font-size: 0.85rem;
+        border-radius: 25px;
+    }
+    
+    .escolas-grid {
+        padding: 0 12px;
+        gap: 14px;
+    }
+    
+    .escola-card {
+        padding: 16px;
+        border-radius: 16px;
+    }
+    
+    .escola-card h3 {
+        font-size: 1.1rem;
+        margin-bottom: 12px;
+        line-height: 1.2;
+    }
+    
+    .escola-card p {
+        font-size: 0.9rem;
+        margin-bottom: 10px;
+        line-height: 1.4;
+    }
+    
+    .escola-card img {
+        height: 150px;
+        margin-bottom: 12px;
+        border-radius: 10px;
+    }
+    
+    .embed-map-responsive {
+        height: 150px;
+        margin-bottom: 12px;
+        border-radius: 10px;
+    }
+    
+    .btn-container {
+        padding-top: 12px;
+        gap: 6px;
+    }
+    
+    .btn-whatsapp, .btn-instagram, .btn-maps {
+        padding: 0 12px;
+        height: 36px;
+        min-height: 36px;
+        font-size: 0.8rem;
+        border-radius: 18px;
     }
 }

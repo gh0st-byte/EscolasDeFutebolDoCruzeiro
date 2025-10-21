@@ -1,0 +1,255 @@
+/* Melhorias adicionais de responsividade */
+
+/* Otimizações para touch devices */
+@media (hover: none) and (pointer: coarse) {
+    .btn-whatsapp, .btn-instagram, .btn-maps, .cta-1, .btn-footer {
+        min-height: 44px;
+        min-width: 44px;
+        padding: 12px 20px;
+    }
+    
+    .dropdown-toggle {
+        min-height: 44px;
+        min-width: 44px;
+    }
+    
+    .carousel-btn {
+        min-height: 44px;
+        min-width: 44px;
+    }
+}
+
+/* Melhorias para orientação landscape em mobile */
+@media (max-width: 900px) and (orientation: landscape) {
+    .container-hero {
+        padding: 20px 16px;
+        min-height: 50vh;
+    }
+    
+    .hero h1 {
+        font-size: 1.8rem;
+        margin-bottom: 12px;
+    }
+    
+    .hero p {
+        font-size: 0.95rem;
+        margin-bottom: 16px;
+    }
+    
+    .news {
+        padding: 40px 0;
+    }
+    
+    .Metodologia {
+        padding: 40px 0;
+    }
+    
+    .map-section {
+        padding: 40px 0;
+    }
+    
+    #map {
+        height: 30vh;
+    }
+}
+
+/* Melhorias para telas muito pequenas (< 360px) */
+@media (max-width: 360px) {
+    body {
+        padding-top: 55px;
+    }
+    
+    header {
+        min-height: 55px;
+    }
+    
+    .container-logo {
+        padding: 6px 10px;
+    }
+    
+    .logo img {
+        height: 28px;
+    }
+    
+    .hero h1 {
+        font-size: 1.5rem;
+    }
+    
+    .news h2, .map-section h1, .cta-2 h2 {
+        font-size: 1.6rem;
+    }
+    
+    .Metodologia h1 {
+        font-size: 1.7rem;
+    }
+    
+    .card {
+        min-width: 220px;
+        width: 220px;
+    }
+    
+    .card-metodologia {
+        width: 200px;
+        min-width: 200px;
+    }
+    
+    .menu-map {
+        max-width: 220px;
+    }
+    
+    .menu-map button {
+        padding: 6px 10px;
+        font-size: 0.75rem;
+    }
+}
+
+/* Melhorias para telas grandes (> 1400px) */
+@media (min-width: 1400px) {
+    .hero {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    
+    .news-cards {
+        justify-content: center;
+    }
+    
+    .metodologia-text {
+        max-width: 1200px;
+        margin: 0 auto;
+        justify-content: center;
+    }
+    
+    .escolas-grid {
+        max-width: 1200px;
+        grid-template-columns: repeat(3, 1fr);
+        justify-items: center;
+    }
+}
+
+/* Melhorias para acessibilidade */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Melhorias para modo escuro */
+@media (prefers-color-scheme: dark) {
+    .map-search input[type="search"] {
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+    }
+    
+    .map-search input[type="search"]::placeholder {
+        color: rgba(255, 255, 255, 0.7);
+    }
+}
+
+/* Otimizações para impressão */
+@media print {
+    .dropdown, .carousel-btn, .btn-saiba-mais, .read-more-btn, 
+    .cta-1, .btn-footer, .fechar-noticia, .map-section {
+        display: none !important;
+    }
+    
+    body {
+        padding-top: 0;
+        font-size: 12pt;
+        line-height: 1.4;
+        color: black !important;
+        background: white !important;
+    }
+    
+    .hero h1, .news h2, .Metodologia h1 {
+        color: black !important;
+        font-size: 18pt;
+    }
+    
+    .card, .escola-card {
+        break-inside: avoid;
+        box-shadow: none !important;
+        border: 1px solid #ccc !important;
+    }
+}
+
+/* Melhorias específicas para carrossel */
+.news-cards, .metodologia-text {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Melhorias para formulários em mobile */
+@media (max-width: 480px) {
+    .form-control, .form-select {
+        font-size: 16px !important; /* Evita zoom no iOS */
+    }
+    
+    input[type="search"] {
+        font-size: 16px !important; /* Evita zoom no iOS */
+    }
+}
+
+/* Melhorias para loading states */
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid #0033a0;
+    border-top: 2px solid transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Melhorias para estados de hover em touch devices */
+@media (hover: hover) and (pointer: fine) {
+    .escola-card:hover {
+        transform: translateY(-8px);
+    }
+    
+    .card:hover {
+        transform: translateY(-10px);
+    }
+    
+    .card-metodologia:hover {
+        transform: translateY(-5px);
+    }
+}
+
+/* Melhorias para focus states */
+.nav-item:focus,
+.btn-whatsapp:focus,
+.btn-instagram:focus,
+.btn-maps:focus,
+.cta-1:focus,
+.btn-footer:focus {
+    outline: 2px solid #0033a0;
+    outline-offset: 2px;
+}
+
+/* Melhorias para contraste */
+@media (prefers-contrast: high) {
+    .card, .escola-card, .card-metodologia {
+        border: 2px solid #000;
+    }
+    
+    .btn-whatsapp, .btn-instagram, .btn-maps {
+        border: 2px solid #000;
+    }
+}
