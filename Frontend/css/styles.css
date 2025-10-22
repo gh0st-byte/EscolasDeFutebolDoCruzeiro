@@ -1,4 +1,26 @@
-/* RESET E BASE */
+/* ==========================================
+   📋 ÍNDICE DE CONTEÚDO
+   ==========================================
+   1. RESET E CONFIGURAÇÕES BASE
+   2. HEADER E NAVEGAÇÃO
+   3. DROPDOWN MENU
+   4. HERO SECTION
+   5. SEÇÃO DE NOTÍCIAS
+   6. SEÇÃO DE METODOLOGIA
+   7. CRIAS DA TOCA
+   8. SEÇÃO DE MAPA
+   9. CTA FRANQUEADO
+   10. MODALS
+   11. FOOTER
+   12. NEWS SECTION E LETTER
+   13. ANIMAÇÕES
+   14. MEDIA QUERIES
+   15. PRINT STYLES
+   ========================================== */
+
+/* ==========================================
+   1. RESET E CONFIGURAÇÕES BASE
+   ========================================== */
 * {
     margin: 0;
     padding: 0;
@@ -18,15 +40,16 @@ body {
     line-height: 1.6;
 }
 
-/* HEADER */
+/* ==========================================
+   2. HEADER E NAVEGAÇÃO
+   ========================================== */
 header {
     background: linear-gradient(135deg, #0033a061 0%, #1e5bb8 100%);
-    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     -moz-backdrop-filter: blur(10px);
     -ms-backdrop-filter: blur(10px);
     -o-backdrop-filter: blur(10px);
-    backdrop-filter: blur(10px);
     color: #fff;
     width: 100%;
     padding: 0;
@@ -41,10 +64,9 @@ header {
     overflow: hidden;
 }
 
-/* Header quando rolar */
 header.scrolled {
-    -webkit-backdrop-filter: blur(8px);
     backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
 }
 
 .container-logo {
@@ -88,7 +110,8 @@ nav {
     overflow: hidden;
 }
 
-.nav-item, .nav-franqueado {
+.nav-item,
+.nav-franqueado {
     color: #fff;
     text-decoration: none;
     font-weight: 600;
@@ -108,6 +131,11 @@ nav {
     height: 2px;
     background: gold;
     transition: width 0.3s ease;
+}
+
+.nav-item:hover {
+    color: gold;
+    transform: translateY(-2px);
 }
 
 .nav-item:hover::after {
@@ -140,7 +168,6 @@ nav button::before {
     height: 100%;
     background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
     transition: left 0.5s;
-    color: gold;
 }
 
 nav button a {
@@ -161,10 +188,11 @@ nav button:hover {
 
 nav button:hover::before {
     left: 100%;
-    cursor: pointer;
 }
 
-/* DROPDOWN MENU */
+/* ==========================================
+   3. DROPDOWN MENU
+   ========================================== */
 .dropdown-menu-end {
     background: linear-gradient(135deg, #0033a0 80%, #1e90ff 100%) !important;
     border: none;
@@ -172,9 +200,8 @@ nav button:hover::before {
     box-shadow: 0 8px 32px rgba(0,0,0,0.18);
     padding: 10px 0;
     min-width: 180px;
-    animation: fadeIn 0.5s, fadeOut 0.5s;
-    -webkit-backdrop-filter: blur(12px);
     backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     right: 0;
     left: auto;
     position: absolute;
@@ -194,16 +221,6 @@ nav button:hover::before {
     visibility: hidden;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-@keyframes fadeOut {
-    from { opacity: 1; }
-    to { opacity: 0; }
-}
-
 .dropdown-item {
     color: #fff !important;
     padding: 14px 28px;
@@ -216,7 +233,8 @@ nav button:hover::before {
     position: relative;
 }
 
-.dropdown-item:hover, .dropdown-item:focus {
+.dropdown-item:hover,
+.dropdown-item:focus {
     background: linear-gradient(90deg, #1e90ff 0%, #0033a0 100%);
     color: gold !important;
     transform: translateX(4px) scale(1.04);
@@ -243,18 +261,33 @@ nav button:hover::before {
     display: none !important;
 }
 
-.dropdown-toggle:focus, .dropdown-toggle:hover {
+.dropdown-toggle:focus,
+.dropdown-toggle:hover {
     background: linear-gradient(135deg, #1e90ff 80%, #0033a0 100%);
     color: gold !important;
     box-shadow: 0 4px 16px rgba(30,144,255,0.22);
     outline: none;
 }
 
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 1050;
+    min-width: 200px;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0,51,160,0.15);
+    border: 1px solid rgba(0,51,160,0.1);
+}
+
 .btn-link {
     text-decoration: none !important;
 }
 
-/* HERO SECTION */
+/* ==========================================
+   4. HERO SECTION
+   ========================================== */
 .container-hero {
     display: flex;
     flex-direction: column;
@@ -266,20 +299,7 @@ nav button:hover::before {
     width: 100%;
     overflow: hidden;
     position: relative;
-}
-
-a button {
-    background: none;
-    border: none;
-    font-size: inherit;
-    font-family: inherit;
-    cursor: pointer;
-    color: floralwhite;
-}
-
-.btn-footer{
-    align-items: baseline;
-    margin: 1rem !important;
+    z-index: 1;
 }
 
 .container-hero::before {
@@ -304,6 +324,21 @@ a button {
     gap: 60px;
     align-items: center;
     width: 100%;
+}
+
+.hero h1 {
+    font-size: 3.2rem;
+    font-weight: 900;
+    margin-bottom: 24px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    line-height: 1.1;
+    background: white;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -moz-background-clip: text;
+    -moz-text-fill-color: transparent;
 }
 
 .hero p {
@@ -334,6 +369,7 @@ a button {
 .hero-image img:hover {
     transform: scale(1.02);
 }
+
 .cta-1 {
     background: linear-gradient(135deg, transparent, rgba(255,255,255,0.1));
     color: #ffffff;
@@ -349,8 +385,8 @@ a button {
     display: inline-block;
     position: relative;
     overflow: hidden;
-    -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     box-shadow: 0 4px 15px rgba(255,255,255,0.2);
 }
 
@@ -374,126 +410,16 @@ a button {
 .cta-1:hover::before {
     left: 100%;
 }
-.hero h1 {
-    font-size: 3.2rem;
-    font-weight: 900;
-    margin-bottom: 24px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    line-height: 1.1;
-    background: white;
-    -webkit-background-clip: text;
-    -moz-background-clip: text;
-    -o-background-clip: text;
-    -ms-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    -moz-text-fill-color: transparent;
-    -o-text-fill-color: transparent;
-    -ms-text-fill-color: transparent;
-    background-clip: text;
-}
 
-/* Smooth Transitions */
-.hero h1, .hero p, .cta-1 {
-    opacity: 0;
-    transform: translateY(30px);
-    animation: fadeInUp 0.8s forwards;
-}
-
-.hero h1 { animation-delay: 0.3s; }
-.hero p { animation-delay: 0.5s; }
-.cta-1 { animation-delay: 0.7s; }
-
-.hero-image {
-    opacity: 0;
-    transform: translateX(30px);
-    animation: fadeInRight 0.8s forwards;
-    animation-delay: 0.4s;
-}
-
-@keyframes fadeInUp {
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes fadeInRight {
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-/* Scroll animations */
-@keyframes slideInFromBottom {
-    from {
-        opacity: 0;
-        transform: translateY(50px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.card, .card-metodologia, .benefit-card, .age-card {
-    animation: slideInFromBottom 0.6s ease-out;
-}
-
-/* Hover effects for interactive elements */
-.nav-item:hover {
-    color: gold;
-    transform: translateY(-2px);
-}
-
-.btn-ver-todas:hover, .btn-footer:hover {
-    transform: translateY(-3px) scale(1.05);
-}
-
-/* Loading animation for images */
-.hero-image img, .card img, .escola-card img {
-    opacity: 0;
-    animation: fadeIn 0.8s ease-in-out forwards;
-}
-
-
-
-
-/* NOTÍCIAS */
+/* ==========================================
+   5. SEÇÃO DE NOTÍCIAS
+   ========================================== */
 .news {
     background: #fff;
-    padding: 10px 0 ;
+    padding: 10px 0;
     text-align: center;
     position: relative;
     overflow: hidden;
-
-}
-
-.news-footer {
-    text-align: center;
-    margin-top: 4px;
-    padding: 0 20px;
-}
-
-.btn-ver-todas, .btn-footer {
-    background: linear-gradient(135deg, #0033a0, #1e5bb8);
-    color: white;
-    padding: 12px 24px;
-    border-radius: 25px;
-    text-decoration: none;
-    font-weight: 700;
-    font-size: 1rem;
-    transition: all 0.3s ease;
-    border: none;
-    display: inline-block;
-}
-
-.btn-ver-todas:hover, .btn-footer:hover {
-    background: linear-gradient(135deg, gold, #ffcc00);
-    color: #0033a0;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(255,204,0,0.4);
 }
 
 .news h2 {
@@ -518,14 +444,38 @@ a button {
     border-radius: 2px;
 }
 
+.news-carousel-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
 .news-carousel {
     width: 100%;
     height: 480px;
-    max-width: 1400px;
-    margin: 0 auto;
-    overflow: hidden;
     padding: 0 24px;
-    position: relative;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+}
+
+.news-carousel::-webkit-scrollbar {
+    height: 8px;
+}
+
+.news-carousel::-webkit-scrollbar-track {
+    background: rgba(0,51,160,0.1);
+    border-radius: 4px;
+}
+
+.news-carousel::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #0033a0, gold);
+    border-radius: 4px;
+}
+
+.news-carousel::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, gold, #0033a0);
 }
 
 .news-cards {
@@ -536,8 +486,9 @@ a button {
     flex-wrap: nowrap;
     width: fit-content;
     align-items: center;
-    justify-content: center;
-    margin: 0 auto;
+    justify-content: flex-start;
+    margin: 0;
+    padding: 0 0 10px 0;
 }
 
 .card {
@@ -550,32 +501,18 @@ a button {
     padding: 0 0 32px 0;
     display: flex;
     flex-direction: column;
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     border: 1px solid rgba(0,51,160,0.1);
     overflow: hidden;
     max-height: 400px;
     min-height: 400px;
     margin-top: 14px;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    -webkit-transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    -moz-transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    -ms-transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    -o-transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .card:hover {
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     transform: translateY(-14px);
     box-shadow: 0 20px 60px rgba(0,51,160,0.2);
     border-color: gold;
-    -webkit-transform: translateY(-14px);
-    -moz-transform: translateY(-14px);
-    -ms-transform: translateY(-14px);
-    -o-transform: translateY(-14px);
-    -webkit-transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    -moz-transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    -ms-transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    -o-transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .card img {
@@ -614,138 +551,115 @@ a button {
     font-size: 1rem;
 }
 
-/* Setas do carousel de notícias */
-.news-carousel-controls .carousel-btn {
+.news-footer {
+    text-align: center;
+    margin-top: 4px;
+    padding: 0 20px;
+}
+
+.btn-ver-todas,
+.btn-footer {
+    background: linear-gradient(135deg, #0033a0, #1e5bb8);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    border: none;
+    display: inline-block;
+    font-family: 'Montserrat', Arial, sans-serif;
+    min-height: 44px;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-ver-todas:hover,
+.btn-footer:hover {
+    background: linear-gradient(135deg, gold, #ffcc00);
+    color: #0033a0;
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 6px 20px rgba(255,204,0,0.4);
+}
+
+.btn-footer {
+    align-items: baseline;
+    margin: 1rem !important;
+}
+
+a button {
+    background: none;
+    border: none;
+    font-size: inherit;
+    font-family: inherit;
+    cursor: pointer;
+    color: floralwhite;
+}
+
+/* Carousel Controls - News */
+.news-carousel-controls {
     position: absolute;
     top: 50%;
+    left: 0;
+    right: 0;
     transform: translateY(-50%);
+    pointer-events: none;
+    z-index: 1001;
+}
+
+.news-carousel-controls .carousel-btn {
+    position: absolute;
     background: transparent;
     color: gold;
     border: 4px solid gold;
     border-radius: 8px;
     width: 44px;
     height: 44px;
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     cursor: pointer;
     transition: all 0.3s ease;
-    font-weight: bold;
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     font-weight: 900;
-    margin-top: 30px;
-    padding: 23px;
-    font-size: 1.8rem;
-}
-
-
-.carousel-controls .carousel-btn:focus {
-    outline: none;
-    box-shadow: 0 0 0 6px rgba(255,215,0,0.5);
-    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-direction: row;
-    
+    padding: 0;
+    pointer-events: auto;
 }
-
 
 .news-carousel-controls .carousel-btn:hover {
     background: #0033a0;
     color: white;
     border-color: #0033a0;
-    transform: translateY(-45%) scale(1.0);
-    -webkit-transform: translateY(-45%) scale(1.0);
-    -moz-transform: translateY(-45%) scale(1.0);
-    -ms-transform: translateY(-45%) scale(1.0);
-    -o-transform: translateY(-45%) scale(1.0);
+    transform: scale(1.1);
+}
+
+.news-carousel-controls .carousel-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 6px rgba(255,215,0,0.5);
 }
 
 .news-carousel-controls .prev-btn {
-    left: 10px;
+    left: 24px;
 }
 
 .news-carousel-controls .next-btn {
-    left: 64px;
+    right: 24px;
 }
 
-/* Setas do carousel de metodologia */
-.metodologia-carousel .carousel-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: linear-gradient(135deg, rgba(0,51,160,0.9), rgba(0,51,160,0.7));
-    color: gold;
-    border: 3px solid gold;
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    font-size: 1.5rem;
-    cursor: pointer;
-    z-index: 1000;
-    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 900;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-}
-
-.metodologia-carousel .carousel-btn:hover {
-    background: linear-gradient(135deg, gold, #ffcc00);
-    color: #0033a0;
-    border-color: #0033a0;
-    transform: translateY(-50%) scale(1.1);
-    box-shadow: 0 15px 40px rgba(255,215,0,0.4);
-}
-
-.metodologia-carousel .carousel-btn:active {
-    transform: translateY(-50%) scale(0.95);
-}
-
-.metodologia-carousel .prev-btn {
-    left: 20px;
-}
-
-.metodologia-carousel .next-btn {
-    right: 20px;
-}
-
-.carousel-btn:hover {
-    background: #0033a0;
-    color: white;
-    border-color: #0033a0;
-    transform: translateY(-50%) scale(1.1);
-}
-
-.prev-btn {
-    left: 10px;
-}
-
-.next-btn {
-    right: 10px;
-}
-
-.news-carousel-controls {
-    position: relative;
-}
-
-/* METODOLOGIA */
+/* ==========================================
+   6. SEÇÃO DE METODOLOGIA
+   ========================================== */
 .metodologia {
-    padding-top: 10px;
+    padding: 80px 0;
     background: url('../assets/img/FUNDO AZUL TEXTURIZADO 1921x1080.png') no-repeat center center;
     background-size: cover;
     background-position: center;
     color: #fff;
     text-align: center;
     position: relative;
-    min-height: 500px;
+    min-height: 700px;
     z-index: 1;
-    padding-bottom: 100px;
 }
 
 .metodologia h1 {
@@ -756,6 +670,10 @@ a button {
     text-transform: uppercase;
     position: relative;
     z-index: 2;
+}
+.titulo-card-metodologia {
+    font-size: 1rem !important;
+    margin-bottom: 30px;
 }
 
 .metodologia h1::after {
@@ -772,118 +690,46 @@ a button {
 
 .metodologia-carousel {
     position: relative;
+    max-width: 1400px;
     margin: 0 auto;
-    overflow: hidden;
-    perspective: 1200px;
-    height: 600px;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0 80px;
+    padding: 0 100px;
+    overflow: hidden;
 }
 
-/* Responsive carousel padding */
-@media (max-width: 768px) {
-    .metodologia-carousel {
-        padding: 0 40px;
-        height: auto;
-    }
-}
-
-@media (max-width: 480px) {
-    .metodologia-carousel {
-        padding: 0 20px;
-        height: auto;
-    }
-}
-
-.metodologia-text {
+.metodologia-track {
     display: flex;
     gap: 30px;
-    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    width: max-content;
+    transition: transform 0.5s ease;
+    width: 100%;
     position: relative;
-    z-index: 2;
-    padding: 0;
-    margin: 0;
-    transform-style: preserve-3d;
-    /* for mobile touch snapping */
-    scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
-}
-
-.metodologia-text.scrollable {
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
 }
 
 .metodologia-cards {
-    position: relative;
-    transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    transform-style: preserve-3d;
-    scroll-snap-align: center;
     flex: 0 0 auto;
-}
-
-.metodologia-cards.active {
-    transform: scale(1.05) translateZ(50px);
-    z-index: 10;
-}
-
-.metodologia-cards.prev {
-    transform: scale(0.85) translateX(-20px) rotateY(25deg) translateZ(-100px);
-    opacity: 0.6;
-    filter: blur(1px);
-}
-
-.metodologia-cards.next {
-    transform: scale(0.85) translateX(20px) rotateY(-25deg) translateZ(-100px);
-    opacity: 0.6;
-    filter: blur(1px);
-}
-
-.metodologia-cards.far {
-    transform: scale(0.7) translateZ(-200px);
-    opacity: 0.3;
-    filter: blur(2px);
-}
-
-/* Responsive gap */
-@media (max-width: 480px) {
-    .metodologia-text {
-        gap: 20px;
-        padding: 0 16px 80px 16px;
-    }
-}
-
-@media (min-width: 481px) and (max-width: 768px) {
-    .metodologia-text {
-        gap: 30px;
-    }
+    width: 350px;
+    min-width: 350px;
 }
 
 .card-metodologia {
     border-radius: 28px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.1);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
     padding: 40px 24px;
     aspect-ratio: 4/5;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition: all 0.4s ease;
     border: 2px solid rgba(255,255,255,0.2);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     cursor: pointer;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
     overflow: hidden;
     position: relative;
-    transform-style: preserve-3d;
-    width: 350px;
-    min-width: 220px;
 }
 
 .card-metodologia::before {
@@ -893,109 +739,84 @@ a button {
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(135deg, rgba(0,51,160,0.1), rgba(255,215,0,0.1));
-    opacity: 0;
-    transition: opacity 0.6s ease;
+    background: linear-gradient(135deg, rgba(0,51,160,0.75), rgba(0,102,153,0.65));
+    opacity: 1;
+    transition: opacity 0.4s ease;
     border-radius: 28px;
 }
 
-.card-metodologia::after {
-    content: '';
-    position: absolute;
-    top: -2px;
-    left: -2px;
-    right: -2px;
-    bottom: -2px;
-    background: linear-gradient(45deg, gold, #0033a0, gold);
-    background-size: 300% 300%;
-    border-radius: 30px;
-    z-index: -1;
-    opacity: 0;
-    animation: gradientShift 3s ease infinite;
-    transition: opacity 0.6s ease;
-}
-
-@keyframes gradientShift {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
-.metodologia-cards.active .card-metodologia::before {
-    opacity: 1;
-}
-
-.metodologia-cards.active .card-metodologia::after {
-    opacity: 1;
-}
-
-.metodologia-cards.active .card-metodologia {
-    box-shadow: 0 30px 80px rgba(0,0,0,0.5), 0 0 50px rgba(255,215,0,0.3);
-    border-color: gold;
-    transform: translateY(-10px);
-}
-
-/* Responsive card sizes */
-@media (max-width: 480px) {
-    .card-metodologia {
-        width: 250px;
-        padding: 30px 20px;
-    }
-}
-
-@media (min-width: 481px) and (max-width: 768px) {
-    .card-metodologia {
-        width: 300px;
-    }
-}
-
-@media (min-width: 769px) and (max-width: 1024px) {
-    .card-metodologia {
-        width: 320px;
-    }
-}
-
-@media (min-width: 1025px) {
-    .card-metodologia {
-        width: 350px;
-    }
-}
-
 .card-metodologia:hover {
-    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
     border-color: gold;
+    transform: translateY(-8px);
+}
+
+.card-metodologia:hover::before {
+    opacity: 0.8;
 }
 
 .card-metodologia h3 {
-    font-size: 1.18rem;
+    font-size: 1.5rem;
     font-weight: 900;
     margin-bottom: 16px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     color: #fff;
-    padding-bottom: 12px;
+    position: relative;
+    z-index: 1;
 }
 
 .card-metodologia p {
-    font-size: 1.01rem;
-    line-height: 1.5;
-    color: #e0e6f7;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: #fff;
     text-align: center;
     margin: 0;
+    position: relative;
+    z-index: 1;
 }
 
-.card-metodologia img {
-    display: block;
-    filter: brightness(0) invert(1);
+/* Metodologia Carousel Controls */
+.metodologia-carousel .carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0,51,160,0.9);
+    color: gold;
+    border: 3px solid gold;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    font-size: 2rem;
+    cursor: pointer;
+    z-index: 100;
     transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
 }
 
-.card-metodologia:hover img {
-    filter: brightness(0) invert(1) drop-shadow(0 0 10px rgba(255,255,255,0.8));
-    transform: scale(1.1);
+.metodologia-carousel .carousel-btn:hover {
+    background: gold;
+    color: #0033a0;
+    border-color: #0033a0;
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 12px 32px rgba(255,215,0,0.5);
 }
 
-/* Carousel controls */
+.metodologia-carousel .prev-btn {
+    left: 20px;
+}
+
+.metodologia-carousel .next-btn {
+    right: 20px;
+}
+
+/* Carousel General */
 .carousel-btn {
     position: absolute;
     top: 50%;
@@ -1021,42 +842,49 @@ a button {
     background: rgba(0,0,0,0.7);
 }
 
-.prev-btn { left: 16px; }
-.next-btn { right: 16px; }
+.prev-btn {
+    left: 16px;
+}
+
+.next-btn {
+    right: 16px;
+}
 
 /* Indicators */
 .metodologia-indicators {
     position: absolute;
-    bottom: 28px;
+    bottom: 30px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
-    gap: 10px;
-    z-index: 20;
+    gap: 12px;
+    z-index: 100;
 }
 
 .metodologia-indicator {
-    width: 12px;
-    height: 12px;
+    width: 14px;
+    height: 14px;
     border-radius: 50%;
-    background: rgba(255,255,255,0.35);
-    border: none;
+    background: rgba(255,255,255,0.4);
+    border: 2px solid rgba(255,255,255,0.6);
     cursor: pointer;
-    transition: background 0.2s ease, transform 0.2s ease;
+    transition: all 0.3s ease;
+}
+
+.metodologia-indicator:hover {
+    background: rgba(255,215,0,0.6);
+    transform: scale(1.1);
 }
 
 .metodologia-indicator.active {
     background: gold;
-    transform: scale(1.15);
+    border-color: gold;
+    transform: scale(1.2);
 }
 
-@media (max-width: 900px) {
-    .carousel-btn {
-        display: none;
-    }
-}
-
-/* CRIAS DA TOCA */
+/* ==========================================
+   7. CRIAS DA TOCA
+   ========================================== */
 .crias {
     background: transparent;
     padding: 80px 0;
@@ -1101,34 +929,9 @@ a button {
     transform: scale(1.02);
 }
 
-/* FECHAR NOTICIA */
-.fechar-noticia {
-    border: 2px solid #ff4d4d;
-    color: #ff4d4d;
-    background: rgba(255, 0, 0, 0.1);
-    font-weight: 700;
-    transition: all 0.3s ease;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    font-size: 1.5rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    z-index: 1060;
-}
-
-.fechar-noticia:hover {
-    background: #ff4d4d;
-    color: #fff;
-    transform: scale(1.1);
-}
-
-/* MAPA */
+/* ==========================================
+   8. SEÇÃO DE MAPA
+   ========================================== */
 .map-section {
     padding: 80px 0;
     background: linear-gradient(135deg, #002080 0%, #0033a0 100%);
@@ -1178,22 +981,22 @@ a button {
     cursor: pointer;
     transition: all 0.3s ease;
     flex: 1;
+    backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     -moz-backdrop-filter: blur(10px);
     -ms-backdrop-filter: blur(10px);
     -o-backdrop-filter: blur(10px);
-    backdrop-filter: blur(10px);
 }
 
 .menu-map button + button {
     border-left: 1px solid rgba(255,255,255,0.2);
 }
 
-.menu-map button.active-map, .menu-map button:hover {
+.menu-map button.active-map,
+.menu-map button:hover {
     background: gold;
     color: #0033a0;
     font-weight: 700;
-
 }
 
 #map {
@@ -1205,7 +1008,6 @@ a button {
     box-shadow: 0 12px 48px rgba(0,0,0,0.3);
 }
 
-/* Map search UI */
 .map-search {
     max-width: 1400px;
     margin: 0 auto 24px;
@@ -1216,7 +1018,7 @@ a button {
 .map-search input[type="search"] {
     width: 100%;
     padding: 16px 20px;
-    border:none;
+    border: none;
     height: 48px;
     border-bottom: #0044ff 4px solid;
     background: rgba(4, 80, 233, 0);
@@ -1226,7 +1028,6 @@ a button {
     color: yellow;
     font-weight: 900;
     text-transform: uppercase;
-
 }
 
 .map-search input[type="search"]:focus {
@@ -1281,7 +1082,7 @@ a button {
     background: #001d90;
 }
 
-/* Marker & Cluster Styles */
+/* Marker Styles */
 .marker-cluster-small {
     background: rgba(0, 51, 160, 0.6);
     border-radius: 50%;
@@ -1331,7 +1132,6 @@ a button {
     background: #0033a0;
 }
 
-/* Override marker cluster styles */
 .marker-cluster div {
     height: 100%;
     margin-left: 5px;
@@ -1351,7 +1151,9 @@ a button {
     box-shadow: 0 0 25px 10px rgba(255, 215, 0, 0.6);
 }
 
-/* CTA "SEJA UM FRANQUEADO" */
+/* ==========================================
+   9. CTA FRANQUEADO
+   ========================================== */
 .cta-2 {
     background: linear-gradient(135deg, #f8f9ff 0%, #e8f0ff 100%);
     color: #0033a0;
@@ -1359,6 +1161,7 @@ a button {
     text-align: center;
     position: relative;
     overflow: hidden;
+    z-index: 1;
 }
 
 .cta-2::before {
@@ -1370,6 +1173,18 @@ a button {
     bottom: 0;
     background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="1" fill="rgba(0,51,160,0.05)"/><circle cx="80" cy="40" r="0.8" fill="rgba(0,51,160,0.03)"/></svg>');
     pointer-events: none;
+}
+
+.cta-2::after {
+    content: '';
+    display: block;
+    position: absolute;
+    right: 8vw;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 420px;
+    height: 180px;
+    border-radius: 8px;
 }
 
 .cta-2-text {
@@ -1475,19 +1290,35 @@ a button {
     left: 100%;
 }
 
-.cta-2::after {
-    content: '';
-    display: block;
+/* ==========================================
+   10. MODALS
+   ========================================== */
+.fechar-noticia {
+    border: 2px solid #ff4d4d;
+    color: #ff4d4d;
+    background: rgba(255, 0, 0, 0.1);
+    font-weight: 700;
+    transition: all 0.3s ease;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: absolute;
-    right: 8vw;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 420px;
-    height: 180px;
-    border-radius: 8px;
+    top: 20px;
+    right: 20px;
+    z-index: 1060;
 }
 
-/* MODAL STYLES */
+.fechar-noticia:hover {
+    background: #ff4d4d;
+    color: #fff;
+    transform: scale(1.1);
+}
+
 .img-modal-news {
     width: 100%;
     max-width: 500px;
@@ -1534,7 +1365,96 @@ a button {
     background: #f4f4f4;
 }
 
-/* FOOTER */
+.news-modal-wireframe {
+    background: white;
+    border: none;
+    border-radius: 0;
+    position: relative;
+}
+
+.news-modal-wireframe::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.05)"/><circle cx="80" cy="40" r="1.5" fill="rgba(255,255,255,0.03)"/><circle cx="40" cy="80" r="1" fill="rgba(255,255,255,0.04)"/></svg>');
+    pointer-events: none;
+}
+
+.news-modal-container {
+    padding: 80px 60px;
+    height: 100vh;
+    overflow-y: auto;
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    max-width: 100%;
+}
+
+.news-modal-title {
+    color: #002080;
+    font-size: 3.2rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    line-height: 1.1;
+    margin: 0 0 50px 0;
+}
+
+.news-modal-image {
+    margin-bottom: 50px;
+    position: relative;
+}
+
+.news-modal-image img {
+    width: 100%;
+    max-width: 900px;
+    height: auto;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    transition: transform 0.3s ease;
+}
+
+.news-modal-image img:hover {
+    transform: scale(1.02);
+}
+
+.news-modal-text {
+    color: #002080;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.news-date {
+    color: gold;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.news-content h3 {
+    color: #0033a0;
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 25px;
+    line-height: 1.4;
+}
+
+.news-content p {
+    color: #333;
+    font-size: 1.2rem;
+    line-height: 1.8;
+    margin: 0;
+    text-align: justify;
+}
+
+/* ==========================================
+   11. FOOTER
+   ========================================== */
 footer {
     background: linear-gradient(135deg, #001a4d 0%, #002080 100%);
     color: #fff;
@@ -1565,7 +1485,8 @@ footer::before {
     z-index: 1;
 }
 
-.footer-section h2, .footer-section h3 {
+.footer-section h2,
+.footer-section h3 {
     color: gold;
     margin-bottom: 20px;
     font-weight: 700;
@@ -1574,10 +1495,14 @@ footer::before {
 .footer-section ul {
     list-style: none;
     padding: 0;
+    margin: 0;
 }
 
 .footer-section li {
     margin-bottom: 8px;
+    list-style: none;
+    display: inline-block;
+    margin: 0 8px;
 }
 
 .autoral-rights {
@@ -1601,12 +1526,6 @@ footer a:hover {
     transform: translateX(4px);
 }
 
-footer li {
-    list-style: none;
-    display: inline-block;
-    margin: 0 8px;
-}
-
 .icon-social {
     width: 40px;
     height: 40px;
@@ -1624,12 +1543,396 @@ footer li {
     background: gold;
 }
 
-footer ul {
-    padding: 0;
-    margin: 0;
+/* ==========================================
+   12. NEWS SECTION E LETTER
+   ========================================== */
+.news-section {
+    background: #fff;
+    padding: 80px 0;
+    min-height: 60vh;
 }
 
-/* RESPONSIVO */
+.news-header {
+    max-width: 1200px;
+    margin: 0 auto 60px;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.news-header h1 {
+    color: #0033a0;
+    font-size: 2.8rem;
+    font-weight: 900;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.news-filters {
+    display: flex;
+    gap: 8px;
+}
+
+.filter-btn {
+    background: transparent;
+    border: 2px solid #0033a0;
+    color: #0033a0;
+    padding: 12px 24px;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Montserrat', Arial, sans-serif;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.filter-btn.active,
+.filter-btn:hover {
+    background: #0033a0;
+    color: #fff;
+}
+
+.news-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 30px;
+    margin-bottom: 60px;
+}
+
+.news-card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #f0f0f0;
+}
+
+.news-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+}
+
+.news-card img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+}
+
+.news-card-content {
+    padding: 24px;
+}
+
+.news-card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.news-category {
+    background: #0033a0;
+    color: #fff;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.news-card h3 {
+    color: #0033a0;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    line-height: 1.4;
+}
+
+.news-card p {
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 16px;
+}
+
+.news-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.read-more {
+    color: #0033a0;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.read-more:hover {
+    color: gold;
+}
+
+.news-pagination,
+.pagination-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 8px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.pagination-btn,
+.pagination-container .btn,
+.pagination-container button,
+.btn-outline-primary {
+    background: transparent !important;
+    border: 2px solid #0033a0 !important;
+    color: #0033a0 !important;
+    padding: 8px 16px !important;
+    border-radius: 24px !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+    min-width: 84px;
+    text-align: center;
+    transition: all 0.3s ease;
+    font-family: 'Montserrat', Arial, sans-serif;
+    text-decoration: none !important;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pagination-btn:hover:not(:disabled),
+.pagination-container .btn:hover:not(:disabled) {
+    background: #0033a0 !important;
+    color: #fff !important;
+}
+
+.pagination-btn:disabled,
+.pagination-container .btn:disabled,
+.pagination-container button[disabled] {
+    opacity: 0.5 !important;
+    cursor: not-allowed !important;
+}
+
+#pageInfo,
+.pagination-container #pageInfo {
+    color: #003366;
+    font-weight: 700;
+    padding: 6px 8px;
+}
+
+.news-letter {
+    background: #fff;
+    padding: 80px 20px;
+    min-height: 60vh;
+}
+
+.news-letter h1 {
+    color: #0033a0;
+    font-size: 2.8rem;
+    font-weight: 900;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.news-item {
+    background: linear-gradient(135deg, #fff 0%, #f8f9ff 100%);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0,51,160,0.1);
+    margin-bottom: 24px;
+    padding: 28px;
+    border: 1px solid rgba(0,51,160,0.1);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    overflow: hidden;
+}
+
+.news-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg, #0033a0 0%, rgb(0, 217, 255) 100%);
+    transition: width 0.4s ease;
+}
+
+.news-item:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 60px rgba(0,51,160,0.2);
+    border-color: rgb(64, 0, 255);
+}
+
+.news-item:hover::before {
+    width: 8px;
+}
+
+.news-item h2 {
+    color: #0033a0;
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+    line-height: 1.3;
+    letter-spacing: -0.5px;
+}
+
+.news-item .date {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.news-item p {
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    font-size: 1rem;
+}
+
+.read-more-btn {
+    background: linear-gradient(135deg, #0033a0 0%, #1e5bb8 100%);
+    border: none;
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 25px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 15px rgba(0,51,160,0.3);
+    font-family: 'Montserrat', Arial, sans-serif;
+    text-decoration: none !important;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.read-more-btn:hover {
+    background: linear-gradient(135deg, gold 0%, #ffcc00 100%);
+    color: #0033a0;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255,204,0,0.4);
+}
+
+/* ==========================================
+   13. ANIMAÇÕES
+   ========================================== */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInRight {
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInFromBottom {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Aplicação de Animações */
+.hero h1,
+.hero p,
+.cta-1 {
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeInUp 0.8s forwards;
+}
+
+.hero h1 {
+    animation-delay: 0.3s;
+}
+
+.hero p {
+    animation-delay: 0.5s;
+}
+
+.cta-1 {
+    animation-delay: 0.7s;
+}
+
+.hero-image {
+    opacity: 0;
+    transform: translateX(30px);
+    animation: fadeInRight 0.8s forwards;
+    animation-delay: 0.4s;
+}
+
+.card,
+.card-metodologia,
+.benefit-card,
+.age-card {
+    animation: slideInFromBottom 0.6s ease-out;
+}
+
+.hero-image img,
+.card img,
+.escola-card img {
+    opacity: 0;
+    animation: fadeIn 0.8s ease-in-out forwards;
+}
+
+/* ==========================================
+   14. MEDIA QUERIES
+   ========================================== */
+
+/* Large Tablets & Small Desktops - 1200px */
 @media (max-width: 1200px) {
     .hero {
         grid-template-columns: 1fr;
@@ -1649,17 +1952,17 @@ footer ul {
         padding: 0 20px;
     }
     
-    .metodologia-text {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 30px;
-        padding: 0 20px;
+    .metodologia-carousel {
+        padding: 0 80px;
+    }
+    
+    .metodologia-cards {
+        width: 300px;
+        min-width: 300px;
     }
     
     .card-metodologia {
-        width: 280px;
-        min-width: 280px;
+        padding: 35px 20px;
     }
     
     .container-logo {
@@ -1671,6 +1974,41 @@ footer ul {
     }
 }
 
+/* Tablets - 769px to 1024px */
+@media (max-width: 1024px) and (min-width: 769px) {
+    .container-hero {
+        padding: 60px 32px;
+    }
+    
+    .hero {
+        gap: 40px;
+    }
+    
+    .hero h1 {
+        font-size: 2.8rem;
+    }
+    
+    .news-cards {
+        padding: 0 32px;
+        gap: 20px;
+    }
+    
+    .card {
+        min-width: 280px;
+        width: 280px;
+    }
+    
+    .map-search {
+        padding: 0 32px;
+    }
+    
+    .footer-content {
+        padding: 0 32px;
+        gap: 40px;
+    }
+}
+
+/* Tablets & Small Desktops - 900px */
 @media (max-width: 900px) {
     .dropdown-menu-end {
         background: linear-gradient(135deg, #0033a0 0%, #1e5bb8 100%) !important;
@@ -1772,18 +2110,41 @@ footer ul {
         margin: 0 auto;
     }
 
-    .metodologia-text {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 20px;
-        padding: 0 20px;
+    .metodologia {
+        padding: 60px 0;
+        min-height: 600px;
+    }
+    
+    .metodologia h1 {
+        font-size: 2.4rem;
+        margin-bottom: 50px;
+    }
+    
+    .metodologia-carousel {
+        padding: 0 60px;
+    }
+    
+    .metodologia-cards {
+        width: 280px;
+        min-width: 280px;
     }
     
     .card-metodologia {
-        width: 260px;
-        min-width: 260px;
-        aspect-ratio: 3/4;
+        padding: 30px 18px;
+    }
+    
+    .card-metodologia h3 {
+        font-size: 1.3rem;
+    }
+    
+    .card-metodologia p {
+        font-size: 0.95rem;
+    }
+    
+    .metodologia-carousel .carousel-btn {
+        width: 50px;
+        height: 50px;
+        font-size: 1.6rem;
     }
 
     .menu-map {
@@ -1818,6 +2179,224 @@ footer ul {
     }
 }
 
+/* Tablets - 481px to 768px */
+@media (max-width: 768px) and (min-width: 481px) {
+    body {
+        margin: 0;
+    }
+    
+    header {
+        min-height: 70px;
+    }
+    
+    .container-logo {
+        padding: 12px 24px;
+    }
+    
+    .logo img {
+        height: 40px;
+    }
+    
+    .container-hero {
+        padding: 50px 24px;
+    }
+    
+    .hero {
+        flex-direction: column;
+        gap: 30px;
+        text-align: center;
+    }
+    
+    .hero h1 {
+        font-size: 2.4rem;
+        margin-bottom: 20px;
+        line-height: 1.2;
+    }
+    
+    .hero p {
+        font-size: 1.1rem;
+        margin-bottom: 24px;
+        max-width: 600px;
+    }
+    
+    .cta-1 {
+        padding: 16px 32px;
+        font-size: 1rem;
+    }
+    
+    .news {
+        padding: 60px 0;
+    }
+    
+    .news h2 {
+        font-size: 2.4rem;
+        margin-bottom: 40px;
+    }
+    
+    .news-cards {
+        padding: 0 24px;
+        gap: 18px;
+        justify-content: center;
+    }
+    
+    .card {
+        min-width: 300px;
+        width: 300px;
+    }
+    
+    .metodologia {
+        padding: 60px 0;
+        min-height: 550px;
+    }
+    
+    .metodologia h1 {
+        font-size: 2.2rem;
+        margin-bottom: 45px;
+    }
+    
+    .metodologia-carousel {
+        padding: 0 70px;
+    }
+    
+    .metodologia-cards {
+        width: 280px;
+        min-width: 280px;
+    }
+    
+    .card-metodologia {
+        padding: 32px 20px;
+    }
+    
+    .map-section {
+        padding: 60px 0;
+    }
+    
+    .map-section h1 {
+        font-size: 2.4rem;
+        margin-bottom: 40px;
+    }
+    
+    .menu-map {
+        max-width: 320px;
+        margin: 0 auto 24px;
+    }
+    
+    .menu-map button {
+        padding: 12px 20px;
+        font-size: 0.9rem;
+    }
+    
+    .map-search {
+        padding: 0 24px;
+        margin-bottom: 20px;
+    }
+    
+    .map-search input[type="search"] {
+        padding: 16px 20px;
+        font-size: 1rem;
+    }
+    
+    #map {
+        width: calc(100% - 48px);
+        height: 45vh;
+        margin: 0 auto;
+    }
+    
+    .cta-2 {
+        padding: 60px 24px;
+    }
+    
+    .cta-2 h2 {
+        font-size: 2.4rem;
+        margin-bottom: 20px;
+    }
+    
+    .cta-2-text p {
+        font-size: 1.1rem;
+        margin-bottom: 28px;
+    }
+    
+    .cta-2 .btn-footer {
+        padding: 16px 36px;
+        font-size: 1rem;
+    }
+    
+    .footer-content {
+        padding: 0 24px;
+        gap: 35px;
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .footer-section h2,
+    .footer-section h3 {
+        font-size: 1.2rem;
+        margin-bottom: 18px;
+    }
+    
+    .footer-section p,
+    .footer-section li {
+        font-size: 0.95rem;
+    }
+    
+    .icon-social {
+        width: 40px;
+        height: 40px;
+        margin: 0 8px;
+    }
+    
+    .autoral-rights {
+        margin-top: 35px;
+        padding-top: 20px;
+        font-size: 0.9rem;
+        grid-column: 1 / -1;
+    }
+    
+    .news-modal-container {
+        padding: 60px 40px;
+    }
+    
+    .news-modal-title {
+        font-size: 2.6rem;
+        margin-bottom: 40px;
+    }
+    
+    .news-content p {
+        font-size: 1.1rem;
+        line-height: 1.7;
+    }
+}
+
+/* Landscape Mode */
+@media (max-width: 768px) and (orientation: landscape) {
+    .container-hero {
+        padding: 30px 24px;
+    }
+    
+    .hero h1 {
+        font-size: 2rem;
+        margin-bottom: 12px;
+    }
+    
+    .hero p {
+        font-size: 0.95rem;
+        margin-bottom: 16px;
+    }
+    
+    #map {
+        height: 35vh;
+    }
+    
+    .news-modal-container {
+        padding: 30px 20px;
+    }
+    
+    .news-modal-title {
+        font-size: 1.8rem;
+        margin-bottom: 20px;
+    }
+}
+
+/* Mobile - 700px */
 @media (max-width: 700px) {
     body {
         padding-top: 65px;
@@ -1915,34 +2494,51 @@ footer ul {
         font-size: 0.95rem;
     }
 
-    .Metodologia {
-        padding: 60px 0;
+    .metodologia {
+        padding: 50px 0;
+        min-height: 500px;
     }
     
-    .Metodologia h1 {
-        font-size: 2.1rem;
+    .metodologia h1 {
+        font-size: 2rem;
         margin-bottom: 40px;
         padding: 0 16px;
     }
 
-    .metodologia-text {
-        padding: 0 16px;
-        gap: 16px;
+    .metodologia-carousel {
+        padding: 0 50px;
+    }
+    
+    .metodologia-cards {
+        width: 260px;
+        min-width: 260px;
     }
     
     .card-metodologia {
-        width: 240px;
-        min-width: 240px;
-        aspect-ratio: 3/4;
-        padding: 25px 18px;
+        padding: 28px 16px;
     }
     
     .card-metodologia h3 {
-        font-size: 1.1rem;
+        font-size: 1.2rem;
     }
     
     .card-metodologia p {
-        font-size: 0.95rem;
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }
+    
+    .metodologia-carousel .carousel-btn {
+        width: 44px;
+        height: 44px;
+        font-size: 1.4rem;
+    }
+    
+    .metodologia-carousel .prev-btn {
+        left: 10px;
+    }
+    
+    .metodologia-carousel .next-btn {
+        right: 10px;
     }
 
     .map-section {
@@ -2010,12 +2606,14 @@ footer ul {
         text-align: center;
     }
     
-    .footer-section h2, .footer-section h3 {
+    .footer-section h2,
+    .footer-section h3 {
         font-size: 1.1rem;
         margin-bottom: 16px;
     }
     
-    .footer-section p, .footer-section li {
+    .footer-section p,
+    .footer-section li {
         font-size: 0.9rem;
     }
     
@@ -2026,484 +2624,7 @@ footer ul {
     }
 }
 
-/* NEWS SECTION */
-.news-section {
-    background: #fff;
-    padding: 80px 0;
-    min-height: 60vh;
-}
-
-.news-header {
-    max-width: 1200px;
-    margin: 0 auto 60px;
-    padding: 0 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 20px;
-}
-
-.news-header h1 {
-    color: #0033a0;
-    font-size: 2.8rem;
-    font-weight: 900;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-}
-
-.news-filters {
-    display: flex;
-    gap: 8px;
-}
-
-.filter-btn {
-    background: transparent;
-    border: 2px solid #0033a0;
-    color: #0033a0;
-    padding: 12px 24px;
-    border-radius: 25px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.filter-btn.active,
-.filter-btn:hover {
-    background: #0033a0;
-    color: #fff;
-}
-
-.news-grid {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 30px;
-    margin-bottom: 60px;
-}
-
-.news-card {
-    background: #fff;
-    border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-    overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    border: 1px solid #f0f0f0;
-}
-
-.news-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 12px 40px rgba(0,0,0,0.15);
-}
-
-.news-card img {
-    width: 100%;
-    height: 220px;
-    object-fit: cover;
-}
-
-.news-card-content {
-    padding: 24px;
-}
-
-.news-card-meta {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 12px;
-}
-
-.news-category {
-    background: #0033a0;
-    color: #fff;
-    padding: 4px 12px;
-    border-radius: 12px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    text-transform: uppercase;
-}
-
-.news-date {
-    color: #666;
-    font-size: 0.9rem;
-}
-
-.news-card h3 {
-    color: #0033a0;
-    font-size: 1.3rem;
-    font-weight: 700;
-    margin-bottom: 12px;
-    line-height: 1.4;
-}
-
-.news-card p {
-    color: #555;
-    line-height: 1.6;
-    margin-bottom: 16px;
-}
-
-.news-card-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.read-more {
-    color: #0033a0;
-    font-weight: 600;
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-.read-more:hover {
-    color: gold;
-}
-
-.news-pagination {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    inset-block: 0;
-}
-
-.pagination-btn {
-    background: transparent;
-    border: 2px solid #0033a0;
-    color: #0033a0;
-    padding: 12px 24px;
-    border-radius: 25px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.pagination-btn:hover:not(:disabled) {
-    background: #0033a0;
-    color: #fff;
-}
-
-.pagination-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-#pageInfo {
-    color: #666;
-    font-weight: 600;
-}
-
-/* Fix pagination visibility and layout (override conflicting global button rules) */
-.pagination-container,
-.news-pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 12px;
-    flex-wrap: wrap;
-    padding: 8px 4px;
-}
-
-.pagination-container .btn,
-.pagination-container button,
-.pagination-btn,
-.btn-outline-primary {
-    /* stronger rule to ensure Bootstrap buttons remain visible */
-    background: transparent !important;
-    border: 2px solid #0033a0 !important;
-    color: #0033a0 !important;
-    padding: 8px 16px !important;
-    border-radius: 24px !important;
-    font-weight: 700 !important;
-    cursor: pointer !important;
-    min-width: 84px;
-    text-align: center;
-}
-
-.pagination-container .btn:disabled,
-.pagination-btn:disabled,
-.pagination-container button[disabled] {
-    opacity: 0.5 !important;
-    cursor: not-allowed !important;
-}
-
-.pagination-container #pageInfo,
-#pageInfo {
-    color: #003366;
-    font-weight: 700;
-    padding: 6px 8px;
-}
-
-@media (max-width: 480px) {
-    .pagination-container .btn,
-    .pagination-container button,
-    .pagination-btn,
-    .btn-outline-primary {
-        padding: 8px 12px !important;
-        font-size: 0.95rem !important;
-        border-radius: 20px !important;
-        min-width: 64px;
-    }
-
-    /* Stack the page info under the buttons on very small screens */
-    .pagination-container {
-        gap: 8px;
-    }
-
-    .pagination-container #pageInfo {
-        order: 3;
-        width: 100%;
-        text-align: center;
-        margin-top: 6px;
-    }
-}
-
-/* NEWS LETTER STYLES */
-.news-letter {
-    background: #fff;
-    padding: 80px 20px;
-    min-height: 60vh;
-}
-
-.news-letter h1 {
-    color: #0033a0;
-    font-size: 2.8rem;
-    font-weight: 900;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    text-align: center;
-    margin-bottom: 60px;
-}
-
-.news-item {
-    background: linear-gradient(135deg, #fff 0%, #f8f9ff 100%);
-    border-radius: 16px;
-    box-shadow: 0 8px 32px rgba(0,51,160,0.1);
-    margin-bottom: 24px;
-    padding: 28px;
-    border: 1px solid rgba(0,51,160,0.1);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    cursor: pointer;
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
-    position: relative;
-    overflow: hidden;
-}
-
-.news-item::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 4px;
-    height: 100%;
-    background: linear-gradient(180deg, #0033a0 0%, rgb(0, 217, 255) 100%);
-    transition: width 0.4s ease;
-}
-
-.news-item:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: 0 20px 60px rgba(0,51,160,0.2);
-    border-color: rgb(64, 0, 255);
-}
-
-.news-item:hover::before {
-    width: 8px;
-}
-
-.news-item h2 {
-    color: #0033a0;
-    font-size: 1.5rem;
-    font-weight: 800;
-    margin-bottom: 12px;
-    line-height: 1.3;
-    letter-spacing: -0.5px;
-}
-
-.news-item .date {
-    color: #666;
-    font-size: 0.9rem;
-    margin-bottom: 16px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.news-item p {
-    color: #555;
-    line-height: 1.6;
-    margin-bottom: 20px;
-    font-size: 1rem;
-}
-
-.read-more-btn {
-    background: linear-gradient(135deg, #0033a0 0%, #1e5bb8 100%);
-    border: none;
-    color: #fff;
-    padding: 12px 24px;
-    border-radius: 25px;
-    font-weight: 700;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    box-shadow: 0 4px 15px rgba(0,51,160,0.3);
-}
-
-.read-more-btn:hover {
-    background: linear-gradient(135deg, gold 0%, #ffcc00 100%);
-    color: #0033a0;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(255,204,0,0.4);
-}
-
-/* NEWS MODAL STYLES */
-.news-modal-wireframe {
-    background: white;
-    border: none;
-    border-radius: 0;
-    position: relative;
-}
-
-.news-modal-wireframe::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.05)"/><circle cx="80" cy="40" r="1.5" fill="rgba(255,255,255,0.03)"/><circle cx="40" cy="80" r="1" fill="rgba(255,255,255,0.04)"/></svg>');
-    pointer-events: none;
-}
-
-.news-modal-container {
-    padding: 80px 60px;
-    height: 100vh;
-    overflow-y: auto;
-    position: relative;
-    z-index: 1;
-    text-align: center;
-    max-width: 100%;
-}
-
-.news-modal-title {
-    color: #002080;
-    font-size: 3.2rem;
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    line-height: 1.1;
-    margin: 0 0 50px 0;
-}
-
-.news-modal-image {
-    margin-bottom: 50px;
-    position: relative;
-}
-
-.news-modal-image img {
-    width: 100%;
-    max-width: 900px;
-    height: auto;
-    border-radius: 16px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
-    transition: transform 0.3s ease;
-}
-
-.news-modal-image img:hover {
-    transform: scale(1.02);
-}
-
-.news-modal-text {
-    color: #002080;
-    max-width: 900px;
-    margin: 0 auto;
-}
-
-.news-date {
-    color: gold;
-    font-size: 1rem;
-    font-weight: 700;
-    margin-bottom: 30px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.news-content h3 {
-    color: #0033a0;
-    font-size: 1.6rem;
-    font-weight: 700;
-    margin-bottom: 25px;
-    line-height: 1.4;
-}
-
-.news-content p {
-    color: #333;
-    font-size: 1.2rem;
-    line-height: 1.8;
-    margin: 0;
-    text-align: justify;
-}
-
-/* Additional responsive improvements */
-/* Ensure buttons are consistent and touch-friendly */
-nav button,
-.cta-1,
-.cta-2 button,
-.btn-ver-todas,
-.btn-footer,
-.filter-btn,
-.pagination-btn,
-.read-more-btn {
-    font-family: 'Montserrat', Arial, sans-serif;
-    text-decoration: none !important;
-    min-height: 44px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* Fix hover state issues */
-.container-hero,
-.Metodologia,
-.crias,
-.cta-2 {
-    position: relative;
-    z-index: 1;
-}
-
-/* Responsive dropdown menu */
-.dropdown-menu {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    z-index: 1050;
-    min-width: 200px;
-    border-radius: 12px;
-    box-shadow: 0 8px 32px rgba(0,51,160,0.15);
-    border: 1px solid rgba(0,51,160,0.1);
-}
-
-.dropdown-item {
-    padding: 12px 20px;
-    font-size: 0.95rem;
-    transition: all 0.2s ease;
-}
-
-.dropdown-item:hover {
-    background: linear-gradient(135deg, #0033a0, #1e5bb8);
-    color: white;
-}
-
-/* Responsive improvements for small screens */
+/* Small Mobile - 576px */
 @media (max-width: 576px) {
     .dropdown-toggle {
         min-width: 44px;
@@ -2574,344 +2695,7 @@ nav button,
     }
 }
 
-/* Landscape orientation adjustments */
-@media (max-width: 768px) and (orientation: landscape) {
-    .container-hero {
-        padding: 30px 24px;
-    }
-    
-    .hero h1 {
-        font-size: 2rem;
-        margin-bottom: 12px;
-    }
-    
-    .hero p {
-        font-size: 0.95rem;
-        margin-bottom: 16px;
-    }
-    
-    #map {
-        height: 35vh;
-    }
-    
-    .news-modal-container {
-        padding: 30px 20px;
-    }
-    
-    .news-modal-title {
-        font-size: 1.8rem;
-        margin-bottom: 20px;
-    }
-}
-
-/* High DPI displays */
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-    .logo img {
-        image-rendering: -webkit-optimize-contrast;
-        image-rendering: crisp-edges;
-    }
-    
-    .icon-social {
-        image-rendering: -webkit-optimize-contrast;
-        image-rendering: crisp-edges;
-    }
-}
-
-/* Extra small devices optimization */
-@media (max-width: 360px) {
-    .hero h1 {
-        font-size: 1.7rem;
-    }
-    
-    .news h2,
-    .map-section h1,
-    .cta-2 h2 {
-        font-size: 1.8rem;
-    }
-    
-    .Metodologia h1 {
-        font-size: 1.9rem;
-    }
-    
-    .card {
-        min-width: 240px;
-        width: 240px;
-    }
-    
-    .menu-map {
-        max-width: 240px;
-    }
-    
-    .menu-map button {
-        padding: 8px 12px;
-        font-size: 0.8rem;
-    }
-    
-    .container-logo {
-        padding: 8px 12px;
-    }
-    
-    .logo img {
-        height: 32px;
-    }
-}
-
-/* Print styles */
-@media print {
-    .dropdown,
-    .carousel-btn,
-    .btn-saiba-mais,
-    .read-more-btn,
-    .cta-1,
-    .btn-footer,
-    .fechar-noticia {
-        display: none !important;
-    }
-    
-    body {
-        padding-top: 0;
-        font-size: 12pt;
-        line-height: 1.4;
-    }
-    
-    .news-modal-container {
-        padding: 20px;
-    }
-    
-    .news-modal-title {
-        font-size: 18pt;
-        color: #000;
-    }
-    
-    .news-content p {
-        font-size: 11pt;
-        color: #000;
-    }
-}
-
-
-/* Large tablet and small desktop - 769px to 1024px */
-@media (max-width: 1024px) and (min-width: 769px) {
-    /* Optimize for larger tablets */
-    .container-hero {
-        padding: 60px 32px;
-    }
-    
-    .hero {
-        gap: 40px;
-    }
-    
-    .hero h1 {
-        font-size: 2.8rem;
-    }
-    
-    .news-cards {
-        padding: 0 32px;
-        gap: 20px;
-    }
-    
-    .card {
-        min-width: 280px;
-        width: 280px;
-    }
-    
-    .metodologia-text {
-        padding: 0 32px;
-        gap: 20px;
-    }
-    
-    .map-search {
-        padding: 0 32px;
-    }
-    
-    .footer-content {
-        padding: 0 32px;
-        gap: 40px;
-    }
-}
-
-/* Tablet breakpoint - 481px to 768px */
-@media (max-width: 768px) and (min-width: 481px) {
-    body {
-        padding-top: 70px;
-    }
-    
-    header {
-        min-height: 70px;
-    }
-    
-    .container-logo {
-        padding: 12px 24px;
-    }
-    
-    .logo img {
-        height: 40px;
-    }
-    
-    .container-hero {
-        padding: 50px 24px;
-    }
-    
-    .hero {
-        flex-direction: column;
-        gap: 30px;
-        text-align: center;
-    }
-    
-    .hero h1 {
-        font-size: 2.4rem;
-        margin-bottom: 20px;
-        line-height: 1.2;
-    }
-    
-    .hero p {
-        font-size: 1.1rem;
-        margin-bottom: 24px;
-        max-width: 600px;
-    }
-    
-    .cta-1 {
-        padding: 16px 32px;
-        font-size: 1rem;
-    }
-    
-    .news {
-        padding: 60px 0;
-    }
-    
-    .news h2 {
-        font-size: 2.4rem;
-        margin-bottom: 40px;
-    }
-    
-    .news-cards {
-        padding: 0 24px;
-        gap: 18px;
-        justify-content: center;
-    }
-    
-    .card {
-        min-width: 300px;
-        width: 300px;
-    }
-    
-    .Metodologia {
-        padding: 70px 0;
-    }
-    
-    .Metodologia h1 {
-        font-size: 2.6rem;
-        margin-bottom: 50px;
-    }
-    
-    .metodologia-text {
-        padding: 0 24px;
-        gap: 18px;
-    }
-    
-    .card-metodologia {
-        aspect-ratio: 3/4;
-        padding: 35px 25px;
-    }
-    
-    .map-section {
-        padding: 60px 0;
-    }
-    
-    .map-section h1 {
-        font-size: 2.4rem;
-        margin-bottom: 40px;
-    }
-    
-    .menu-map {
-        max-width: 320px;
-        margin: 0 auto 24px;
-    }
-    
-    .menu-map button {
-        padding: 12px 20px;
-        font-size: 0.9rem;
-    }
-    
-    .map-search {
-        padding: 0 24px;
-        margin-bottom: 20px;
-    }
-    
-    .map-search input[type="search"] {
-        padding: 16px 20px;
-        font-size: 1rem;
-    }
-    
-    #map {
-        width: calc(100% - 48px);
-        height: 45vh;
-        margin: 0 auto;
-    }
-    
-    .cta-2 {
-        padding: 60px 24px;
-    }
-    
-    .cta-2 h2 {
-        font-size: 2.4rem;
-        margin-bottom: 20px;
-    }
-    
-    .cta-2-text p {
-        font-size: 1.1rem;
-        margin-bottom: 28px;
-    }
-    
-    .cta-2 .btn-footer {
-        padding: 16px 36px;
-        font-size: 1rem;
-    }
-    
-    .footer-content {
-        padding: 0 24px;
-        gap: 35px;
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .footer-section h2, .footer-section h3 {
-        font-size: 1.2rem;
-        margin-bottom: 18px;
-    }
-    
-    .footer-section p, .footer-section li {
-        font-size: 0.95rem;
-    }
-    
-    .icon-social {
-        width: 40px;
-        height: 40px;
-        margin: 0 8px;
-    }
-    
-    .autoral-rights {
-        margin-top: 35px;
-        padding-top: 20px;
-        font-size: 0.9rem;
-        grid-column: 1 / -1;
-    }
-    
-    .news-modal-container {
-        padding: 60px 40px;
-    }
-    
-    .news-modal-title {
-        font-size: 2.6rem;
-        margin-bottom: 40px;
-    }
-    
-    .news-content p {
-        font-size: 1.1rem;
-        line-height: 1.7;
-    }
-}
-
-/* Mobile breakpoint - up to 480px */
+/* Mobile - 480px and below */
 @media (max-width: 480px) {
     .news-modal-title {
         font-size: 1.8rem;
@@ -2922,10 +2706,13 @@ nav button,
     
     body {
         padding-top: 60px;
+        margin: 0;
     }
     
     header {
         min-height: 60px;
+        max-width: 100%;
+        display: flex;
     }
 
     .container-logo {
@@ -3025,49 +2812,66 @@ nav button,
         margin-bottom: 12px;
     }
 
-    .Metodologia {
-        padding: 50px 0;
+    .metodologia {
+        padding: 40px 0;
+        padding-bottom: 20px;
+        min-height: 450px;
     }
     
-    .Metodologia h1 {
-        font-size: 1.9rem;
-        margin-bottom: 35px;
+    .metodologia h1 {
+        font-size: 1.8rem;
+        margin-bottom: 30px;
         padding: 0 12px;
     }
+    .titulo-card-metodologia {
+        font-size: 0.8rem !important;
+    }
 
-    .metodologia-text {
-        padding: 0 12px;
-        gap: 12px;
+    .metodologia-carousel {
+        padding: 0 45px;
+        padding-bottom: 20px;
+    }
+    
+    .metodologia-cards {
+        width: 220px;
+        min-width: 220px;
     }
     
     .card-metodologia {
-        width: 220px;
-        min-width: 220px;
-        aspect-ratio: 3/4;
-        padding: 20px 15px;
+        padding: 24px 16px;
     }
     
     .card-metodologia h3 {
-        font-size: 1rem;
+        font-size: 1.1rem;
         margin-bottom: 12px;
     }
     
     .card-metodologia p {
-        font-size: 0.9rem;
+        font-size: 0.85rem;
         line-height: 1.4;
     }
     
-    .btn-saiba-mais {
-        padding: 8px 14px;
-        font-size: 0.85rem;
-        margin-top: 10px;
+    .metodologia-carousel .carousel-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 1.3rem;
     }
     
-    .dropdown-content {
-        padding: 10px 12px;
-        font-size: 0.85rem;
-        line-height: 1.3;
-        max-width: 200px;
+    .metodologia-carousel .prev-btn {
+        left: 5px;
+    }
+    
+    .metodologia-carousel .next-btn {
+        right: 5px;
+    }
+    
+    .metodologia-indicators {
+        bottom: 20px;
+    }
+    
+    .metodologia-indicator {
+        width: 10px;
+        height: 10px;
     }
 
     .map-section {
@@ -3146,12 +2950,14 @@ nav button,
         text-align: center;
     }
     
-    .footer-section h2, .footer-section h3 {
+    .footer-section h2,
+    .footer-section h3 {
         font-size: 1rem;
         margin-bottom: 12px;
     }
     
-    .footer-section p, .footer-section li {
+    .footer-section p,
+    .footer-section li {
         font-size: 0.85rem;
         line-height: 1.3;
     }
@@ -3206,29 +3012,12 @@ nav button,
         font-size: 0.9rem;
     }
     
-    /* Carousel controls */
-    .news-carousel-controls .carousel-btn,
-    .metodologia-carousel .carousel-btn {
-        width: 36px;
-        height: 36px;
-        font-size: 1.1rem;
-        border-radius: 6px;
-    }
-    
     .news-carousel-controls .prev-btn {
         left: 5px;
     }
     
     .news-carousel-controls .next-btn {
         left: 50px;
-    }
-    
-    .metodologia-carousel .prev-btn {
-        left: 5px;
-    }
-    
-    .metodologia-carousel .next-btn {
-        right: 5px;
     }
     
     .fechar-noticia {
@@ -3246,3 +3035,89 @@ nav button,
     }
 }
 
+/* Extra Small Devices - 360px */
+@media (max-width: 360px) {
+    .hero h1 {
+        font-size: 1.7rem;
+    }
+    
+    .news h2,
+    .map-section h1,
+    .cta-2 h2 {
+        font-size: 1.8rem;
+    }
+    
+    .metodologia h1 {
+        font-size: 1.9rem;
+    }
+    
+    .card {
+        min-width: 240px;
+        width: 240px;
+    }
+    
+    .menu-map {
+        max-width: 240px;
+    }
+    
+    .menu-map button {
+        padding: 8px 12px;
+        font-size: 0.8rem;
+    }
+    
+    .container-logo {
+        padding: 8px 12px;
+    }
+    
+    .logo img {
+        height: 32px;
+    }
+}
+
+/* High DPI Displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .logo img {
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+    }
+    
+    .icon-social {
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+    }
+}
+
+/* ==========================================
+   15. PRINT STYLES
+   ========================================== */
+@media print {
+    .dropdown,
+    .carousel-btn,
+    .btn-saiba-mais,
+    .read-more-btn,
+    .cta-1,
+    .btn-footer,
+    .fechar-noticia {
+        display: none !important;
+    }
+    
+    body {
+        padding-top: 0;
+        font-size: 12pt;
+        line-height: 1.4;
+    }
+    
+    .news-modal-container {
+        padding: 20px;
+    }
+    
+    .news-modal-title {
+        font-size: 18pt;
+        color: #000;
+    }
+    
+    .news-content p {
+        font-size: 11pt;
+        color: #000;
+    }
+}
