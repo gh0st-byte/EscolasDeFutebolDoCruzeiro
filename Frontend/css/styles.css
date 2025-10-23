@@ -423,6 +423,9 @@ nav button:hover::before {
 /* ==========================================
    5. SEÇÃO DE NOTÍCIAS
    ========================================== */
+
+
+
 .news {
     background: #fff;
     padding: 10px 0;
@@ -590,7 +593,13 @@ nav button:hover::before {
     left: 10%;
 }
 
+.btn-navigation .prev-btn{
+    order: 1 !important;
+}
 
+.btn-navigation .next-btn{
+    order: 2 !important;
+}
 
 .btn-ver-todas {
     background: linear-gradient(135deg, #0033a0, #1e5bb8);
@@ -613,7 +622,6 @@ nav button:hover::before {
 .btn-navigation{
     position: absolute;
     top: 50%;
-    transform: translateY(-50%);
     z-index: 10;
 }
 
@@ -672,6 +680,7 @@ a button {
     opacity: 0.4;
     cursor: not-allowed;
 }
+
 
 
 

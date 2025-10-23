@@ -20,7 +20,7 @@ function escapeHtml(text) {
 // Carregar dados das escolas
 async function carregarEscolas() {
     try {
-        const escolasResponse = await fetch('/Backend/api/data.php?file=schools.json');
+        const escolasResponse = await fetch('http://localhost:8000/Backend/api/data.php?file=schools.json');
         
         if (!escolasResponse.ok) {
             throw new Error(`Erro ao carregar escolas: ${escolasResponse.status}`);

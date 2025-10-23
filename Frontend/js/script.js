@@ -1,102 +1,77 @@
-// Função para escapar HTML
-function escapeHtml(text) {
-  const div = document.createElement('div');
-  div.textContent = text;
-  return div.innerHTML;
-}
+// Configuração de segurança
+const CONFIG = {
+  API_BASE: 'http://localhost:8000/Backend/api/data.php',
+  FALLBACK_IMAGE: 'https://images.pexels.com/photos/29920213/pexels-photo-29920213.jpeg',
+  DEBOUNCE_DELAY: 300,
+  MAP_INIT_DELAY: 100
+};
 
+// Utilitários de segurança
+const Security = {
+  escapeHtml: (text) => {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  },
+  
+  sanitizeUrl: (url) => {
+    if (!url || typeof url !== 'string') return '';
+    return url.startsWith('http') ? url : '';
+  },
+  
+  validateEmail: (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),
+  
+  validatePhone: (phone) => phone.replace(/\D/g, '').length >= 10,
+  
+  debounce: (fn, delay = CONFIG.DEBOUNCE_DELAY) => {
+    let timer;
+    return (...args) => {
+      clearTimeout(timer);
+      timer = setTimeout(() => fn.apply(this, args), delay);
+    };
+  }
+};
 
-// Carregar notícias para o index
-function loadIndexNews() {
+// Cache para dados
+const Cache = {
+  data: new Map(),
+  set: (key, value, ttl = 300000) => { // 5min TTL
+    Cache.data.set(key, { value, expires: Date.now() + ttl });
+  },
+  get: (key) => {
+    const item = Cache.data.get(key);
+    return item && item.expires > Date.now() ? item.value : null;
+  }
+};
 
-  fetch('http://localhost:8000/Backend/api/data.php?file=news.json')
-    .then(response => response.json())
-    .then(data => {
-      const container = document.getElementById('newsCardsContainer');
-      if (!container) return;
-      
-      // Reverter array para pegar as mais recentes (de baixo para cima)
-      const noticias = data.reverse().slice(0, 15);
-      
-      container.innerHTML = noticias.map((item, index) => {
-        const imageURL = item['1-image_URL'] || 'https://images.pexels.com/photos/29920213/pexels-photo-29920213.jpeg';
-        const title = item.title || 'Título da Notícia';
-        const content = item.content || 'Resumo da notícia...';
-        const resumo = content.length > 80 ? content.substring(0, 80) + '...' : content;
-        
-        return `
-          <div class="card">
-            <img src="${escapeHtml(imageURL)}" alt="${escapeHtml(title)}">
-            <h3>${escapeHtml(title)}</h3>
-            <p>${escapeHtml(resumo)}</p>
-            <a href="#" onclick="openIndexNewsModal(${index}); return false;">Leia mais</a>
-          </div>
-        `;
-      }).join('');
-      
-      // Armazenar notícias globalmente para o modal
-      window.indexNews = noticias;
-      
-      // Inicializar carrossel após carregar imagens das notícias
-      waitForImages(container).then(() => initNewsCarousel()).catch(() => initNewsCarousel());
-    })
-    .catch(error => {
-      console.error('Erro ao carregar notícias:', error);
-      const container = document.getElementById('newsCardsContainer');
-      if (container) {
-        container.innerHTML = `
-          <div class="card">
-            <img src="https://images.pexels.com/photos/29920213/pexels-photo-29920213.jpeg" alt="Notícia">
-            <h3>Últimas Notícias</h3>
-            <p>Acompanhe as novidades das Escolas do Cruzeiro...</p>
-          </div>
-        `;
-      }
-    });
-}
-
-// Aguarda as imagens dentro de um container serem carregadas
-function waitForImages(container) {
-  const imgs = Array.from(container.querySelectorAll('img'));
-  if (imgs.length === 0) return Promise.resolve();
-
-  const promises = imgs.map(img => {
-    // If image is already complete and decoded, resolve
-    if (img.complete) {
-      // try decode for better reliability
-      if (img.decode) return img.decode().catch(() => {});
-      return Promise.resolve();
-    }
-    return new Promise(resolve => {
-      img.addEventListener('load', resolve);
-      img.addEventListener('error', resolve);
-    });
-  });
-
-  return Promise.all(promises);
-}
+// API Helper
+const API = {
+  fetch: async (file) => {
+    const cached = Cache.get(file);
+    if (cached) return cached;
+    
+    const response = await fetch(`${CONFIG.API_BASE}?file=${encodeURIComponent(file)}`);
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    
+    const data = await response.json();
+    Cache.set(file, data);
+    return data;
+  }
+};
 
 // Header scroll effect
 window.addEventListener('scroll', () => {
-  const header = document.querySelector('header');
-  if (header) {
-    header.classList.toggle('scrolled', window.scrollY > 0);
-  }
+  document.querySelector('header')?.classList.toggle('scrolled', window.scrollY > 0);
 });
 
-// Variáveis globais
+// Variáveis globais do mapa
 let map, markers, schools = [];
 
 // Inicializar mapa
 function initMap() {
   const mapElement = document.getElementById('map');
-  if (!mapElement) return;
-  
-  // Verificar se Leaflet está carregado
-  if (typeof L === 'undefined') {
-    console.error('Leaflet não carregado');
-    return;
-  }
+  if (!mapElement || typeof L === 'undefined') return;
   
   map = L.map('map', {
     center: [-15.78, -47.93], 
@@ -117,11 +92,11 @@ function initMap() {
 
   markers = L.markerClusterGroup({
     maxClusterRadius: 50,
-    iconCreateFunction: function(cluster) {
-      const childCount = cluster.getChildCount();
-      const size = childCount < 10 ? 40 : childCount < 20 ? 50 : 60;
+    iconCreateFunction: (cluster) => {
+      const count = cluster.getChildCount();
+      const size = count < 10 ? 40 : count < 20 ? 50 : 60;
       return new L.DivIcon({ 
-        html: `<div style="background-color: #0033a0; width: ${size}px; height: ${size}px; border-radius: 50%; border: 2px solid white; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 14px;">${childCount}</div>`, 
+        html: `<div style="background-color: #0033a0; width: ${size}px; height: ${size}px; border-radius: 50%; border: 2px solid white; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 14px;">${count}</div>`, 
         className: 'custom-cluster', 
         iconSize: new L.Point(size, size) 
       });
@@ -132,38 +107,26 @@ function initMap() {
   setupMapButtons();
   setupMapSearch();
   
-  // Forçar redimensionamento do mapa
-  setTimeout(() => {
-    if (map) {
-      map.invalidateSize();
-      console.log('Mapa inicializado');
-    }
-  }, 500);
+  setTimeout(() => map?.invalidateSize(), 500);
 }
 
 // Carregar escolas
-function loadSchools() {
-  fetch("http://localhost:8000/Backend/api/data.php?file=schools.json")
-    .then(res => {
-      if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-      return res.json();
-    })
-    .then(data => {
-      schools = data;
-      addMarkers('Brasil');
-    })
-    .catch(error => console.error('Erro ao carregar escolas:', error));
+async function loadSchools() {
+  try {
+    schools = await API.fetch('schools.json');
+    addMarkers('Brasil');
+  } catch (error) {
+    console.error('Erro ao carregar escolas:', error);
+  }
 }
 
 // Criar ícone personalizado
-function createBlueCircleIcon() {
-  return L.divIcon({
-    className: 'custom-marker',
-    html: `<div style="background-color: #0033a0; width: 100%; height: 100%; border-radius: 50%; box-shadow: 0 0 10px 3px #0033a0;"></div>`,
-    iconSize: [20, 20],
-    iconAnchor: [10, 10]
-  });
-}
+const createBlueCircleIcon = () => L.divIcon({
+  className: 'custom-marker',
+  html: '<div style="background-color: #0033a0; width: 100%; height: 100%; border-radius: 50%; box-shadow: 0 0 10px 3px #0033a0;"></div>',
+  iconSize: [20, 20],
+  iconAnchor: [10, 10]
+});
 
 // Adicionar marcadores no mapa
 function addMarkers(region = 'all') {
@@ -173,53 +136,40 @@ function addMarkers(region = 'all') {
   
   const filteredSchools = schools.filter(p => {
     if (region === 'all') return true;
-    if (region === 'Brasil') return p.region && (p.region.toLowerCase() === 'brasil');
-    if (region === 'world') return p.region && p.region.toLowerCase() !== 'brasil' && p.region.toLowerCase() !== 'brazil';
-    return p.region && p.region.toLowerCase() === region.toLowerCase();
+    if (region === 'Brasil') return p.region?.toLowerCase() === 'brasil';
+    if (region === 'world') return p.region?.toLowerCase() !== 'brasil';
+    return p.region?.toLowerCase() === region.toLowerCase();
   });
   
   filteredSchools.forEach(p => {
-    if (!p.lat || !p.lng || isNaN(p.lat) || isNaN(p.lng)) {
-      console.log('Escola ignorada (coordenadas inválidas):', p.nome, p.lat, p.lng);
-      return;
-    }
-    
-    console.log('Adicionando marcador:', p.nome, p.lat, p.lng);
+    if (!p.lat || !p.lng || isNaN(p.lat) || isNaN(p.lng)) return;
     
     const nome = p.nome || p.cidade || 'Escola do Cruzeiro';
     const endereco = p.endereco_encontrado || p.endereco || 'Endereço não disponível';
     const telefone = p.telefone || '';
     
-    // Verificar WhatsApp
-    const hasWhatsapp = p.whatsapp && p.whatsapp.trim() && p.whatsapp !== 'null';
-    
-    // Verificar Instagram - pode estar em instagram_url ou instagram
+    const hasWhatsapp = p.whatsapp?.trim() && p.whatsapp !== 'null';
     let instagramUrl = '';
-    if (p.instagram_url && p.instagram_url.trim() && p.instagram_url !== 'null') {
-        instagramUrl = p.instagram_url;
-    } else if (p.instagram && p.instagram.trim() && p.instagram !== 'null' && p.instagram.startsWith('@')) {
-        instagramUrl = `https://www.instagram.com/${p.instagram.replace('@', '')}`;
+    if (p.instagram_url?.trim() && p.instagram_url !== 'null') {
+      instagramUrl = Security.sanitizeUrl(p.instagram_url);
+    } else if (p.instagram?.startsWith('@')) {
+      instagramUrl = `https://www.instagram.com/${p.instagram.replace('@', '')}`;
     }
     
     const popupContent = `
       <div class="escola-popup-card" style="min-width: 250px; text-align: center; padding: 15px;">
-        <h4 style="color: #0033a0; margin-bottom: 10px; font-size: 16px; font-weight: bold;">${escapeHtml(nome)}</h4>
-        <p style="margin-bottom: 8px; font-size: 14px; color: #555;"><strong>Endereço:</strong><br>${escapeHtml(endereco)}</p>
-        ${telefone ? `<p style="margin-bottom: 10px; font-size: 14px; color: #555;"><strong>Telefone:</strong> ${escapeHtml(telefone)}</p>` : ''}
+        <h4 style="color: #0033a0; margin-bottom: 10px; font-size: 16px; font-weight: bold;">${Security.escapeHtml(nome)}</h4>
+        <p style="margin-bottom: 8px; font-size: 14px; color: #555;"><strong>Endereço:</strong><br>${Security.escapeHtml(endereco)}</p>
+        ${telefone ? `<p style="margin-bottom: 10px; font-size: 14px; color: #555;"><strong>Telefone:</strong> ${Security.escapeHtml(telefone)}</p>` : ''}
         <div style="display: flex; gap: 8px; justify-content: center; margin-top: 12px;">
-          ${hasWhatsapp ? `<a href="${escapeHtml(p.whatsapp)}" target="_blank" rel="noopener" style="background: #25D366; color: white; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-size: 12px; font-weight: bold; display: inline-block;">WhatsApp</a>` : ''}
-          ${instagramUrl ? `<a href="${escapeHtml(instagramUrl)}" target="_blank" rel="noopener" style="background: #E1306C; color: white; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-size: 12px; font-weight: bold; display: inline-block;">Instagram</a>` : ''}
+          ${hasWhatsapp ? `<a href="${Security.escapeHtml(p.whatsapp)}" target="_blank" rel="noopener" style="background: #25D366; color: white; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-size: 12px; font-weight: bold; display: inline-block;">WhatsApp</a>` : ''}
+          ${instagramUrl ? `<a href="${Security.escapeHtml(instagramUrl)}" target="_blank" rel="noopener" style="background: #E1306C; color: white; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-size: 12px; font-weight: bold; display: inline-block;">Instagram</a>` : ''}
         </div>
       </div>
     `;
     
-    const latNum = Number(p.lat);
-    const lngNum = Number(p.lng);
-    const marker = L.marker([latNum, lngNum], {icon: createBlueCircleIcon(), title: nome});
-
-    // attach school id for reliable matching from search
-    try { marker.schoolId = p.id || p._id || p.codigo || null; } catch(e) { marker.schoolId = null; }
-
+    const marker = L.marker([Number(p.lat), Number(p.lng)], {icon: createBlueCircleIcon(), title: nome});
+    marker.schoolId = p.id || p._id || p.codigo || null;
     marker.bindPopup(popupContent, { maxWidth: 300, className: 'custom-popup' });
     markers.addLayer(marker);
   });
@@ -246,37 +196,37 @@ function setupMapButtons() {
   });
 }
 
-// --- Map search UI ---
+// Configurar busca do mapa
 function setupMapSearch() {
   const input = document.getElementById('mapSearch');
   const resultsList = document.getElementById('mapSearchResults');
   if (!input || !resultsList) return;
 
-  function clearResults() {
+  const clearResults = () => {
     resultsList.innerHTML = '';
     resultsList.style.display = 'none';
-  }
+  };
 
-  function showResults(items) {
-    resultsList.innerHTML = items.map((item, index) => `<li data-index="${index}" data-lat="${item.lat || ''}" data-lng="${item.lng || ''}">${escapeHtml(item.nome || item.cidade || item.endereco_encontrado || item.title || '')}</li>`).join('');
+  const showResults = (items) => {
+    resultsList.innerHTML = items.map((item, index) => 
+      `<li data-index="${index}" data-lat="${item.lat || ''}" data-lng="${item.lng || ''}">${Security.escapeHtml(item.nome || item.cidade || item.endereco_encontrado || '')}</li>`
+    ).join('');
     resultsList.style.display = items.length ? 'block' : 'none';
     resultsList._currentItems = items;
-  }
+  };
 
-  input.addEventListener('input', debounce((e) => {
+  input.addEventListener('input', Security.debounce((e) => {
     const q = e.target.value.trim().toLowerCase();
     if (!q) { clearResults(); return; }
 
-    // Search only in loaded schools from schools.json
     const results = schools.filter(s => {
-      const fields = ((s.nome||'') + ' ' + (s.cidade||'') + ' ' + (s.endereco_encontrado||'') + ' ' + (s.bairro||'')).toLowerCase();
+      const fields = `${s.nome || ''} ${s.cidade || ''} ${s.endereco_encontrado || ''} ${s.bairro || ''}`.toLowerCase();
       return fields.includes(q) && s.lat && s.lng;
     }).slice(0, 8);
 
     showResults(results);
-  }, 300));
+  }));
 
-  // click on results
   resultsList.addEventListener('click', (ev) => {
     const li = ev.target.closest('li');
     if (!li) return;
@@ -285,17 +235,13 @@ function setupMapSearch() {
     const items = resultsList._currentItems || [];
     const selected = items[index];
     
-    if (selected && selected.lat && selected.lng) {
+    if (selected?.lat && selected?.lng) {
       const lat = Number(selected.lat);
       const lng = Number(selected.lng);
       
-      // Center map on location
       map.setView([lat, lng], 15);
       
-      // Find and open the corresponding marker popup
       let markerFound = false;
-
-      // 1) try to match by id if available
       if (selected.id) {
         markers.eachLayer(layer => {
           if (markerFound) return;
@@ -306,91 +252,134 @@ function setupMapSearch() {
         });
       }
 
-      // 2) fallback: match by coordinates with looser tolerance
       if (!markerFound) {
         markers.eachLayer(layer => {
-          if (markerFound) return;
-          if (!layer.getLatLng) return;
+          if (markerFound || !layer.getLatLng) return;
           const markerLat = layer.getLatLng().lat;
           const markerLng = layer.getLatLng().lng;
           if (Math.abs(markerLat - lat) < 0.01 && Math.abs(markerLng - lng) < 0.01) {
-            setTimeout(() => { layer.openPopup(); }, 200);
+            setTimeout(() => layer.openPopup(), 200);
             markerFound = true;
           }
         });
       }
-
-      if (!markerFound) console.log('Marcador não encontrado para:', selected.nome, selected.id, lat, lng);
     }
     
     clearResults();
     input.value = '';
   });
 
-  // click outside to close
-  document.addEventListener('click', (e)=>{
+  document.addEventListener('click', (e) => {
     if (!e.target.closest('.map-search')) clearResults();
   });
 }
 
-// small debounce helper
-function debounce(fn, wait=200){
-  let t;
-  return function(...args){ clearTimeout(t); t = setTimeout(()=>fn.apply(this,args), wait); };
+// Carregar notícias para o index
+async function loadIndexNews() {
+  const container = document.getElementById('newsCardsContainer');
+  if (!container) return;
+  
+  try {
+    const data = await API.fetch('news.json');
+    const noticias = data.reverse().slice(0, 15);
+    
+    container.innerHTML = noticias.map((item, index) => {
+      const imageURL = Security.sanitizeUrl(item['1-image_URL']) || CONFIG.FALLBACK_IMAGE;
+      const title = item.title || 'Título da Notícia';
+      const content = item.content || 'Resumo da notícia...';
+      const resumo = content.length > 80 ? content.substring(0, 80) + '...' : content;
+      
+      return `
+        <div class="card">
+          <img src="${Security.escapeHtml(imageURL)}" alt="${Security.escapeHtml(title)}">
+          <h3>${Security.escapeHtml(title)}</h3>
+          <p>${Security.escapeHtml(resumo)}</p>
+          <a href="#" onclick="openIndexNewsModal(${index}); return false;">Leia mais</a>
+        </div>
+      `;
+    }).join('');
+    
+    window.indexNews = noticias;
+    
+    const imgs = container.querySelectorAll('img');
+    Promise.all(Array.from(imgs).map(img => 
+      img.complete ? Promise.resolve() : new Promise(resolve => {
+        img.addEventListener('load', resolve);
+        img.addEventListener('error', resolve);
+      })
+    )).then(() => initNewsCarousel()).catch(() => initNewsCarousel());
+  } catch (error) {
+    console.error('Erro ao carregar notícias:', error);
+    container.innerHTML = `
+      <div class="card">
+        <img src="${CONFIG.FALLBACK_IMAGE}" alt="Notícia">
+        <h3>Últimas Notícias</h3>
+        <p>Acompanhe as novidades das Escolas do Cruzeiro...</p>
+      </div>
+    `;
+  }
 }
 
 // Inicializar carrossel de notícias
 function initNewsCarousel() {
   const track = document.querySelector('.news-cards');
+  const carousel = document.querySelector('.news-carousel');
   const cards = document.querySelectorAll('.card');
   
-  if (!track || cards.length === 0) return;
+  if (!track || !carousel || cards.length === 0) return;
   let currentIndex = 0;
 
-  // Ensure we don't create controls more than once
-  const controlsClass = 'news-carousel-controls';
-  let controls = track.parentElement.querySelector('.' + controlsClass);
-
-  function calculateLayout() {
+  const calculateLayout = () => {
     const firstCard = track.querySelector('.card');
+    if (!firstCard) return { cardWidth: 360, visibleCards: 1, maxIndex: 0 };
+    
     const cardRect = firstCard.getBoundingClientRect();
     const style = window.getComputedStyle(firstCard);
-    const marginRight = parseFloat(style.marginRight || '0');
+    const marginRight = parseFloat(style.marginRight || '32');
     const cardWidth = Math.round(cardRect.width + marginRight);
-    const containerWidth = track.parentElement.clientWidth || track.parentElement.offsetWidth;
+    const containerWidth = carousel.clientWidth;
     const visibleCards = Math.max(1, Math.floor(containerWidth / cardWidth));
     const maxIndex = Math.max(0, cards.length - visibleCards);
     return { cardWidth, visibleCards, maxIndex };
-  }
+  };
 
-  function updateCarousel() {
+  const updateCarousel = () => {
     const { cardWidth, maxIndex } = calculateLayout();
+    const screenWidth = window.innerWidth;
+    
     if (currentIndex > maxIndex) currentIndex = maxIndex;
-    track.style.transition = 'transform 300ms ease';
-    track.style.transform = `translateX(-${currentIndex * cardWidth}px)`;
+    
+    if (screenWidth > 480) {
+      track.style.transition = 'transform 300ms ease';
+      track.style.transform = `translateX(-${currentIndex * cardWidth}px)`;
+      carousel.scrollLeft = 0;
+    } else {
+      track.style.transform = 'translateX(0)';
+      carousel.scrollLeft = currentIndex * cardWidth;
+    }
 
-    const prev = controls.querySelector('.prev-btn');
-    const next = controls.querySelector('.next-btn');
+
+    const next = document.getElementById('newsNextBtn');
+    const prev = document.getElementById('newsPrevBtn');
     if (prev) prev.disabled = currentIndex === 0;
     if (next) next.disabled = currentIndex >= maxIndex;
-  }
+  };
 
-  // Usar botões do HTML
   const prevBtn = document.getElementById('newsPrevBtn');
   const nextBtn = document.getElementById('newsNextBtn');
   
   if (prevBtn && nextBtn && !prevBtn.dataset.initialized) {
     prevBtn.addEventListener('click', () => {
-      const { maxIndex } = calculateLayout();
-      if (currentIndex < maxIndex) {
-        currentIndex++;
+      if (currentIndex > 0) {
+        currentIndex--;
         updateCarousel();
       }
     });
 
     nextBtn.addEventListener('click', () => {
-      if (currentIndex > 0) {
-        currentIndex--;
+      const { maxIndex } = calculateLayout();
+      if (currentIndex < maxIndex) {
+        currentIndex++;
         updateCarousel();
       }
     });
@@ -399,26 +388,431 @@ function initNewsCarousel() {
     nextBtn.dataset.initialized = 'true';
   }
 
-  // Responsive handling: recalc on resize
   if (!window._newsCarouselInitialized) {
-    window.addEventListener('resize', () => {
-      // small debounce
-      clearTimeout(window._newsCarouselResizeTimer);
-      window._newsCarouselResizeTimer = setTimeout(updateCarousel, 120);
-    });
+    window.addEventListener('resize', Security.debounce(() => {
+      currentIndex = 0;
+      updateCarousel();
+    }, 120));
     window._newsCarouselInitialized = true;
   }
 
-  // initial layout
   updateCarousel();
 }
 
-// Função para abrir modal de notícia no index
-function openIndexNewsModal(index) {
-  const news = window.indexNews[index];
+// Formulário de contato
+function initFormularioContato() {
+  const telefoneInput = document.getElementById('telefone');
+  const form = document.getElementById('whatsappForm');
+  
+  if (!telefoneInput || !form) return;
+  
+  let schoolsData = [];
+  
+  API.fetch('schools.json').then(data => {
+    schoolsData = data;
+  }).catch(console.error);
+  
+  telefoneInput.addEventListener('input', function(e) {
+    let value = e.target.value.replace(/\D/g, '');
+    if (value.length >= 11) {
+      value = value.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+    } else if (value.length >= 7) {
+      value = value.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
+    } else if (value.length >= 3) {
+      value = value.replace(/(\d{2})(\d{0,5})/, '($1) $2');
+    }
+    e.target.value = value;
+  });
+
+  const atualizarCidades = () => {
+    const estadoSelect = document.getElementById('estado');
+    const cidadeSelect = document.getElementById('cidade');
+    const unidadeSelect = document.getElementById('unidade');
+    
+    if (!estadoSelect || !cidadeSelect) return;
+    
+    const estado = estadoSelect.value;
+    cidadeSelect.innerHTML = '<option value="" disabled selected>Selecione a cidade</option>';
+    
+    if (schoolsData.length > 0) {
+      const cidadesUnicas = [...new Set(
+        schoolsData
+          .filter(escola => escola.estado === estado && escola.whatsapp?.trim() && escola.whatsapp !== 'null')
+          .map(escola => escola.cidade ? escola.cidade.split(/[\/\-–]/)[0].trim() : '')
+          .filter(cidade => cidade)
+      )];
+      
+      cidadesUnicas.forEach(cidade => {
+        cidadeSelect.innerHTML += `<option value="${cidade}">${cidade}</option>`;
+      });
+    }
+    
+    cidadeSelect.disabled = false;
+    if (unidadeSelect) {
+      unidadeSelect.innerHTML = '<option value="" disabled selected>Primeiro selecione a cidade</option>';
+      unidadeSelect.disabled = true;
+    }
+  };
+
+  const atualizarUnidades = () => {
+    const cidadeSelect = document.getElementById('cidade');
+    const estadoSelect = document.getElementById('estado');
+    const unidadeSelect = document.getElementById('unidade');
+    
+    if (!cidadeSelect || !estadoSelect || !unidadeSelect) return;
+    
+    const cidade = cidadeSelect.value;
+    const estado = estadoSelect.value;
+    
+    unidadeSelect.innerHTML = '<option value="" disabled selected>Selecione a unidade</option>';
+    
+    if (schoolsData.length > 0) {
+      const unidadesFiltradas = schoolsData.filter(escola => 
+        escola.estado === estado && 
+        escola.cidade?.includes(cidade) &&
+        escola.whatsapp?.trim() && 
+        escola.whatsapp !== 'null'
+      );
+      
+      if (unidadesFiltradas.length > 0) {
+        unidadesFiltradas.forEach(escola => {
+          const nomeExibicao = escola.nome || escola.cidade;
+          unidadeSelect.innerHTML += `<option value="${nomeExibicao}" data-whatsapp="${escola.whatsapp}">${nomeExibicao}</option>`;
+        });
+      } else {
+        unidadeSelect.innerHTML += '<option value="Consultar disponibilidade">Nenhuma unidade com WhatsApp disponível nesta região</option>';
+      }
+    }
+    
+    unidadeSelect.disabled = false;
+  };
+  
+  document.getElementById('estado')?.addEventListener('change', atualizarCidades);
+  document.getElementById('cidade')?.addEventListener('change', atualizarUnidades);
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const nome = document.getElementById('nome').value.trim();
+    const cidade = document.getElementById('cidade').value;
+    const estado = document.getElementById('estado').value;
+    const unidade = document.getElementById('unidade').value;
+    const telefone = telefoneInput.value.trim();
+    const mensagem = document.getElementById('mensagem').value.trim();
+
+    if (!nome || !cidade || !estado || !unidade || !telefone) {
+      alert('Por favor, preencha todos os campos obrigatórios.');
+      return;
+    }
+
+    if (!Security.validatePhone(telefone)) {
+      alert('Por favor, digite um número de WhatsApp válido.');
+      return;
+    }
+
+    const unidadeOption = document.getElementById('unidade').querySelector(`option[value="${unidade}"]`);
+    const whatsappUnidade = unidadeOption?.getAttribute('data-whatsapp');
+    
+    if (!whatsappUnidade || whatsappUnidade === 'Consultar disponibilidade') {
+      alert('Esta unidade não possui WhatsApp disponível. Tente outra unidade.');
+      return;
+    }
+    
+    const whatsappLimpo = whatsappUnidade.replace(/\D/g, '');
+    
+    let texto = `Olá me chamo ${nome}, muito prazer, sou de ${cidade} este é meu WhatsApp vim do site das ESCOLAS DO CRUZEIRO%0A%0A`;
+    texto += `Eu gostaria de marcar a aula experimental na sua unidade ${unidade}%0A se possível`;
+    
+    if (mensagem) texto += `%0AObservações: ${mensagem}%0A`;
+    
+    const url = `https://wa.me/${whatsappLimpo}?text=${texto}`;
+    window.open(url, '_blank');
+  });
+}
+
+// Salvar dados do licenciado
+async function salvarDadosLicenciado(dados) {
+  const urls = [
+    'https://calvus-sylvester-limply.ngrok-free.dev/Backend/admin/index.php',
+    '/Backend/admin/index.php',
+    '../Backend/admin/index.php',
+    'Backend/admin/index.php'
+  ];
+  
+  for (let i = 0; i < urls.length; i++) {
+    try {
+      const response = await fetch(urls[i], {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'ngrok-skip-browser-warning': 'true'
+        },
+        body: JSON.stringify({...dados, action: 'save_proposta'})
+      });
+      
+      if (response.ok) {
+        const result = await response.json();
+        const timestamp = new Date().toISOString();
+        const dadosComTimestamp = { ...dados, timestamp, id: result.id };
+        
+        let licenciados = JSON.parse(localStorage.getItem('licenciados') || '[]');
+        licenciados.push(dadosComTimestamp);
+        localStorage.setItem('licenciados', JSON.stringify(licenciados));
+        
+        return { ok: true };
+      }
+    } catch (error) {
+      console.log(`Tentativa ${i + 1} falhou:`, error.message);
+    }
+  }
+  
+  // Fallback: salvar apenas no localStorage
+  const timestamp = new Date().toISOString();
+  const dadosComTimestamp = { ...dados, timestamp };
+  
+  let licenciados = JSON.parse(localStorage.getItem('licenciados') || '[]');
+  licenciados.push(dadosComTimestamp);
+  localStorage.setItem('licenciados', JSON.stringify(licenciados));
+  
+  throw new Error('Todas as URLs falharam');
+}
+
+// Formulário de licenciado
+function initFormularioLicenciado() {
+  const telefoneInput = document.getElementById('telefone');
+  const form = document.getElementById('licenciadoForm');
+  
+  if (!telefoneInput || !form) return;
+  
+  telefoneInput.addEventListener('input', function(e) {
+    let value = e.target.value.replace(/\D/g, '');
+    if (value.length >= 11) {
+      value = value.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+    } else if (value.length >= 7) {
+      value = value.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
+    } else if (value.length >= 3) {
+      value = value.replace(/(\d{2})(\d{0,5})/, '($1) $2');
+    }
+    e.target.value = value;
+  });
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const nome = document.getElementById('nome').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const telefone = telefoneInput.value.trim();
+    const cidade = document.getElementById('cidade').value.trim();
+    const estado = document.getElementById('estado').value;
+    const experiencia = document.getElementById('experiencia').value;
+    const investimento = document.getElementById('investimento').value;
+    const mensagem = document.getElementById('mensagem').value.trim();
+
+    if (!nome || !email || !telefone || !cidade || !estado) {
+      alert('Por favor, preencha todos os campos obrigatórios.');
+      return;
+    }
+
+    if (!Security.validateEmail(email)) {
+      alert('Por favor, digite um e-mail válido.');
+      return;
+    }
+
+    if (!Security.validatePhone(telefone)) {
+      alert('Por favor, digite um número de WhatsApp válido.');
+      return;
+    }
+
+    const dados = {
+      nome,
+      email,
+      telefone,
+      cidade,
+      bairro: document.getElementById('bairro')?.value?.trim() || '',
+      estado,
+      experiencia,
+      investimento,
+      mensagem,
+      status: 'Em análise'
+    };
+
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const originalText = submitBtn.textContent;
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Enviando...';
+
+    salvarDadosLicenciado(dados)
+      .then(() => {
+        mostrarMensagemSucesso();
+        form.reset();
+      })
+      .catch(() => mostrarMensagemErro())
+      .finally(() => {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+      });
+  });
+}
+
+// Modais de mensagem
+const mostrarMensagemSucesso = () => {
+  const modal = criarModal(
+    '✓ Proposta Enviada com Sucesso!',
+    'Sua solicitação de licenciamento foi recebida e está sendo analisada pela nossa equipe. Entraremos em contato em breve caso a gente tenha interesse na sua proposta.',
+    '#28a745'
+  );
+  document.body.appendChild(modal);
+  setTimeout(() => modal.style.display = 'flex', 100);
+};
+
+const mostrarMensagemErro = () => {
+  const modal = criarModal(
+    '⚠ Erro no Envio',
+    'Houve um problema ao enviar sua proposta. Seus dados foram salvos localmente. Tente novamente em alguns minutos.',
+    '#dc3545'
+  );
+  document.body.appendChild(modal);
+  setTimeout(() => modal.style.display = 'flex', 100);
+};
+
+function criarModal(titulo, mensagem, cor) {
+  const modal = document.createElement('div');
+  modal.style.cssText = `
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+    background: rgba(0,0,0,0.5); display: none; align-items: center; 
+    justify-content: center; z-index: 10000;
+  `;
+  
+  modal.innerHTML = `
+    <div style="
+      background: white; padding: 40px; border-radius: 15px; 
+      max-width: 500px; margin: 20px; text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    ">
+      <div style="
+        width: 80px; height: 80px; border-radius: 50%; 
+        background: ${Security.escapeHtml(cor)}; margin: 0 auto 20px; 
+        display: flex; align-items: center; justify-content: center;
+        font-size: 40px; color: white; font-weight: bold;
+      ">${Security.escapeHtml(titulo.charAt(0))}</div>
+      <h2 style="color: #333; margin-bottom: 15px; font-size: 24px;">${Security.escapeHtml(titulo)}</h2>
+      <p style="color: #666; line-height: 1.6; margin-bottom: 30px; font-size: 16px;">${Security.escapeHtml(mensagem)}</p>
+      <button onclick="this.closest('div').parentElement.remove()" style="
+        background: ${Security.escapeHtml(cor)}; color: white; border: none; 
+        padding: 12px 30px; border-radius: 25px; 
+        font-size: 16px; font-weight: 600; cursor: pointer;
+        transition: all 0.3s ease;
+      ">Entendi</button>
+    </div>
+  `;
+  
+  modal.onclick = (e) => {
+    if (e.target === modal) modal.remove();
+  };
+  
+  return modal;
+}
+
+// Carregar notícias para a página news.html
+async function loadNewsPage() {
+  const container = document.getElementById('newsContainer');
+  if (!container) return;
+  
+  try {
+    const data = await API.fetch('news.json');
+    const noticias = data.reverse();
+    const itemsPerPage = 6;
+    let currentPage = 1;
+    const totalPages = Math.ceil(noticias.length / itemsPerPage);
+    
+    const renderPage = (page) => {
+      const start = (page - 1) * itemsPerPage;
+      const end = start + itemsPerPage;
+      const pageNews = noticias.slice(start, end);
+      
+      container.innerHTML = pageNews.map((item, index) => {
+        const globalIndex = start + index;
+        const imageURL = Security.sanitizeUrl(item['1-image_URL']) || CONFIG.FALLBACK_IMAGE;
+        const title = item.title || 'Título da Notícia';
+        const content = item.content || 'Conteúdo da notícia...';
+        const resumo = content.length > 150 ? content.substring(0, 150) + '...' : content;
+        
+        let dateText = '';
+        if (item.dayWeek && item.date && item.month) {
+          dateText = `${item.dayWeek}, ${item.date} de ${item.month}`;
+        }
+        
+        return `
+          <div class="news-item" onclick="openNewsModal(${globalIndex})">
+            <h2>${Security.escapeHtml(title)}</h2>
+            ${dateText ? `<div class="date">${Security.escapeHtml(dateText)}</div>` : ''}
+            <p>${Security.escapeHtml(resumo)}</p>
+            <button class="read-more-btn">Leia mais</button>
+          </div>
+        `;
+      }).join('');
+      
+      document.getElementById('pageInfo').textContent = `Página ${page} de ${totalPages}`;
+      document.getElementById('prevPage').disabled = page === 1;
+      document.getElementById('nextPage').disabled = page === totalPages;
+    };
+    
+    window.allNews = noticias;
+    renderPage(1);
+    
+    document.getElementById('prevPage').onclick = () => {
+      if (currentPage > 1) {
+        currentPage--;
+        renderPage(currentPage);
+      }
+    };
+    
+    document.getElementById('nextPage').onclick = () => {
+      if (currentPage < totalPages) {
+        currentPage++;
+        renderPage(currentPage);
+      }
+    };
+  } catch (error) {
+    console.error('Erro ao carregar notícias:', error);
+    container.innerHTML = '<p style="text-align: center; color: #666;">Erro ao carregar notícias.</p>';
+  }
+}
+
+// Abrir modal de notícia na página news.html
+function openNewsModal(index) {
+  const news = window.allNews?.[index];
   if (!news) return;
   
-  // Criar modal se não existir
+  document.getElementById('newsModalLabel').textContent = news.title;
+  
+  const imageContainer = document.getElementById('newsModalImage');
+  const imageUrl = Security.sanitizeUrl(news['1-image_URL']);
+  if (imageUrl) {
+    imageContainer.innerHTML = `<img src="${Security.escapeHtml(imageUrl)}" class="img-fluid mb-3" alt="Imagem da notícia">`;
+  } else {
+    imageContainer.innerHTML = '';
+  }
+  
+  let dateText = '';
+  if (news.dayWeek && news.date && news.month) {
+    dateText = `${news.dayWeek}, ${news.date} de ${news.month}`;
+  }
+  
+  document.getElementById('newsModalBody').innerHTML = `
+    ${dateText ? `<div class="news-date mb-3"><strong>${Security.escapeHtml(dateText)}</strong></div>` : ''}
+    ${news.subtitle ? `<h4 class="mb-3">${Security.escapeHtml(news.subtitle)}</h4>` : ''}
+    <div class="news-content">${Security.escapeHtml(news.content)}</div>
+  `;
+  
+  new bootstrap.Modal(document.getElementById('newsModal')).show();
+}
+
+// Abrir modal de notícia no index
+function openIndexNewsModal(index) {
+  const news = window.indexNews?.[index];
+  if (!news) return;
+  
   let modal = document.getElementById('indexNewsModal');
   if (!modal) {
     modal = document.createElement('div');
@@ -439,12 +833,12 @@ function openIndexNewsModal(index) {
     document.body.appendChild(modal);
   }
   
-  // Preencher conteúdo do modal
   document.getElementById('indexNewsModalLabel').textContent = news.title;
   
   const imageContainer = document.getElementById('indexNewsModalImage');
-  if (news['1-image_URL']) {
-    imageContainer.innerHTML = `<img src="${news['1-image_URL']}" class="img-fluid mb-3" alt="Imagem da notícia">`;
+  const imageUrl = Security.sanitizeUrl(news['1-image_URL']);
+  if (imageUrl) {
+    imageContainer.innerHTML = `<img src="${Security.escapeHtml(imageUrl)}" class="img-fluid mb-3" alt="Imagem da notícia">`;
   } else {
     imageContainer.innerHTML = '';
   }
@@ -455,377 +849,90 @@ function openIndexNewsModal(index) {
   }
   
   document.getElementById('indexNewsModalBody').innerHTML = `
-    ${dateText ? `<div class="news-date mb-3"><strong>${dateText}</strong></div>` : ''}
-    ${news.subtitle ? `<h4 class="mb-3">${news.subtitle}</h4>` : ''}
-    <div class="news-content">${news.content}</div>
+    ${dateText ? `<div class="news-date mb-3"><strong>${Security.escapeHtml(dateText)}</strong></div>` : ''}
+    ${news.subtitle ? `<h4 class="mb-3">${Security.escapeHtml(news.subtitle)}</h4>` : ''}
+    <div class="news-content">${Security.escapeHtml(news.content)}</div>
   `;
   
-  // Abrir modal
   new bootstrap.Modal(modal).show();
 }
 
-// Formulário de contato - formAulaWhatsapp.html
-function initFormularioContato() {
-  const telefoneInput = document.getElementById('telefone');
-  const cidadeSelect = document.getElementById('cidade');
-  const estadoSelect = document.getElementById('estado');
-  const unidadeSelect = document.getElementById('unidade');
-  const form = document.getElementById('whatsappForm');
-  
-  if (!telefoneInput || !form) return;
-  
-  let schoolsData = [];
-  
-  // Carregar dados das escolas
-  fetch('/Backend/api/data.php?file=schools.json')
-    .then(response => response.json())
-    .then(data => {
-      schoolsData = data;
-      console.log('Escolas carregadas:', schoolsData.length);
-    })
-    .catch(error => {
-      console.error('Erro ao carregar escolas:', error);
-    });
-  
-  // Máscara para telefone
-  telefoneInput.addEventListener('input', function(e) {
-    let value = e.target.value.replace(/\D/g, '');
-    if (value.length >= 11) {
-      value = value.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
-    } else if (value.length >= 7) {
-      value = value.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
-    } else if (value.length >= 3) {
-      value = value.replace(/(\d{2})(\d{0,5})/, '($1) $2');
-    }
-    e.target.value = value;
-  });
+// Controlar dropdown da metodologia
+function toggleDropdown(button) {
+  const dropdownContent = button.nextElementSibling;
+  const isActive = dropdownContent.classList.contains('active');
 
-  // Atualizar cidades baseado no estado
-  function atualizarCidades() {
-    if (!estadoSelect || !cidadeSelect) return;
-    
-    const estado = estadoSelect.value;
-    cidadeSelect.innerHTML = '<option value="" disabled selected>Selecione a cidade</option>';
-    
-    if (schoolsData.length > 0) {
-      const cidadesUnicas = [...new Set(
-        schoolsData
-          .filter(escola => escola.estado === estado && escola.whatsapp && escola.whatsapp.trim() && escola.whatsapp !== 'null')
-          .map(escola => {
-            if (escola.cidade) {
-              // Usar o campo cidade diretamente, removendo partes após barra ou hífen
-              return escola.cidade.split(/[\/\-–]/)[0].trim();
-            }
-            return '';
-          })
-          .filter(cidade => cidade)
-      )];
-      
-      cidadesUnicas.forEach(cidade => {
-        cidadeSelect.innerHTML += `<option value="${cidade}">${cidade}</option>`;
-      });
-    }
-    
-    cidadeSelect.disabled = false;
-    unidadeSelect.innerHTML = '<option value="" disabled selected>Primeiro selecione a cidade</option>';
-    unidadeSelect.disabled = true;
+  if (isActive) {
+    dropdownContent.classList.remove('active');
+    button.textContent = 'Saiba Mais';
+  } else {
+    dropdownContent.classList.add('active');
+    button.textContent = 'X';
   }
+}
 
-  // Atualizar unidades baseado na cidade/estado
-  function atualizarUnidades() {
-    if (!cidadeSelect || !estadoSelect || !unidadeSelect) return;
-    
-    const cidade = cidadeSelect.value;
-    const estado = estadoSelect.value;
-    
-    unidadeSelect.innerHTML = '<option value="" disabled selected>Selecione a unidade</option>';
-    
-    if (schoolsData.length > 0) {
-      const unidadesFiltradas = schoolsData.filter(escola => 
-        escola.estado === estado && 
-        escola.cidade && 
-        escola.cidade.includes(cidade) &&
-        escola.whatsapp && 
-        escola.whatsapp.trim() && 
-        escola.whatsapp !== 'null'
-      );
-      
-      if (unidadesFiltradas.length > 0) {
-        unidadesFiltradas.forEach(escola => {
-          const nomeExibicao = escola.nome || escola.cidade;
-          unidadeSelect.innerHTML += `<option value="${nomeExibicao}" data-whatsapp="${escola.whatsapp}">${nomeExibicao}</option>`;
-        });
-      } else {
-        unidadeSelect.innerHTML += '<option value="Consultar disponibilidade">Nenhuma unidade com WhatsApp disponível nesta região</option>';
-      }
-    }
-    
-    unidadeSelect.disabled = false;
-  }
-  
-  if (estadoSelect) estadoSelect.addEventListener('change', atualizarCidades);
-  if (cidadeSelect) cidadeSelect.addEventListener('change', atualizarUnidades);
+// Carousel da metodologia
+let metodologiaCurrentIndex = 0;
 
-  // Validação e envio
-  form.addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const nome = document.getElementById('nome').value.trim();
-    const cidade = cidadeSelect.value;
-    const estado = estadoSelect.value;
-    const unidade = unidadeSelect.value;
-    const telefone = telefoneInput.value.trim();
-    const mensagem = document.getElementById('mensagem').value.trim();
-
-    if (!nome || !cidade  || !estado || !unidade || !telefone) {
-      alert('Por favor, preencha todos os campos obrigatórios.');
-      return;
-    }
-
-    if (telefone.replace(/\D/g, '').length < 10) {
-      alert('Por favor, digite um número de WhatsApp válido.');
-      return;
-    }
-
-    // Obter WhatsApp da unidade selecionada
-    const unidadeOption = unidadeSelect.querySelector(`option[value="${unidade}"]`);
-    const whatsappUnidade = unidadeOption ? unidadeOption.getAttribute('data-whatsapp') : null;
-    
-    if (!whatsappUnidade || whatsappUnidade === 'Consultar disponibilidade') {
-      alert('Esta unidade não possui WhatsApp disponível. Tente outra unidade.');
-      return;
-    }
-    
-    // Limpar WhatsApp (remover caracteres especiais)
-    const whatsappLimpo = whatsappUnidade.replace(/\D/g, '');
-    
-    let texto = `Olá me chamo ${nome}, muito prazer, sou de ${cidade} este é meu WhatsApp vim do site das ESCOLAS DO CRUZEIRO%0A%0A`;
-    texto += `Eu gostaria de marcar a aula experimental na sua unidade ${unidade}%0A se possível`;
-
-    
-    if (mensagem) texto += `%0AObservações: ${mensagem}%0A`;
-    
-    
-    const url = `https://wa.me/${whatsappLimpo}?text=${texto}`;
-    window.open(url, '_blank');
+const updateMetodologiaIndicators = () => {
+  document.querySelectorAll('.metodologia-indicator').forEach((btn, i) => {
+    btn.classList.toggle('active', i === metodologiaCurrentIndex);
   });
-}
+};
 
-// Função para salvar dados da proposta
-function salvarDadosLicenciado(dados) {
-  // Tentar diferentes URLs baseado no ambiente
-  const urls = [
-    'https://calvus-sylvester-limply.ngrok-free.dev/Backend/admin/index.php',
-    '/Backend/admin/index.php',
-    '../Backend/admin/index.php',
-    'Backend/admin/index.php'
-  ];
+const updateMetodologiaCarousel = () => {
+  const track = document.getElementById('metodologiaCarousel');
+  const carousel = document.querySelector('.metodologia-carousel');
+  if (!track || !carousel) return;
   
-  async function tentarEnvio(urlIndex = 0) {
-    if (urlIndex >= urls.length) {
-      throw new Error('Todas as URLs falharam');
-    }
-    
-    try {
-      const response = await fetch(urls[urlIndex], {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'ngrok-skip-browser-warning': 'true'
-        },
-        body: JSON.stringify({...dados, action: 'save_proposta'})
-      });
-      
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}`);
-      }
-      
-      return await response.json();
-    } catch (error) {
-      console.log(`Tentativa ${urlIndex + 1} falhou:`, error.message);
-      return tentarEnvio(urlIndex + 1);
-    }
+  const cards = track.querySelectorAll('.metodologia-cards');
+  if (cards.length === 0) return;
+  
+  const cardWidth = cards[0].offsetWidth;
+  const gap = 30;
+  const carouselCenter = carousel.offsetWidth / 2;
+  const cardCenter = cardWidth / 2;
+  const offset = carouselCenter - cardCenter - (metodologiaCurrentIndex * (cardWidth + gap));
+  
+  track.style.transform = `translateX(${offset}px)`;
+  updateMetodologiaIndicators();
+};
+
+const prevSlide = () => {
+  if (metodologiaCurrentIndex > 0) {
+    metodologiaCurrentIndex--;
+    updateMetodologiaCarousel();
   }
-  
-  return tentarEnvio()
+};
 
-    .then(result => {
-      // Salvar no localStorage para backup
-      const timestamp = new Date().toISOString();
-      const dadosComTimestamp = { ...dados, timestamp, id: result.id };
-      
-      let licenciados = JSON.parse(localStorage.getItem('licenciados') || '[]');
-      licenciados.push(dadosComTimestamp);
-      localStorage.setItem('licenciados', JSON.stringify(licenciados));
-      
-      return { ok: true };
-    })
-    .catch(error => {
-      console.error('Erro ao salvar:', error);
-      // Fallback: salvar apenas no localStorage
-      const timestamp = new Date().toISOString();
-      const dadosComTimestamp = { ...dados, timestamp };
-      
-      let licenciados = JSON.parse(localStorage.getItem('licenciados') || '[]');
-      licenciados.push(dadosComTimestamp);
-      localStorage.setItem('licenciados', JSON.stringify(licenciados));
-      
-      throw error;
-    });
-}
-
-// Formulário de licenciado - formLicenciado.html
-function initFormularioLicenciado() {
-  const telefoneInput = document.getElementById('telefone');
-  const form = document.getElementById('licenciadoForm');
-  
-  if (!telefoneInput || !form) {
-    console.log('Elementos do formulário não encontrados');
-    return;
+const nextSlide = () => {
+  const track = document.getElementById('metodologiaCarousel');
+  const cards = track?.querySelectorAll('.metodologia-cards');
+  if (cards && metodologiaCurrentIndex < cards.length - 1) {
+    metodologiaCurrentIndex++;
+    updateMetodologiaCarousel();
   }
-  
-  console.log('Formulário de licenciado inicializado');
-  
-  // Máscara para telefone
-  telefoneInput.addEventListener('input', function(e) {
-    let value = e.target.value.replace(/\D/g, '');
-    if (value.length >= 11) {
-      value = value.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
-    } else if (value.length >= 7) {
-      value = value.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
-    } else if (value.length >= 3) {
-      value = value.replace(/(\d{2})(\d{0,5})/, '($1) $2');
-    }
-    e.target.value = value;
-  });
+};
 
-  // Validação e envio
-  form.addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const nome = document.getElementById('nome').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const telefone = telefoneInput.value.trim();
-    const cidade = document.getElementById('cidade').value.trim();
-    const estado = document.getElementById('estado').value;
-    const experiencia = document.getElementById('experiencia').value;
-    const investimento = document.getElementById('investimento').value;
-    const mensagem = document.getElementById('mensagem').value.trim();
-
-    if (!nome || !email || !telefone || !cidade || !estado) {
-      alert('Por favor, preencha todos os campos obrigatórios.');
-      return;
-    }
-
-    if (telefone.replace(/\D/g, '').length < 10) {
-      alert('Por favor, digite um número de WhatsApp válido.');
-      return;
-    }
-
-    // Dados para envio
-    const dados = {
-      nome,
-      email,
-      telefone,
-      cidade,
-      bairro: document.getElementById('bairro')?.value?.trim() || '',
-      estado,
-      experiencia,
-      investimento,
-      mensagem,
-      status: 'Em análise'
-    };
-
-    // Desabilitar botão durante envio
-    const submitBtn = form.querySelector('button[type="submit"]');
-    const originalText = submitBtn.textContent;
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Enviando...';
-
-    // Salvar dados
-    console.log('Enviando dados:', dados);
-    salvarDadosLicenciado(dados)
-      .then(response => {
-        console.log('Resposta recebida:', response);
-        mostrarMensagemSucesso();
-        form.reset();
-      })
-      .catch(error => {
-        console.error('Erro ao enviar:', error);
-        mostrarMensagemErro();
-      })
-      .finally(() => {
-        // Reabilitar botão
-        submitBtn.disabled = false;
-        submitBtn.textContent = originalText;
-      });
-  });
-}
-
-// Funções para mostrar mensagens
-function mostrarMensagemSucesso() {
-  const modal = criarModal(
-    '✓ Proposta Enviada com Sucesso!',
-    'Sua solicitação de licenciamento foi recebida e está sendo analisada pela nossa equipe. Entraremos em contato em breve caso a gente tenha interesse na sua proposta.',
-    '#28a745'
-  );
-  document.body.appendChild(modal);
-  setTimeout(() => modal.style.display = 'flex', 100);
-}
-
-function mostrarMensagemErro() {
-  const modal = criarModal(
-    '⚠ Erro no Envio',
-    'Houve um problema ao enviar sua proposta. Seus dados foram salvos localmente. Tente novamente em alguns minutos.',
-    '#dc3545'
-  );
-  document.body.appendChild(modal);
-  setTimeout(() => modal.style.display = 'flex', 100);
-}
-
-function criarModal(titulo, mensagem, cor) {
-  const modal = document.createElement('div');
-  modal.style.cssText = `
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-    background: rgba(0,0,0,0.5); display: none; align-items: center; 
-    justify-content: center; z-index: 10000;
-  `;
-  
-  modal.innerHTML = `
-    <div style="
-      background: white; padding: 40px; border-radius: 15px; 
-      max-width: 500px; margin: 20px; text-align: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    ">
-      <div style="
-        width: 80px; height: 80px; border-radius: 50%; 
-        background: ${cor}; margin: 0 auto 20px; 
-        display: flex; align-items: center; justify-content: center;
-        font-size: 40px; color: white; font-weight: bold;
-      ">${titulo.charAt(0)}</div>
-      <h2 style="color: #333; margin-bottom: 15px; font-size: 24px;">${titulo}</h2>
-      <p style="color: #666; line-height: 1.6; margin-bottom: 30px; font-size: 16px;">${mensagem}</p>
-      <button onclick="this.closest('div').parentElement.remove()" style="
-        background: ${cor}; color: white; border: none; 
-        padding: 12px 30px; border-radius: 25px; 
-        font-size: 16px; font-weight: 600; cursor: pointer;
-        transition: all 0.3s ease;
-      ">Entendi</button>
-    </div>
-  `;
-  
-  modal.onclick = (e) => {
-    if (e.target === modal) modal.remove();
-  };
-  
-  return modal;
-}
+const goToSlide = (index) => {
+  const track = document.getElementById('metodologiaCarousel');
+  const cards = track?.querySelectorAll('.metodologia-cards');
+  if (cards && index >= 0 && index < cards.length) {
+    metodologiaCurrentIndex = index;
+    updateMetodologiaCarousel();
+  }
+};
 
 // Inicialização principal
 document.addEventListener('DOMContentLoaded', () => {
   // Carregar notícias se estivermos na página index
   if (document.getElementById('newsCardsContainer')) {
     loadIndexNews();
+  }
+  
+  // Carregar notícias se estivermos na página news.html
+  if (document.getElementById('newsContainer')) {
+    loadNewsPage();
   }
   
   // Inicializar formulário de contato se estivermos na página
@@ -838,201 +945,29 @@ document.addEventListener('DOMContentLoaded', () => {
     initFormularioLicenciado();
   }
   
+  // Inicializar carousel de metodologia
+  if (document.getElementById('metodologiaCarousel')) {
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const indicators = document.getElementById('metodologiaIndicators');
+    
+    prevBtn?.addEventListener('click', prevSlide);
+    nextBtn?.addEventListener('click', nextSlide);
+    
+    indicators?.addEventListener('click', (e) => {
+      const btn = e.target.closest('.metodologia-indicator');
+      if (btn) {
+        const idx = Number(btn.dataset.index);
+        if (!isNaN(idx)) goToSlide(idx);
+      }
+    });
+    
+    window.addEventListener('resize', updateMetodologiaCarousel);
+    updateMetodologiaCarousel();
+  }
+  
   // Aguardar um pouco antes de inicializar o mapa
   setTimeout(() => {
     initMap();
-  }, 100);
+  }, CONFIG.MAP_INIT_DELAY);
 });
-
-// News functionality para news.html
-
-        let allNews = [];
-        let currentPage = 1;
-        const newsPerPage = 10;
-        
-        async function loadNews() {
-            try {
-                const response = await fetch('https://calvus-sylvester-limply.ngrok-free.dev/Backend/api/data.php?file=news.json');
-
-                if (!response.ok) throw new Error('Erro ao carregar notícias');
-                
-                allNews = await response.json();
-                if (!Array.isArray(allNews)) throw new Error('Dados inválidos');
-
-                allNews = allNews.reverse();
-                
-                displayNews();
-                updatePagination();
-            } catch (error) {
-                console.error('Erro:', error);
-                document.getElementById('newsContainer').innerHTML = '<p class="text-center text-danger">Erro ao carregar notícias</p>';
-            }
-        }
-
-        
-        function displayNews() {
-            const startIndex = (currentPage - 1) * newsPerPage;
-            const endIndex = startIndex + newsPerPage;
-            const newsToShow = allNews.slice(startIndex, endIndex);
-            
-            const container = document.getElementById('newsContainer');
-            
-            if (newsToShow.length === 0) {
-                container.innerHTML = '<p class="text-center">Nenhuma notícia encontrada</p>';
-                return;
-            }
-            
-            container.innerHTML = newsToShow.map((news, index) => `
-                <div class="news-item" onclick="openNewsModal(${startIndex + index})">
-                    <h2>${news.title}</h2>
-                    <div class="date">${news.dayWeek ? news.dayWeek + ', ' : ''}${news.date} de ${news.month}</div>
-                    <p>${news.content.substring(0, 150)}...</p>
-                    <button class="read-more-btn">Ler Mais</button>
-                </div>
-            `).join('');
-        }
-        
-        function updatePagination() {
-            const totalPages = Math.ceil(allNews.length / newsPerPage);
-            
-            document.getElementById('pageInfo').textContent = `Página ${currentPage} de ${totalPages}`;
-            document.getElementById('prevPage').disabled = currentPage === 1;
-            document.getElementById('nextPage').disabled = currentPage === totalPages;
-        }
-        
-        function openNewsModal(index) {
-            const news = allNews[index];
-            document.getElementById('newsModalLabel').textContent = news.title;
-            
-            const imageContainer = document.getElementById('newsModalImage');
-            if (news['1-image_URL']) {
-                imageContainer.innerHTML = `<img src="${news['1-image_URL']}" class="img-fluid mb-3" alt="Imagem da notícia">`;
-            } else {
-                imageContainer.innerHTML = '';
-            }
-            
-            let dateText = '';
-            if (news.dayWeek && news.date && news.month) {
-                dateText = `${news.dayWeek}, ${news.date} de ${news.month}`;
-            }
-            
-            document.getElementById('newsModalBody').innerHTML = `
-                ${dateText ? `<div class="news-date mb-3"><strong>${dateText}</strong></div>` : ''}
-                ${news.subtitle ? `<h4 class="mb-3">${news.subtitle}</h4>` : ''}
-                <div class="news-content">${news.content}</div>
-            `;
-            
-            new bootstrap.Modal(document.getElementById('newsModal')).show();
-        }
-        
-        document.addEventListener('DOMContentLoaded', () => {
-            loadNews();
-            
-            document.getElementById('prevPage').addEventListener('click', () => {
-                if (currentPage > 1) {
-                    currentPage--;
-                    window.scrollTo(0, 0);
-                    displayNews();
-                    updatePagination();
-                }
-            });
-            
-            document.getElementById('nextPage').addEventListener('click', () => {
-                const totalPages = Math.ceil(allNews.length / newsPerPage);v
-                if (currentPage < totalPages) {
-                    currentPage++;
-                    window.scrollTo(0, 0);
-                    displayNews();
-                    updatePagination();
-                }
-            });
-        });
-
-// Função para controlar dropdown da metodologia:
-function toggleDropdown(button) {
-    const dropdownContent = button.nextElementSibling;
-    const isActive = dropdownContent.classList.contains('active');
-
-    if (isActive) {
-        dropdownContent.classList.remove('active');
-        button.textContent = 'Saiba Mais';
-    } else {
-        dropdownContent.classList.add('active');
-        button.textContent = 'X';
-    }
-}
-
-// Carousel da metodologia
-let metodologiaCurrentIndex = 0;
-
-function updateMetodologiaIndicators() {
-    document.querySelectorAll('.metodologia-indicator').forEach((btn, i) => {
-        btn.classList.toggle('active', i === metodologiaCurrentIndex);
-    });
-}
-
-function updateMetodologiaCarousel() {
-    const track = document.getElementById('metodologiaCarousel');
-    const carousel = document.querySelector('.metodologia-carousel');
-    if (!track || !carousel) return;
-    
-    const cards = track.querySelectorAll('.metodologia-cards');
-    if (cards.length === 0) return;
-    
-    const cardWidth = cards[0].offsetWidth;
-    const gap = 30;
-    const carouselCenter = carousel.offsetWidth / 2;
-    const cardCenter = cardWidth / 2;
-    const offset = carouselCenter - cardCenter - (metodologiaCurrentIndex * (cardWidth + gap));
-    
-    track.style.transform = `translateX(${offset}px)`;
-    updateMetodologiaIndicators();
-}
-
-function prevSlide() {
-    if (metodologiaCurrentIndex > 0) {
-        metodologiaCurrentIndex--;
-        updateMetodologiaCarousel();
-    }
-}
-
-function nextSlide() {
-    const track = document.getElementById('metodologiaCarousel');
-    const cards = track?.querySelectorAll('.metodologia-cards');
-    if (cards && metodologiaCurrentIndex < cards.length - 1) {
-        metodologiaCurrentIndex++;
-        updateMetodologiaCarousel();
-    }
-}
-
-function goToSlide(index) {
-    const track = document.getElementById('metodologiaCarousel');
-    const cards = track?.querySelectorAll('.metodologia-cards');
-    if (cards && index >= 0 && index < cards.length) {
-        metodologiaCurrentIndex = index;
-        updateMetodologiaCarousel();
-    }
-}
-
-// Inicializar carousel de metodologia
-if (document.getElementById('metodologiaCarousel')) {
-    document.addEventListener('DOMContentLoaded', () => {
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
-        const indicators = document.getElementById('metodologiaIndicators');
-        
-        prevBtn?.addEventListener('click', prevSlide);
-        nextBtn?.addEventListener('click', nextSlide);
-        
-        indicators?.addEventListener('click', (e) => {
-            const btn = e.target.closest('.metodologia-indicator');
-            if (btn) {
-                const idx = Number(btn.dataset.index);
-                if (!isNaN(idx)) goToSlide(idx);
-            }
-        });
-        
-        window.addEventListener('resize', updateMetodologiaCarousel);
-        updateMetodologiaCarousel();
-    });
-}
