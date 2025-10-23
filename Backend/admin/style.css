@@ -247,6 +247,35 @@ button:hover {
     overflow: hidden;
 }
 
+.search-bar-admin {
+    padding: 1.5rem 2rem;
+    background: #f8f9fa;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.search-bar-admin input {
+    width: 100%;
+    padding: 12px 20px;
+    border: 2px solid #0033a0;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #0033a0;
+    background: white;
+    transition: all 0.3s ease;
+}
+
+.search-bar-admin input:focus {
+    outline: none;
+    border-color: #1e5bb8;
+    box-shadow: 0 4px 15px rgba(0,51,160,0.2);
+}
+
+.search-bar-admin input::placeholder {
+    color: rgba(0,51,160,0.5);
+    font-weight: 500;
+}
+
 .data-container h3 {
     background: #0033a0;
     color: white;

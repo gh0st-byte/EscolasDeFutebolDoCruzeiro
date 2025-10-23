@@ -650,6 +650,12 @@ if ($tab_atual === 'news.json' || $tab_atual === 'news_draft.json' || $tab_atual
 
         <!-- Lista de Dados -->
         <div class="data-container">
+            <?php if ($tab_atual !== 'licenciadosProposta.json'): ?>
+            <div class="search-bar-admin">
+                <input type="search" id="adminSearch" placeholder="Pesquisar..." aria-label="Pesquisar">
+            </div>
+            <?php endif; ?>
+            
             <?php if ($tab_atual === 'licenciadosProposta.json'): ?>
                 <div class="propostas-tabs">
                     <button class="proposta-tab active" onclick="filtrarPropostas('all')">Todas (<?= count($dados) ?>)</button>
@@ -1278,6 +1284,17 @@ if ($tab_atual === 'news.json' || $tab_atual === 'news_draft.json' || $tab_atual
                 fecharModalProposta();
             }
         }
+        
+        // Função de pesquisa
+        document.getElementById('adminSearch')?.addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const rows = document.querySelectorAll('tbody tr, .failed-item');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm) ? '' : 'none';
+            });
+        });
     </script>
 </body>
 </html>

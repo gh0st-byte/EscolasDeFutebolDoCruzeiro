@@ -61,7 +61,7 @@ header {
     z-index: 1005;
     min-height: 80px;
     transition: all 0.3s ease;
-    overflow: hidden;
+    overflow: visible;
 }
 
 header.scrolled {
@@ -193,6 +193,10 @@ nav button:hover::before {
 /* ==========================================
    3. DROPDOWN MENU
    ========================================== */
+.dropdown {
+    position: relative;
+}
+
 .dropdown-menu-end {
     background: linear-gradient(135deg, #0033a0 80%, #1e90ff 100%) !important;
     border: none;
@@ -202,21 +206,24 @@ nav button:hover::before {
     min-width: 180px;
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    right: 0;
-    left: auto;
-    position: absolute;
-    z-index: 1050;
+    right: 0 !important;
+    left: auto !important;
+    position: absolute !important;
+    z-index: 2000 !important;
+    top: 100% !important;
+    transform: none !important;
+    margin-top: 8px !important;
 }
 
 .dropdown-menu-end.show {
-    display: block;
-    animation: fadeIn 0.5s;
+    display: block !important;
+    animation: fadeIn 0.3s;
     opacity: 1;
     visibility: visible;
 }
 
 .dropdown-menu-end.hide {
-    animation: fadeOut 0.5s;
+    animation: fadeOut 0.3s;
     opacity: 0;
     visibility: hidden;
 }
@@ -270,15 +277,17 @@ nav button:hover::before {
 }
 
 .dropdown-menu {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    z-index: 1050;
+    position: absolute !important;
+    top: 100% !important;
+    left: auto !important;
+    right: 0 !important;
+    z-index: 2000 !important;
     min-width: 200px;
     border-radius: 12px;
     box-shadow: 0 8px 32px rgba(0,51,160,0.15);
     border: 1px solid rgba(0,51,160,0.1);
+    transform: none !important;
+    margin-top: 8px !important;
 }
 
 .btn-link {
@@ -554,17 +563,36 @@ nav button:hover::before {
     padding-bottom: 10px;
 }
 
+.aviso-mobile-V{
+    display: none;
+    color: #0033a0;
+    font-weight: 700;
+    margin-top: 16px;
+}
 .news-footer {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 16px;
-    margin-top: 24px;
-    padding: 0 20px;
+    gap: 24px;
+    margin-top: 0;
+    margin-bottom: 16px;
+    position: relative;
+    z-index: 1;
 }
 
-.btn-ver-todas,
-.btn-footer {
+.btn-navigation {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    align-self: flex-start;
+    padding-left: 24px;
+    left: 10%;
+}
+
+
+
+.btn-ver-todas {
     background: linear-gradient(135deg, #0033a0, #1e5bb8);
     color: white;
     padding: 12px 24px;
@@ -579,6 +607,14 @@ nav button:hover::before {
     min-height: 44px;
     align-items: center;
     justify-content: center;
+    margin-top: 1.5rem;
+}
+
+.btn-navigation{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
 }
 
 .btn-ver-todas:hover,
@@ -604,22 +640,10 @@ a button {
 }
 
 /* Carousel Controls - News */
-.news-carousel-controls {
-    position: absolute;
-    top: 50%;
-    left: 0;
-    right: 0;
-    transform: translateY(-50%);
-    pointer-events: none;
-    z-index: 1001;
-}
-
-.news-carousel-controls .carousel-btn {
-    position: absolute;
-    display: flex;
+.news-footer .carousel-btn {
     background: transparent;
     color: gold;
-    border: 6px solid gold;
+    border: 3px solid gold;
     border-radius: 8px;
     width: 44px;
     height: 44px;
@@ -631,18 +655,22 @@ a button {
     align-items: center;
     justify-content: center;
     padding: 0;
-    pointer-events: auto;
 }
 
-.news-carousel-controls .carousel-btn:hover {
+.news-footer .carousel-btn:hover {
     background: #0033a0;
     color: white;
     border-color: #0033a0;
 }
 
-.news-carousel-controls .carousel-btn:focus {
+.news-footer .carousel-btn:focus {
     outline: none;
-    box-shadow: 0 0 0 6px rgba(255,215,0,0.5);
+    box-shadow: 0 0 0 3px rgba(255,215,0,0.3);
+}
+
+.news-footer .carousel-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
 }
 
 
@@ -1206,11 +1234,15 @@ a button {
 .cta-2 {
     background: linear-gradient(135deg, #f8f9ff 0%, #e8f0ff 100%);
     color: #0033a0;
-    padding: 80px 0;
+    padding: 50px;
     text-align: center;
     position: relative;
     overflow: hidden;
     z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .cta-2::before {
@@ -1243,6 +1275,9 @@ a button {
     text-align: center;
     position: relative;
     z-index: 1;
+    align-items: center;
+    justify-content: center;
+
 }
 
 .cta-2-text p {
@@ -2009,7 +2044,7 @@ footer a:hover {
     }
     
     .news-carousel {
-        padding: 0 20px;
+        padding-bottom: 0;
     }
     
     .card {
@@ -2184,6 +2219,12 @@ footer a:hover {
         padding: 0 20px;
     }
 
+    .news-footer {
+        padding: 0 20px;
+        gap: 10px;
+        justify-content: flex-start;
+    }
+
     .news-cards {
         gap: 20px;
         padding: 0 20px;
@@ -2343,6 +2384,12 @@ footer a:hover {
         margin-bottom: 40px;
     }
     
+    .news-footer {
+        padding: 0 24px;
+        gap: 10px;
+        justify-content: flex-start;
+    }
+
     .news-cards {
         padding: 0 24px;
         gap: 18px;
@@ -2581,6 +2628,12 @@ footer a:hover {
         padding: 0 16px;
     }
 
+    .news-footer {
+        padding: 0 16px;
+        gap: 10px;
+        justify-content: flex-start;
+    }
+
     .news-cards {
         gap: 16px;
         padding: 0 16px;
@@ -2784,11 +2837,11 @@ footer a:hover {
         margin-top: 8px;
     }
     
-    .news-carousel-controls .carousel-btn {
+    .news-footer .carousel-btn {
         width: 40px;
         height: 40px;
-        font-size: 1.3rem;
-        border-radius: 6px;
+        font-size: 1.6rem;
+        border-width: 3px;
     }
     
     .metodologia-carousel .carousel-btn {
@@ -2822,6 +2875,17 @@ footer a:hover {
         line-height: 1.1;
         margin-bottom: 25px;
         padding: 0 10px;
+    }
+    .news-carousel {
+        padding-bottom: 0;
+        overflow-x: auto;
+    }
+
+    .btn-navigation{
+        display: none;
+    }
+    .aviso-mobile-V{
+        display: block;
     }
     
     body {
@@ -2901,6 +2965,13 @@ footer a:hover {
         font-size: 1.8rem;
         margin-bottom: 30px;
         padding: 0 12px;
+    }
+
+    .news-footer {
+        padding: 0 12px;
+        gap: 10px;
+        justify-content: flex-start;
+        flex-wrap: wrap;
     }
 
     .news-cards {
@@ -3139,12 +3210,11 @@ footer a:hover {
         font-size: 0.9rem;
     }
     
-    .news-carousel-controls .prev-btn {
-        left: 5px;
-    }
-    
-    .news-carousel-controls .next-btn {
-        left: 50px;
+    .news-footer .carousel-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 1.5rem;
+        border-width: 2px;
     }
     
     .fechar-noticia {

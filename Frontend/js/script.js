@@ -381,16 +381,16 @@ function initNewsCarousel() {
   
   if (prevBtn && nextBtn && !prevBtn.dataset.initialized) {
     prevBtn.addEventListener('click', () => {
-      if (currentIndex > 0) {
-        currentIndex--;
+      const { maxIndex } = calculateLayout();
+      if (currentIndex < maxIndex) {
+        currentIndex++;
         updateCarousel();
       }
     });
 
     nextBtn.addEventListener('click', () => {
-      const { maxIndex } = calculateLayout();
-      if (currentIndex < maxIndex) {
-        currentIndex++;
+      if (currentIndex > 0) {
+        currentIndex--;
         updateCarousel();
       }
     });
@@ -938,7 +938,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             
             document.getElementById('nextPage').addEventListener('click', () => {
-                const totalPages = Math.ceil(allNews.length / newsPerPage);
+                const totalPages = Math.ceil(allNews.length / newsPerPage);v
                 if (currentPage < totalPages) {
                     currentPage++;
                     window.scrollTo(0, 0);

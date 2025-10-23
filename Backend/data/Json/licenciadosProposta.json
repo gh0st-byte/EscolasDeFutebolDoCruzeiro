@@ -14,20 +14,6 @@
         "timestamp": "2024-10-15 14:23:11"
     },
     {
-        "id": 3,
-        "name": "Licenciado 3",
-        "email": "licenciado3@example.com",
-        "whatsapp": "+1234567892",
-        "cidade de interesse": "Cidade Exemplo 3",
-        "bairro de interesse": "Bairro Exemplo 3",
-        "estado de interesse": "Estado Exemplo 3",
-        "experiencia com futebol": "Treinador licenciado",
-        "capital disponível": "R$ 70.000,00",
-        "mensagem": "Estou interessado em abrir uma unidade da escola de futebol.",
-        "status": "Aprovado",
-        "timestamp": "2024-10-16 16:53:48"
-    },
-    {
         "id": 4,
         "name": "Paulo",
         "email": "exemplodeinsercao@funcionou.com",
@@ -52,7 +38,7 @@
         "experiencia": "Professor de educação física",
         "capital disponível": "Até R$ 50.000",
         "mensagem": "Olá! Tenho grande interesse em me tornar um licenciado de uma Escola de Futebol do Cruzeiro. Sou professor de educação física a 8 anos com experiência no trabalho com jovens e escolinhas esportivas. Acredito muito no poder do esporte como ferramenta de formação e inclusão, e gostaria de levar essa metodologia para a região central de São Paulo.\n\nTenho capacidade de investimento de até R$ 50.000 e busco uma parceria sólida, com suporte e crescimento conjunto. Estou à disposição para conversar e entender melhor os próximos passos.",
-        "status": "Em análise",
+        "status": "Aprovado",
         "timestamp": "2025-10-16 17:15:56"
     },
     {
