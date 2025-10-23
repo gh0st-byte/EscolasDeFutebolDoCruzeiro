@@ -28,7 +28,7 @@
 }
 
 body {
-    font-family: 'Montserrat', Arial, sans-serif;
+    font-family: 'Outfit', sans-serif;
     background-image: url('https://imagens.cruzeiro.com.br/Estutura de Páginas/fundoestrelado_siteapp.jpeg');
     background-attachment: fixed;
     display: flex;
@@ -462,6 +462,7 @@ nav button:hover::before {
 
 .news-carousel::-webkit-scrollbar {
     height: 8px;
+    display: none;
 }
 
 .news-carousel::-webkit-scrollbar-track {
@@ -469,14 +470,7 @@ nav button:hover::before {
     border-radius: 4px;
 }
 
-.news-carousel::-webkit-scrollbar-thumb {
-    background: linear-gradient(135deg, #0033a0, gold);
-    border-radius: 4px;
-}
 
-.news-carousel::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(135deg, gold, #0033a0);
-}
 
 .news-cards {
     display: flex;
@@ -488,7 +482,8 @@ nav button:hover::before {
     align-items: center;
     justify-content: flex-start;
     margin: 0;
-    padding: 0 0 10px 0;
+    padding-top: 16px;
+    padding-bottom: 100px;
 }
 
 .card {
@@ -517,10 +512,16 @@ nav button:hover::before {
 
 .card img {
     width: 100%;
-    height: 200px;
+    max-height: 200px !important;
     object-fit: cover;
     margin-bottom: 0;
     transition: transform 0.3s ease;
+    overflow: hidden;
+}
+
+.card p{
+    flex-grow: 1;
+    max-height: 100px;
 }
 
 .card:hover img {
@@ -549,11 +550,16 @@ nav button:hover::before {
     font-weight: bold;
     text-decoration: none;
     font-size: 1rem;
+    position: bottom;
+    padding-bottom: 10px;
 }
 
 .news-footer {
-    text-align: center;
-    margin-top: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    margin-top: 24px;
     padding: 0 20px;
 }
 
@@ -569,7 +575,7 @@ nav button:hover::before {
     transition: all 0.3s ease;
     border: none;
     display: inline-block;
-    font-family: 'Montserrat', Arial, sans-serif;
+    font-family: 'Outfit', sans-serif;
     min-height: 44px;
     align-items: center;
     justify-content: center;
@@ -610,9 +616,10 @@ a button {
 
 .news-carousel-controls .carousel-btn {
     position: absolute;
+    display: flex;
     background: transparent;
     color: gold;
-    border: 4px solid gold;
+    border: 6px solid gold;
     border-radius: 8px;
     width: 44px;
     height: 44px;
@@ -631,7 +638,6 @@ a button {
     background: #0033a0;
     color: white;
     border-color: #0033a0;
-    transform: scale(1.1);
 }
 
 .news-carousel-controls .carousel-btn:focus {
@@ -639,13 +645,8 @@ a button {
     box-shadow: 0 0 0 6px rgba(255,215,0,0.5);
 }
 
-.news-carousel-controls .prev-btn {
-    left: 24px;
-}
 
-.news-carousel-controls .next-btn {
-    right: 24px;
-}
+
 
 /* ==========================================
    6. SEÇÃO DE METODOLOGIA
@@ -671,10 +672,7 @@ a button {
     position: relative;
     z-index: 2;
 }
-.titulo-card-metodologia {
-    font-size: 1rem !important;
-    margin-bottom: 30px;
-}
+
 
 .metodologia h1::after {
     content: '';
@@ -705,6 +703,7 @@ a button {
     transition: transform 0.5s ease;
     width: 100%;
     position: relative;
+    padding: 40px;
 }
 
 .metodologia-cards {
@@ -732,6 +731,23 @@ a button {
     position: relative;
 }
 
+.card-metodologia:hover {
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    border-color: gold;
+    transform: translateY(-8px);
+}
+
+.card-metodologia p{
+    font-size: 1.5rem;
+    line-height: 1.6;
+    font-weight: 700;
+    color: #fff;
+    text-align: center;
+    margin-top: 15px;
+    position: relative;
+    z-index: 1;
+}
+
 .card-metodologia::before {
     content: '';
     position: absolute;
@@ -756,24 +772,56 @@ a button {
 }
 
 .card-metodologia h3 {
-    font-size: 1.5rem;
+    font-size: 2rem;
     font-weight: 900;
-    margin-bottom: 16px;
+    margin-bottom: 20px;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
     color: #fff;
     position: relative;
     z-index: 1;
 }
 
-.card-metodologia p {
-    font-size: 1.05rem;
+.btn-saiba-mais {
+    background: gold;
+    color: #0033a0;
+    border: none;
+    padding: 12px 32px;
+    border-radius: 25px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 1;
+    margin-top: 10px;
+}
+
+.btn-saiba-mais:hover {
+    background: #fff;
+    transform: scale(1.05);
+}
+
+.dropdown-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+    position: relative;
+    z-index: 1;
+    margin-top: 15px;
+}
+
+.dropdown-content.active {
+    max-height: 300px;
+}
+
+.dropdown-content p {
+    font-size: 1rem;
     line-height: 1.6;
     color: #fff;
     text-align: center;
     margin: 0;
-    position: relative;
-    z-index: 1;
+    padding: 0 10px;
 }
 
 /* Metodologia Carousel Controls */
@@ -853,12 +901,13 @@ a button {
 /* Indicators */
 .metodologia-indicators {
     position: absolute;
-    bottom: 30px;
+    bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
     gap: 12px;
     z-index: 100;
+    margin-top: 80px;
 }
 
 .metodologia-indicator {
@@ -1585,7 +1634,7 @@ footer a:hover {
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
-    font-family: 'Montserrat', Arial, sans-serif;
+    font-family: 'Outfit', sans-serif;
     min-height: 44px;
     display: inline-flex;
     align-items: center;
@@ -1706,7 +1755,7 @@ footer a:hover {
     min-width: 84px;
     text-align: center;
     transition: all 0.3s ease;
-    font-family: 'Montserrat', Arial, sans-serif;
+    font-family: 'Outfit', sans-serif;
     text-decoration: none !important;
     min-height: 44px;
     display: inline-flex;
@@ -1825,7 +1874,7 @@ footer a:hover {
     text-transform: uppercase;
     letter-spacing: 0.5px;
     box-shadow: 0 4px 15px rgba(0,51,160,0.3);
-    font-family: 'Montserrat', Arial, sans-serif;
+    font-family: 'Outfit', sans-serif;
     text-decoration: none !important;
     min-height: 44px;
     display: inline-flex;
@@ -1941,15 +1990,35 @@ footer a:hover {
         padding: 0 20px;
     }
     
+    .hero h1 {
+        font-size: 2.8rem;
+    }
+    
+    .hero p {
+        font-size: 1.15rem;
+    }
+    
     .hero-image {
         order: -1;
         max-width: 400px;
         margin: 0 auto;
     }
     
+    .news h2 {
+        font-size: 2.5rem;
+    }
+    
     .news-carousel {
-        position: relative;
         padding: 0 20px;
+    }
+    
+    .card {
+        width: 320px;
+        min-width: 320px;
+    }
+    
+    .metodologia h1 {
+        font-size: 2.6rem;
     }
     
     .metodologia-carousel {
@@ -1963,6 +2032,18 @@ footer a:hover {
     
     .card-metodologia {
         padding: 35px 20px;
+    }
+    
+    .card-metodologia h3 {
+        font-size: 1.8rem;
+    }
+    
+    .map-section h1 {
+        font-size: 2.5rem;
+    }
+    
+    .cta-2 h2 {
+        font-size: 2.6rem;
     }
     
     .container-logo {
@@ -1981,21 +2062,45 @@ footer a:hover {
     }
     
     .hero {
-        gap: 40px;
+        gap: 35px;
     }
     
     .hero h1 {
-        font-size: 2.8rem;
+        font-size: 2.6rem;
+    }
+    
+    .hero p {
+        font-size: 1.1rem;
+    }
+    
+    .news h2 {
+        font-size: 2.4rem;
     }
     
     .news-cards {
-        padding: 0 32px;
-        gap: 20px;
+        gap: 24px;
     }
     
     .card {
-        min-width: 280px;
+        min-width: 300px;
+        width: 300px;
+    }
+    
+    .metodologia h1 {
+        font-size: 2.4rem;
+    }
+    
+    .metodologia-cards {
         width: 280px;
+        min-width: 280px;
+    }
+    
+    .map-section h1 {
+        font-size: 2.4rem;
+    }
+    
+    .cta-2 h2 {
+        font-size: 2.4rem;
     }
     
     .map-search {
@@ -2004,7 +2109,7 @@ footer a:hover {
     
     .footer-content {
         padding: 0 32px;
-        gap: 40px;
+        gap: 35px;
     }
 }
 
@@ -2125,8 +2230,8 @@ footer a:hover {
     }
     
     .metodologia-cards {
-        width: 280px;
-        min-width: 280px;
+        width: 270px;
+        min-width: 270px;
     }
     
     .card-metodologia {
@@ -2134,10 +2239,15 @@ footer a:hover {
     }
     
     .card-metodologia h3 {
-        font-size: 1.3rem;
+        font-size: 1.6rem;
     }
     
     .card-metodologia p {
+        font-size: 1rem;
+    }
+    
+    .btn-saiba-mais {
+        padding: 10px 28px;
         font-size: 0.95rem;
     }
     
@@ -2510,21 +2620,31 @@ footer a:hover {
     }
     
     .metodologia-cards {
-        width: 260px;
-        min-width: 260px;
+        width: 250px;
+        min-width: 250px;
     }
     
     .card-metodologia {
-        padding: 28px 16px;
+        padding: 26px 16px;
     }
     
     .card-metodologia h3 {
-        font-size: 1.2rem;
+        font-size: 1.5rem;
+        margin-bottom: 16px;
     }
     
     .card-metodologia p {
-        font-size: 0.9rem;
+        font-size: 0.95rem;
         line-height: 1.5;
+    }
+    
+    .btn-saiba-mais {
+        padding: 10px 24px;
+        font-size: 0.9rem;
+    }
+    
+    .dropdown-content p {
+        font-size: 0.9rem;
     }
     
     .metodologia-carousel .carousel-btn {
@@ -2823,32 +2943,39 @@ footer a:hover {
         margin-bottom: 30px;
         padding: 0 12px;
     }
-    .titulo-card-metodologia {
-        font-size: 0.8rem !important;
-    }
+
 
     .metodologia-carousel {
-        padding: 0 45px;
-        padding-bottom: 20px;
+        padding: 0 45px 20px;
     }
     
     .metodologia-cards {
-        width: 220px;
-        min-width: 220px;
+        width: 230px;
+        min-width: 230px;
     }
     
     .card-metodologia {
-        padding: 24px 16px;
+        padding: 24px 14px;
     }
     
     .card-metodologia h3 {
-        font-size: 1.1rem;
-        margin-bottom: 12px;
+        font-size: 1.3rem;
+        margin-bottom: 14px;
     }
     
     .card-metodologia p {
-        font-size: 0.85rem;
+        font-size: 0.9rem;
         line-height: 1.4;
+    }
+    
+    .btn-saiba-mais {
+        padding: 8px 20px;
+        font-size: 0.85rem;
+    }
+    
+    .dropdown-content p {
+        font-size: 0.85rem;
+        padding: 0 8px;
     }
     
     .metodologia-carousel .carousel-btn {
@@ -2866,7 +2993,7 @@ footer a:hover {
     }
     
     .metodologia-indicators {
-        bottom: 20px;
+        bottom: 15px;
     }
     
     .metodologia-indicator {
@@ -3120,4 +3247,33 @@ footer a:hover {
         font-size: 11pt;
         color: #000;
     }
+}
+
+
+.news-footer .carousel-btn {
+    background: transparent;
+    color: gold;
+    border: 4px solid gold;
+    border-radius: 8px;
+    width: 44px;
+    height: 44px;
+    font-size: 1.8rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.news-footer .carousel-btn:hover {
+    background: #0033a0;
+    color: white;
+    border-color: #0033a0;
+}
+
+.news-footer .carousel-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }

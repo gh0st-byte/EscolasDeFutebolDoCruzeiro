@@ -375,17 +375,11 @@ function initNewsCarousel() {
     if (next) next.disabled = currentIndex >= maxIndex;
   }
 
-  if (!controls) {
-    controls = document.createElement('div');
-    controls.className = controlsClass;
-    const prevBtn = document.createElement('button');
-    prevBtn.innerHTML = '‹';
-    prevBtn.className = 'carousel-btn prev-btn';
-
-    const nextBtn = document.createElement('button');
-    nextBtn.innerHTML = '›';
-    nextBtn.className = 'carousel-btn next-btn';
-
+  // Usar botões do HTML
+  const prevBtn = document.getElementById('newsPrevBtn');
+  const nextBtn = document.getElementById('newsNextBtn');
+  
+  if (prevBtn && nextBtn && !prevBtn.dataset.initialized) {
     prevBtn.addEventListener('click', () => {
       if (currentIndex > 0) {
         currentIndex--;
@@ -400,12 +394,9 @@ function initNewsCarousel() {
         updateCarousel();
       }
     });
-
-    controls.appendChild(prevBtn);
-    controls.appendChild(nextBtn);
-    // Inserir controles no wrapper, fora da div de scroll
-    const wrapper = track.closest('.news-carousel-wrapper') || track.parentElement.parentElement;
-    wrapper.appendChild(controls);
+    
+    prevBtn.dataset.initialized = 'true';
+    nextBtn.dataset.initialized = 'true';
   }
 
   // Responsive handling: recalc on resize

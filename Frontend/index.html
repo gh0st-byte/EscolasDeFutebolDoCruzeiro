@@ -140,7 +140,9 @@
                 </div>
 
                 <div class="news-footer">
+                    <button class="carousel-btn prev-btn" id="newsPrevBtn">‹</button>
                     <a href="news.html" class="btn-ver-todas">Ver Todas</a>
+                    <button class="carousel-btn next-btn" id="newsNextBtn">›</button>
                 </div>
 
             </div>
@@ -153,29 +155,41 @@
       <div class="metodologia-track" id="metodologiaCarousel">
         <div class="metodologia-cards">
           <div class="card-metodologia" style="background-image: url('assets/img/EXCLUSIVIDADE.png');">
-            <h1 class="titulo-card-metodologia">Exclusividade</h1>
-            <p>Metodologia única desenvolvida pelos profissionais do Cruzeiro para formar atletas de excelência com técnicas inovadoras.</p>
+            <h3>Exclusividade</h3>
+            <button class="btn-saiba-mais" onclick="toggleDropdown(this)">Saiba Mais</button>
+            <div class="dropdown-content">
+              <p>Metodologia única desenvolvida pelos profissionais do Cruzeiro para formar atletas de excelência com técnicas inovadoras.</p>
+            </div>
           </div>
         </div>
 
         <div class="metodologia-cards">
           <div class="card-metodologia" style="background-image: url('assets/img/FORMAÇÃO.png');">
-            <h1 class="titulo-card-metodologia">Formação</h1>
-            <p>Desenvolvimento técnico e tático baseado na tradição vitoriosa do clube mais vencedor de Minas Gerais.</p>
+            <h3>Formação</h3>
+            <button class="btn-saiba-mais" onclick="toggleDropdown(this)">Saiba Mais</button>
+            <div class="dropdown-content">
+              <p>Desenvolvimento técnico e tático baseado na tradição vitoriosa do clube mais vencedor de Minas Gerais.</p>
+            </div>
           </div>
         </div>
 
         <div class="metodologia-cards">
           <div class="card-metodologia" style="background-image: url('assets/img/DESENVOLVIMENTO.png');">
-            <h1 class="titulo-card-metodologia">Desenvolvimento</h1>
-            <p>Crescimento integral do atleta, focando aspectos físicos, mentais e sociais para formação completa.</p>
+            <h3>Desenvolvimento</h3>
+            <button class="btn-saiba-mais" onclick="toggleDropdown(this)">Saiba Mais</button>
+            <div class="dropdown-content">
+              <p>Crescimento integral do atleta, focando aspectos físicos, mentais e sociais para formação completa.</p>
+            </div>
           </div>
         </div>
 
         <div class="metodologia-cards">
           <div class="card-metodologia" style="background-image: url('assets/img/ATRIBUTOS.png');">
-            <h1 class="titulo-card-metodologia">Atributos</h1>
-            <p>Fortalecimento dos valores e características que definem um verdadeiro cruzeirense com tradição e excelência.</p>
+            <h3>Atributos</h3>
+            <button class="btn-saiba-mais" onclick="toggleDropdown(this)">Saiba Mais</button>
+            <div class="dropdown-content">
+              <p>Fortalecimento dos valores e características que definem um verdadeiro cruzeirense com tradição e excelência.</p>
+            </div>
           </div>
         </div>
       </div>
