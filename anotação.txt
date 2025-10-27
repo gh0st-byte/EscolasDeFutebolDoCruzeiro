@@ -1,0 +1,1 @@
+lembra de corrigir a forma como o modal container em news exibe o texto
