@@ -587,19 +587,34 @@ nav button:hover::before {
 .btn-navigation {
     display: flex;
     align-items: center;
-    gap: 10px;
-    align-self: flex-start;
-    padding-left: 24px;
-    left: 10%;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 10px;
 }
 
-.btn-navigation .prev-btn{
-    order: 1 !important;
+@media (max-width: 768px) {
+    .btn-navigation {
+        gap: 8px;
+    }
+    
+    .news-footer .carousel-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 1.4rem;
+        border-width: 2px;
+    }
 }
 
-.btn-navigation .next-btn{
-    order: 2 !important;
+@media (max-width: 480px) {
+    .news-footer .carousel-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 1.2rem;
+        border-width: 2px;
+    }
 }
+
+
 
 .btn-ver-todas {
     background: linear-gradient(135deg, #0033a0, #1e5bb8);
@@ -617,12 +632,6 @@ nav button:hover::before {
     align-items: center;
     justify-content: center;
     margin-top: 1.5rem;
-}
-
-.btn-navigation{
-    position: absolute;
-    top: 50%;
-    z-index: 10;
 }
 
 .btn-ver-todas:hover,
@@ -2404,6 +2413,13 @@ footer a:hover {
         gap: 18px;
         justify-content: center;
     }
+
+    .pagination-container{
+        margin: 0;
+        flex-wrap: nowrap;
+        text-wrap: nowrap;
+        padding: 0;
+    }
     
     .card {
         min-width: 300px;
@@ -2519,6 +2535,7 @@ footer a:hover {
     
     .news-modal-container {
         padding: 60px 40px;
+        overflow-y: auto !important;
     }
     
     .news-modal-title {
@@ -2824,6 +2841,11 @@ footer a:hover {
         padding: 20px;
     }
     
+    .news-carousel{
+        padding-bottom: 0;
+        height: fit-content;
+    }
+    
     .news-item h2 {
         font-size: 1.3rem;
         margin-bottom: 10px;
@@ -2838,7 +2860,13 @@ footer a:hover {
         font-size: 0.95rem;
         margin-bottom: 16px;
     }
-    
+
+    .pagination-container{
+        margin: 0;
+        flex-wrap: nowrap;
+        text-wrap: nowrap;
+        padding: 0;
+    }
     .read-more-btn {
         padding: 10px 20px;
         font-size: 0.85rem;
@@ -2968,6 +2996,13 @@ footer a:hover {
 
     .news {
         padding: 40px 0;
+    }
+
+    .pagination-container{
+        margin: 0;
+        flex-wrap: nowrap;
+        text-wrap: nowrap;
+        padding: 0;
     }
 
     .news h2 {
@@ -3251,6 +3286,10 @@ footer a:hover {
     .map-section h1,
     .cta-2 h2 {
         font-size: 1.8rem;
+    }
+    .news-carousel{
+        padding-bottom: 0;
+        height: fit-content;
     }
     
     .metodologia h1 {
