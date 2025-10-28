@@ -1,21 +1,5 @@
 [
     {
-        "lat": -15.917223,
-        "lng": -46.106111,
-        "nome": null,
-        "cidade": "Arinos\/MG",
-        "map_URL": null,
-        "endereco": "Rua Edgard Ramos Barroso, 149 – Jd Paulista – Arinos – MG Cep.: 38.680-000",
-        "endereco_encontrado": "Arinos, Região Geográfica Imediata de Unaí, Região Geográfica Intermediária de Patos de Minas, MG, Região Sudeste, 38680-000, Brasil",
-        "telefone": "(38) 99902-7727",
-        "whatsapp": "https:\/\/api.whatsapp.com\/send\/?phone=55338999027727",
-        "instagram": "@escolacruzeiro.arinos",
-        "region": "Brasil",
-        "estado": "MG",
-        "instagram_url": null,
-        "ComoChegar": null
-    },
-    {
         "lat": -19.9227318,
         "lng": -43.9450948,
         "nome": null,
