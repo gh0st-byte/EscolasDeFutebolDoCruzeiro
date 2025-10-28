@@ -41,7 +41,7 @@ php -S localhost:8000
 #### Backend (Administradores)
 - URL: http://localhost:8000/Backend/admin/
 - Usuário: admin
-- Senha: cruzeiro2024
+- Senha: cruzeiro2025
 
 ## Estrutura de URLs
 

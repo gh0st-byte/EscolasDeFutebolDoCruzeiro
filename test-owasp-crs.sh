@@ -5,8 +5,8 @@
 
 echo "=== Teste do OWASP ModSecurity CRS ==="
 
-# URL base (altere conforme necessário)
-BASE_URL="http://localhost"
+# URL base 
+BASE_URL="http://localhost:8000"
 
 echo "Testando proteções..."
 

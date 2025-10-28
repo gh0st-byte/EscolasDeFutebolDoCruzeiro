@@ -1,7 +1,7 @@
 <?php
 // Configurações de segurança
 define('ADMIN_USERNAME', $_ENV['ADMIN_USERNAME'] ?? 'admin');
-define('ADMIN_PASSWORD', $_ENV['ADMIN_PASSWORD'] ?? 'cruzeiro2024');
+define('ADMIN_PASSWORD', $_ENV['ADMIN_PASSWORD'] ?? 'cruzeiro2025');
 
 // Configurações de sessão
 ini_set('session.cookie_httponly', 1);

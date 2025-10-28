@@ -50,15 +50,22 @@ EscolasDeFutebolDoCruzeiro/
 └── README.md              # Este arquivo
 ```
 
-
 <<<<<<< HEAD
-=======
--  **IMPORTANTE**: Antes de usar em produção:
+============
+
+- **IMPORTANTE**: Antes de usar em produção:
 
 1. Copie `.env.example` para `.env`
 2. Altere as credenciais no arquivo `.env`
 3. Configure variáveis de ambiente seguras
+
 >>>>>>> 23a3139 (update de segurança)
+>>>>>>>
+>>>>>>
+>>>>>
+>>>>
+>>>
+>>
 
 ## Como Usar
 
@@ -87,7 +94,7 @@ EscolasDeFutebolDoCruzeiro/
 - **Editar**: Modificar registros existentes
 - **Deletar**: Remover registros (com confirmação)
 
-## Estrutura dos Dados
+## Principais Estruturas de Dados Utilizados
 
 ### schools.json
 
@@ -107,26 +114,40 @@ EscolasDeFutebolDoCruzeiro/
 }
 ```
 
-### addressSchools.json
-
+### news.json
 ```json
 {
-  "lat": -19.9227318,
-  "lng": -43.9450948,
-  "nome": "Nome da escola",
-  "endereco_encontrado": "Endereço completo",
-  "region": "Brasil"
+  "title": "Nova categoria nas Escolas",
+   "subtitle": "Futebol feminino ganha espaço no projeto educacional",
+   "dayWeek": "Segunda-feira",
+   "date": "07",
+   "month": "Janeiro",
+   "content": "As Escolas do Cruzeiro lançaram categoria de futebol feminino, oferecendo oportunidades iguais para meninas interessadas no esporte. A iniciativa conta com estrutura profissional e treinadoras especializadas. O projeto visa desenvolver talentos femininos e promover igualdade de gênero no ambiente esportivo.",
+   "1-image_URL": "https:\/\/images.pexels.com\/photos\/1171084\/pexels-photo-1171084.jpeg"
 }
 ```
 
-### failed_addresses.json
-
+### licenciadosProposta.json
 ```json
-[
-  "Endereço que falhou no processamento",
-  "Outro endereço com problema"
-]
+
+{
+   "id": 1,
+   "name": "Licenciado 2",
+   "email": "licenciado2@example.com",
+   "whatsapp": "+1234567891",
+   "cidade de interesse": "Cidade Exemplo 2",
+   "bairro de interesse": "Bairro Exemplo 2",
+   "estado de interesse": "Estado Exemplo 2",
+   "experiencia com futebol": "Empresário do esporte",
+   "capital disponível": "R$ 60.000,00",
+   "mensagem": "Estou interessado em abrir uma unidade da escola de futebol.",
+   "status": "Em análise",
+   "timestamp": "2025-10-15 14:23:11"
+}
 ```
+
+
+
 
 ## Instalação no AWS Lightsail
 
@@ -378,7 +399,6 @@ O sistema se adapta automaticamente para:
 - Desktop (1200px+)
 - Tablet (768px - 1199px)
 - Mobile (< 768px)
-
 
 # Licenciamento
 

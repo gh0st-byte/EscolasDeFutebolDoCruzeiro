@@ -1,6 +1,6 @@
 <?php
 // Script para criar usuários - use variáveis de ambiente para senhas
-$adminPassword = $_ENV['ADMIN_PASSWORD'] ?? 'cruzeiro2024';
+$adminPassword = $_ENV['ADMIN_PASSWORD'] ?? 'cruzeiro2025';
 $marcoPassword = $_ENV['MARCO_PASSWORD'] ?? '12345678';
 
 $users = [

@@ -330,18 +330,22 @@ function initNewsCarousel() {
   let currentIndex = 0;
 
   const calculateLayout = () => {
-    const firstCard = track.querySelector('.card');
-    if (!firstCard) return { cardWidth: 360, visibleCards: 1, maxIndex: 0 };
-    
-    const cardRect = firstCard.getBoundingClientRect();
-    const style = window.getComputedStyle(firstCard);
-    const marginRight = parseFloat(style.marginRight || '32');
-    const cardWidth = Math.round(cardRect.width + marginRight);
-    const containerWidth = carousel.clientWidth;
-    const visibleCards = Math.max(1, Math.floor(containerWidth / cardWidth));
-    const maxIndex = Math.max(0, cards.length - visibleCards);
-    return { cardWidth, visibleCards, maxIndex };
-  };
+  const firstCard = track.querySelector('.card');
+  if (!firstCard) return { cardWidth: 360, visibleCards: 1, maxIndex: 0 };
+
+  const cardRect = firstCard.getBoundingClientRect();
+  const style = window.getComputedStyle(firstCard);
+
+  // usa o gap real do container em vez da marginRight
+  const gap = parseFloat(window.getComputedStyle(track).gap || '0');
+  const cardWidth = Math.round(cardRect.width + gap);
+
+  const containerWidth = carousel.clientWidth;
+  const visibleCards = Math.max(1, Math.floor(containerWidth / cardWidth));
+  const maxIndex = Math.max(0, cards.length - visibleCards);
+
+  return { cardWidth, visibleCards, maxIndex };
+};
 
   const updateCarousel = () => {
     const { cardWidth, maxIndex } = calculateLayout();
@@ -803,7 +807,7 @@ function openNewsModal(index) {
   document.getElementById('newsModalBody').innerHTML = `
     ${dateText ? `<div class="news-date mb-3"><strong>${Security.escapeHtml(dateText)}</strong></div>` : ''}
     ${news.subtitle ? `<h4 class="mb-3">${Security.escapeHtml(news.subtitle)}</h4>` : ''}
-    <div class="news-content">${Security.escapeHtml(news.content)}</div>
+    <div class="news-content">${Security.escapeHtml(news.content).replace(/\n/g, '<br>')}</div>
   `;
   
   new bootstrap.Modal(document.getElementById('newsModal')).show();
@@ -852,7 +856,7 @@ function openIndexNewsModal(index) {
   document.getElementById('indexNewsModalBody').innerHTML = `
     ${dateText ? `<div class="news-date mb-3"><strong>${Security.escapeHtml(dateText)}</strong></div>` : ''}
     ${news.subtitle ? `<h4 class="mb-3">${Security.escapeHtml(news.subtitle)}</h4>` : ''}
-    <div class="news-content">${Security.escapeHtml(news.content)}</div>
+    <div class="news-content">${Security.escapeHtml(news.content).replace(/\n/g, '<br>')}</div>
   `;
   
   new bootstrap.Modal(modal).show();

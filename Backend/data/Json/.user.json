@@ -1,10 +1,6 @@
 [
     {
         "username": "admin",
-        "password": "$2y$10$9kDjcy7gxeYKvo3DP3zHneC.yvIzzWDWWdQztwvxIosKU8g07a40i"
-    },
-    {
-        "username": "test",
-        "password": "$2y$10$rSlkYXwZxjOU\/OPb0KjkKu3an5Lep.EwsqIpC8hEIhnXAETo2kkAi"
+        "password": "$2y$10$Zk6bVZMYtExDjPWLvf7KTOjqUHo0BBQcT19axsj1vTCHiHntLPI3."
     }
 ]

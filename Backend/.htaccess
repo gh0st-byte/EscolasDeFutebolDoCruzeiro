@@ -1,7 +1,38 @@
-RewriteEngine On
+# ModSecurity for Backend
+<IfModule mod_security2.c>
+    SecRuleEngine On
+    SecRequestBodyAccess On
+    SecRule REQUEST_METHOD "@streq POST" \
+        "id:1001,phase:2,block,msg:'POST requests monitored',logdata:'Matched Data: %{MATCHED_VAR} found within %{MATCHED_VAR_NAME}'"
+    SecRule ARGS "@detectSQLi" \
+        "id:1002,phase:2,block,msg:'SQL Injection Attack Detected',logdata:'Matched Data: %{MATCHED_VAR} found within %{MATCHED_VAR_NAME}'"
+    SecRule ARGS "@detectXSS" \
+        "id:1003,phase:2,block,msg:'XSS Attack Detected',logdata:'Matched Data: %{MATCHED_VAR} found within %{MATCHED_VAR_NAME}'"
+</IfModule>
 
-# Redirecionar para Frontend
-RewriteRule ^Frontend/(.*)$ ../Frontend/$1 [L]
+# Restrict access to admin area
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{REQUEST_URI} ^/Backend/admin/
+    RewriteCond %{HTTP_REFERER} !^https?://(www\.)?localhost [NC]
+    RewriteCond %{REMOTE_ADDR} !^127\.0\.0\.1$
+    RewriteRule .* - [F,L]
+</IfModule>
 
-# Redirecionar raiz para Frontend
-RewriteRule ^$ ../Frontend/index.html [L]
+# Block direct access to data files
+<FilesMatch "\.(json|log|txt)$">
+    <RequireAll>
+        Require local
+        Require ip 127.0.0.1
+    </RequireAll>
+</FilesMatch>
+
+# Rate limiting
+<IfModule mod_evasive24.c>
+    DOSHashTableSize    2048
+    DOSPageCount        5
+    DOSSiteCount        50
+    DOSPageInterval     1
+    DOSSiteInterval     1
+    DOSBlockingPeriod   600
+</IfModule>
