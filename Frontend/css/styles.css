@@ -58,7 +58,7 @@ header {
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 1005;
+    z-index: 1055;
     min-height: 80px;
     transition: all 0.3s ease;
     overflow: visible;
@@ -1177,7 +1177,7 @@ a button {
     border-radius: 8px;
     max-height: 240px;
     overflow-y: auto;
-    z-index: 1100;
+    z-index: 1000;
 }
 
 .map-search-results li {

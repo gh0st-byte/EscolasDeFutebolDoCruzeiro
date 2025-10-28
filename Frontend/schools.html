@@ -62,15 +62,39 @@
         <section class="escolas">
             <h2>Nossas Unidades</h2>
             <div class="filtros">
-                <select id="filtroRegiao" title="Filtrar por região">
-                    <option value="">Todas as Regiões</option>
-                </select>
-                <select id="filtroEstado" title="Filtrar por estado">
-                    <option value="">Todos os Estados</option>
-                </select>
-                <select id="filtroCidade" title="Filtrar por cidade">
-                    <option value="">Todas as Cidades</option>
-                </select>
+                <div class="filter-dropdown">
+                    <div class="filter-header" data-filter="regiao">
+                        <span class="filter-label">Regiões</span>
+                        <span class="filter-count">0</span>
+                        <span class="filter-arrow">▼</span>
+                    </div>
+                    <div class="filter-options" id="filtroRegiao">
+                        <!-- Opções serão carregadas via JavaScript -->
+                    </div>
+                </div>
+                
+                <div class="filter-dropdown">
+                    <div class="filter-header" data-filter="estado">
+                        <span class="filter-label">Estados</span>
+                        <span class="filter-count">0</span>
+                        <span class="filter-arrow">▼</span>
+                    </div>
+                    <div class="filter-options" id="filtroEstado">
+                        <!-- Opções serão carregadas via JavaScript -->
+                    </div>
+                </div>
+                
+                <div class="filter-dropdown">
+                    <div class="filter-header" data-filter="cidade">
+                        <span class="filter-label">Cidades</span>
+                        <span class="filter-count">0</span>
+                        <span class="filter-arrow">▼</span>
+                    </div>
+                    <div class="filter-options" id="filtroCidade">
+                        <!-- Opções serão carregadas via JavaScript -->
+                    </div>
+                </div>
+                
                 <button id="limparFiltros">Limpar Filtros</button>
             </div>
             <div class="escolas-grid">
@@ -105,6 +129,6 @@
 
     </main>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="js/schools.js"></script>
+    <script src="js/schools-updated.js"></script>
 </body>
 </html>

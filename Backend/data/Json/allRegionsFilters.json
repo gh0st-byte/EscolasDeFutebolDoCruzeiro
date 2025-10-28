@@ -36,43 +36,46 @@
             }
         }
     },
-    "Colômbia": {
-        "name": "Colômbia",
-        "states": {
-            "Cundinamarca": {
-                "name": "Cundinamarca",
-                "cities": ["Bogotá"]
+    
+    "Mundo": {
+        "Colômbia": {
+            "name": "Colômbia",
+            "states": {
+                "Cundinamarca": {
+                    "name": "Cundinamarca",
+                    "cities": ["Bogotá"]
+                }
             }
-        }
-    },
-    "Peru": {
-        "name": "Peru",
-        "states": {
-            "Villa El Salvador": {
-                "name": "Villa El Salvador",
-                "cities": ["San Borja"]
+        },
+        "Peru": {
+            "name": "Peru",
+            "states": {
+                "Villa El Salvador": {
+                    "name": "Villa El Salvador",
+                    "cities": ["San Borja"]
+                }
             }
-        }
-    },
-    "Tailândia": {
-        "name": "Tailândia",
-        "states": {
-            "Watthana": {
-                "name": "Watthana",
-                "cities": ["Bangkok"]
+        },
+        "Tailândia": {
+            "name": "Tailândia",
+            "states": {
+                "Watthana": {
+                    "name": "Watthana",
+                    "cities": ["Bangkok"]
+                }
             }
-        }
-    },
-    "Estados Unidos": {
-        "name": "Estados Unidos",
-        "states": {
-            "Massachusetts": {
-                "name": "Massachusetts",
-                "cities": ["Boston"]
-            },
-            "Pensilvânia": {
-                "name": "Pensilvânia",
-                "cities": ["New Jersey"]
+        },
+        "Estados Unidos": {
+            "name": "Estados Unidos",
+            "states": {
+                "Massachusetts": {
+                    "name": "Massachusetts",
+                    "cities": ["Boston"]
+                },
+                "Pensilvânia": {
+                    "name": "Pensilvânia",
+                    "cities": ["New Jersey"]
+                }
             }
         }
     }

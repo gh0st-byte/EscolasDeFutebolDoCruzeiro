@@ -57,6 +57,17 @@ const API = {
     const data = await response.json();
     Cache.set(file, data);
     return data;
+  },
+  
+  fetchTranslated: async (file, targetLang = 'en') => {
+    const cacheKey = `${file}_${targetLang}`;
+    const cached = Cache.get(cacheKey);
+    if (cached) return cached;
+    
+    const originalData = await API.fetch(file);
+    const translatedData = await translateJsonData(originalData, targetLang);
+    Cache.set(cacheKey, translatedData);
+    return translatedData;
   }
 };
 
@@ -113,7 +124,9 @@ function initMap() {
 // Carregar escolas
 async function loadSchools() {
   try {
-    schools = await API.fetch('schools.json');
+    schools = window.translationActive ? 
+      await API.fetchTranslated('schools.json', window.translationActive) : 
+      await API.fetch('schools.json');
     addMarkers('Brasil');
   } catch (error) {
     console.error('Erro ao carregar escolas:', error);
@@ -274,13 +287,50 @@ function setupMapSearch() {
   });
 }
 
+// Função para traduzir dados JSON
+async function translateJsonData(data, targetLang = 'en') {
+  if (!data || !window.translateText) return data;
+  
+  if (Array.isArray(data)) {
+    return Promise.all(data.map(item => translateJsonData(item, targetLang)));
+  }
+  
+  if (typeof data === 'object') {
+    const translated = {};
+    for (const [key, value] of Object.entries(data)) {
+      if (typeof value === 'string' && shouldTranslateField(key)) {
+        translated[key] = await window.translateText(value, targetLang);
+      } else if (typeof value === 'object') {
+        translated[key] = await translateJsonData(value, targetLang);
+      } else {
+        translated[key] = value;
+      }
+    }
+    return translated;
+  }
+  
+  return data;
+}
+
+// Campos que devem ser traduzidos no JSON
+function shouldTranslateField(fieldName) {
+  const translatableFields = [
+    'title', 'subtitle', 'content', 'nome', 'endereco', 'endereco_encontrado',
+    'bairro', 'cidade', 'region', 'estado', 'experiencia', 'mensagem',
+    'dayWeek', 'month', 'status'
+  ];
+  return translatableFields.includes(fieldName);
+}
+
 // Carregar notícias para o index
 async function loadIndexNews() {
   const container = document.getElementById('newsCardsContainer');
   if (!container) return;
   
   try {
-    const data = await API.fetch('news.json');
+    const data = window.translationActive ? 
+      await API.fetchTranslated('news.json', window.translationActive) : 
+      await API.fetch('news.json');
     const noticias = data.reverse().slice(0, 15);
     
     container.innerHTML = noticias.map((item, index) => {
@@ -724,7 +774,9 @@ async function loadNewsPage() {
   if (!container) return;
   
   try {
-    const data = await API.fetch('news.json');
+    const data = window.translationActive ? 
+      await API.fetchTranslated('news.json', window.translationActive) : 
+      await API.fetch('news.json');
     const noticias = data.reverse();
     const itemsPerPage = 6;
     let currentPage = 1;
@@ -925,6 +977,24 @@ const goToSlide = (index) => {
   if (cards && index >= 0 && index < cards.length) {
     metodologiaCurrentIndex = index;
     updateMetodologiaCarousel();
+  }
+};
+
+// Função para recarregar dados da página
+window.reloadPageData = async function() {
+  // Recarregar notícias do index
+  if (document.getElementById('newsCardsContainer')) {
+    await loadIndexNews();
+  }
+  
+  // Recarregar notícias do news.html
+  if (document.getElementById('newsContainer')) {
+    await loadNewsPage();
+  }
+  
+  // Recarregar escolas do mapa
+  if (typeof loadSchools === 'function') {
+    await loadSchools();
   }
 };
 
