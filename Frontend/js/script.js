@@ -51,7 +51,7 @@ const API = {
     const cached = Cache.get(file);
     if (cached) return cached;
     
-    const response = await fetch(`${CONFIG.API_BASE}?file=${encodeURIComponent(file)}`);
+    const response = await fetch(`${CONFIG.API_BASE}${file}`);
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     
     const data = await response.json();
