@@ -928,57 +928,84 @@ function toggleDropdown(button) {
   }
 }
 
-// Carousel da metodologia
-let metodologiaCurrentIndex = 0;
-
-const updateMetodologiaIndicators = () => {
-  document.querySelectorAll('.metodologia-indicator').forEach((btn, i) => {
-    btn.classList.toggle('active', i === metodologiaCurrentIndex);
-  });
-};
-
-const updateMetodologiaCarousel = () => {
-  const track = document.getElementById('metodologiaCarousel');
+// Inicializar carousel de metodologia
+function initMetodologiaCarousel() {
+  const track = document.querySelector('.metodologia-track');
   const carousel = document.querySelector('.metodologia-carousel');
-  if (!track || !carousel) return;
+  const cards = document.querySelectorAll('.metodologia-cards');
   
-  const cards = track.querySelectorAll('.metodologia-cards');
-  if (cards.length === 0) return;
+  if (!track || !carousel || cards.length === 0) return;
+  let currentIndex = 0;
+
+  const calculateLayout = () => {
+    const firstCard = track.querySelector('.metodologia-cards');
+    if (!firstCard) return { cardWidth: 382, visibleCards: 1, maxIndex: 0 };
+
+    const cardRect = firstCard.getBoundingClientRect();
+    const gap = parseFloat(window.getComputedStyle(track).gap || '32');
+    const cardWidth = Math.round(cardRect.width + gap);
+
+    const containerWidth = carousel.clientWidth;
+    const visibleCards = Math.max(1, Math.floor(containerWidth / cardWidth));
+    const maxIndex = Math.max(0, cards.length - visibleCards);
+
+    return { cardWidth, visibleCards, maxIndex };
+  };
+
+  const updateCarousel = () => {
+    const { cardWidth, maxIndex } = calculateLayout();
+    const screenWidth = window.innerWidth;
+    
+    if (currentIndex > maxIndex) currentIndex = maxIndex;
+    
+    if (screenWidth > 480) {
+      track.style.transition = 'transform 300ms ease';
+      track.style.transform = `translateX(-${currentIndex * cardWidth}px)`;
+      carousel.scrollLeft = 0;
+    } else {
+      track.style.transform = 'translateX(0)';
+      carousel.scrollLeft = currentIndex * cardWidth;
+    }
+
+    const next = document.getElementById('nextBtn');
+    const prev = document.getElementById('prevBtn');
+    if (prev) prev.disabled = currentIndex === 0;
+    if (next) next.disabled = currentIndex >= maxIndex;
+  };
+
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
   
-  const cardWidth = cards[0].offsetWidth;
-  const gap = 30;
-  const carouselCenter = carousel.offsetWidth / 2;
-  const cardCenter = cardWidth / 2;
-  const offset = carouselCenter - cardCenter - (metodologiaCurrentIndex * (cardWidth + gap));
-  
-  track.style.transform = `translateX(${offset}px)`;
-  updateMetodologiaIndicators();
-};
-
-const prevSlide = () => {
-  if (metodologiaCurrentIndex > 0) {
-    metodologiaCurrentIndex--;
-    updateMetodologiaCarousel();
+  if (prevBtn && nextBtn && !prevBtn.dataset.initialized) {
+    nextBtn.addEventListener('click', () => {
+      const { maxIndex } = calculateLayout();
+      if (currentIndex < maxIndex) {
+        currentIndex++;
+        updateCarousel();
+      }
+    });
+    
+    prevBtn.addEventListener('click', () => {
+      if (currentIndex > 0) {
+        currentIndex--;
+        updateCarousel();
+      }
+    });
+    
+    nextBtn.dataset.initialized = 'true';
+    prevBtn.dataset.initialized = 'true';
   }
-};
 
-const nextSlide = () => {
-  const track = document.getElementById('metodologiaCarousel');
-  const cards = track?.querySelectorAll('.metodologia-cards');
-  if (cards && metodologiaCurrentIndex < cards.length - 1) {
-    metodologiaCurrentIndex++;
-    updateMetodologiaCarousel();
+  if (!window._metodologiaCarouselInitialized) {
+    window.addEventListener('resize', Security.debounce(() => {
+      currentIndex = 0;
+      updateCarousel();
+    }, 120));
+    window._metodologiaCarouselInitialized = true;
   }
-};
 
-const goToSlide = (index) => {
-  const track = document.getElementById('metodologiaCarousel');
-  const cards = track?.querySelectorAll('.metodologia-cards');
-  if (cards && index >= 0 && index < cards.length) {
-    metodologiaCurrentIndex = index;
-    updateMetodologiaCarousel();
-  }
-};
+  updateCarousel();
+}
 
 // Função para recarregar dados da página
 window.reloadPageData = async function() {
@@ -1021,24 +1048,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   
   // Inicializar carousel de metodologia
-  if (document.getElementById('metodologiaCarousel')) {
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    const indicators = document.getElementById('metodologiaIndicators');
-    
-    prevBtn?.addEventListener('click', prevSlide);
-    nextBtn?.addEventListener('click', nextSlide);
-    
-    indicators?.addEventListener('click', (e) => {
-      const btn = e.target.closest('.metodologia-indicator');
-      if (btn) {
-        const idx = Number(btn.dataset.index);
-        if (!isNaN(idx)) goToSlide(idx);
-      }
-    });
-    
-    window.addEventListener('resize', updateMetodologiaCarousel);
-    updateMetodologiaCarousel();
+  if (document.querySelector('.metodologia-track')) {
+    initMetodologiaCarousel();
   }
   
   // Aguardar um pouco antes de inicializar o mapa
