@@ -180,7 +180,7 @@ function initTranslator() {
     cursor: pointer;
     font-weight: 600;
     font-size: 0.85rem;
-    margin-left: 15px;
+    margin-left: 10px;
     transition: all 0.3s ease;
   `;
   
@@ -209,10 +209,10 @@ function initTranslator() {
     }
   });
   
-  // Adicionar ao header, ao lado da logo
+  // Adicionar ao header, ao lado direito da logo
   const logo = document.querySelector('.logo');
   if (logo) {
-    logo.parentNode.insertBefore(translateBtn, logo.nextSibling);
+    logo.appendChild(translateBtn);
   }
   
   // Marcar elementos para tradução

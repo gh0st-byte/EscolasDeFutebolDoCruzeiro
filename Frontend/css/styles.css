@@ -80,6 +80,11 @@ header.scrolled {
     width: 100%;
 }
 
+.logo {
+    display: flex;
+    align-items: center;
+}
+
 .logo img {
     height: 48px;
     width: auto;
@@ -91,6 +96,8 @@ header.scrolled {
 .logo img:hover {
     transform: scale(1.05);
 }
+
+
 
 nav {
     display: flex;
@@ -593,27 +600,7 @@ nav button:hover::before {
     flex-direction: row;
 }
 
-@media (max-width: 768px) {
-    .btn-navigation {
-        gap: 8px;
-    }
-    
-    .news-footer .carousel-btn {
-        width: 36px;
-        height: 36px;
-        font-size: 1.4rem;
-        border-width: 2px;
-    }
-}
 
-@media (max-width: 480px) {
-    .news-footer .carousel-btn {
-        width: 32px;
-        height: 32px;
-        font-size: 1.2rem;
-        border-width: 2px;
-    }
-}
 
 
 
@@ -703,7 +690,7 @@ a button {
    6. SEÇÃO DE METODOLOGIA
    ========================================== */
 .metodologia {
-    padding: 80px 0;
+    padding: 30px 0;
     background: url('../assets/img/FUNDO AZUL TEXTURIZADO 1921x1080.png') no-repeat center center;
     background-size: cover;
     background-position: center;
@@ -738,36 +725,47 @@ a button {
 }
 
 .metodologia-carousel {
-    position: relative;
-    max-width: 1400px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 100px;
-    overflow: hidden;
+    width: 100%;
+    height: 480px;
+    padding: 0 24px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+}
+
+.metodologia-carousel::-webkit-scrollbar {
+    height: 8px;
+    display: none;
 }
 
 .metodologia-track {
     display: flex;
-    gap: 30px;
+    z-index: 1;
+    gap: 32px;
     transition: transform 0.5s ease;
-    width: 100%;
-    position: relative;
-    padding: 40px;
+    flex-wrap: nowrap;
+    width: fit-content;
+    align-items: center;
+    justify-content: flex-start;
+    margin: 0;
+    padding-top: 16px;
+    padding-bottom: 100px;
 }
 
 .metodologia-cards {
     flex: 0 0 auto;
     width: 350px;
     min-width: 350px;
+    max-width: 350px;
+    display: flex;
+    justify-content: center;
+    margin-top: 14px;
 }
 
 .card-metodologia {
-    border-radius: 28px;
+    border-radius: 50px;
     box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-    padding: 38px 24px;
-    aspect-ratio: 4/5;
+    padding: 38px 24px 30px 24px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -779,6 +777,13 @@ a button {
     cursor: pointer;
     overflow: hidden;
     position: relative;
+    width: 350px;
+    height: 450px;
+    left: 100px;
+    -webkit-border-radius: 50px;
+    -moz-border-radius: 50px;
+    -ms-border-radius: 50px;
+    -o-border-radius: 50px;
 }
 
 
@@ -809,7 +814,6 @@ a button {
     opacity: 1;
     transition: opacity 0.4s ease;
     border-radius: 28px;
-    border: 3px solid gold;
     -webkit-transition: opacity 0.4s ease;
     -moz-transition: opacity 0.4s ease;
     -ms-transition: opacity 0.4s ease;
@@ -959,34 +963,16 @@ a button {
 
 /* Indicators */
 .metodologia-indicators {
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 12px;
-    z-index: 100;
-    margin-top: 80px;
+    display: none;
 }
 
-.metodologia-indicator {
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.4);
-    border: 2px solid rgba(255,255,255,0.6);
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
 
 .metodologia-indicator:hover {
-    background: rgba(255,215,0,0.6);
     transform: scale(1.1);
 }
 
 .metodologia-indicator.active {
-    background: gold;
-    border-color: gold;
+
     transform: scale(1.2);
 }
 
@@ -2087,9 +2073,7 @@ footer a:hover {
         font-size: 2.6rem;
     }
     
-    .metodologia-carousel {
-        padding: 0 80px;
-    }
+
     
     .metodologia-cards {
         width: 300px;
@@ -2156,10 +2140,7 @@ footer a:hover {
         font-size: 2.4rem;
     }
     
-    .metodologia-cards {
-        width: 280px;
-        min-width: 280px;
-    }
+
     
     .map-section h1 {
         font-size: 2.4rem;
@@ -2181,6 +2162,7 @@ footer a:hover {
 
 /* Tablets & Small Desktops - 900px */
 @media (max-width: 900px) {
+
     .dropdown-menu-end {
         background: linear-gradient(135deg, #0033a0 0%, #1e5bb8 100%) !important;
         border: none;
@@ -2287,29 +2269,18 @@ footer a:hover {
         margin: 0 auto;
     }
 
-    .metodologia {
-        padding: 60px 0;
-        min-height: 600px;
-    }
+
     
     .metodologia h1 {
         font-size: 2.4rem;
         margin-bottom: 50px;
     }
     
-    .metodologia-carousel {
-        padding: 0 60px;
-    }
-    
     .metodologia-cards {
         width: 270px;
         min-width: 270px;
     }
-    
-    .card-metodologia {
-        padding: 30px 18px;
-    }
-    
+
     .card-metodologia h3 {
         font-size: 1.6rem;
     }
@@ -2327,6 +2298,17 @@ footer a:hover {
         width: 50px;
         height: 50px;
         font-size: 1.6rem;
+    }
+    
+    .btn-navigation {
+        gap: 8px;
+    }
+    
+    .news-footer .carousel-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 1.4rem;
+        border-width: 2px;
     }
 
     .menu-map {
@@ -2363,6 +2345,60 @@ footer a:hover {
 
 /* Tablets - 481px to 768px */
 @media (max-width: 768px) and (min-width: 481px) {
+    .metodologia-carousel {
+        padding: 0;
+    }
+    
+    .metodologia h1 {
+        font-size: 2.4rem;
+        margin-bottom: 40px;
+    }
+    
+    .metodologia-track {
+        gap: 20px;
+        padding: 20px 0;
+    }
+    
+    .metodologia-cards {
+        width: 300px;
+        min-width: 300px;
+    }
+    
+    .card-metodologia {
+        width: 300px;
+        height: 400px;
+        left: 30px;
+        right: 0;
+    }
+    
+    .card-metodologia h3 {
+        font-size: 1.6rem;
+        margin-bottom: 16px;
+    }
+    
+    .card-metodologia p {
+        font-size: 1.2rem;
+    }
+    
+    .btn-saiba-mais {
+        padding: 10px 24px;
+        font-size: 0.9rem;
+    }
+    
+    .metodologia-carousel .carousel-btn {
+        width: 50px;
+        height: 50px;
+        font-size: 1.6rem;
+        border-width: 2px;
+    }
+    
+    .metodologia-carousel .prev-btn {
+        left: 15px;
+    }
+    
+    .metodologia-carousel .next-btn {
+        right: 15px;
+    }
     body {
         margin: 0;
     }
@@ -2450,7 +2486,7 @@ footer a:hover {
     }
     
     .metodologia-carousel {
-        padding: 0 70px;
+        padding: 0 35px ;
     }
     
     .metodologia-cards {
@@ -2459,7 +2495,7 @@ footer a:hover {
     }
     
     .card-metodologia {
-        padding: 32px 20px;
+        padding: 0 20px;
     }
     
     .map-section {
@@ -2594,6 +2630,51 @@ footer a:hover {
 
 /* Mobile - 700px */
 @media (max-width: 700px) {
+    .metodologia-carousel {
+        padding: 0 50px;
+    }
+    
+    .metodologia-cards {
+        width: 250px;
+        min-width: 250px;
+    }
+    
+    .card-metodologia {
+        padding: 26px 16px;
+    }
+    
+    .card-metodologia h3 {
+        font-size: 1.5rem;
+        margin-bottom: 16px;
+    }
+    
+    .card-metodologia p {
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+    
+    .btn-saiba-mais {
+        padding: 10px 24px;
+        font-size: 0.9rem;
+    }
+    
+    .dropdown-content p {
+        font-size: 0.9rem;
+    }
+    
+    .metodologia-carousel .carousel-btn {
+        width: 44px;
+        height: 44px;
+        font-size: 1.4rem;
+    }
+    
+    .metodologia-carousel .prev-btn {
+        left: 10px;
+    }
+    
+    .metodologia-carousel .next-btn {
+        right: 10px;
+    }
     body {
         padding-top: 65px;
     }
@@ -2920,6 +3001,88 @@ footer a:hover {
 
 /* Mobile - 480px and below */
 @media (max-width: 480px) {
+    .metodologia-carousel {
+        padding: 0 45px 20px;
+    }
+    
+    .metodologia {
+        padding: 20px 0;
+        min-height: 600px;
+    }
+    
+    .metodologia h1 {
+        font-size: 2rem;
+        margin-bottom: 30px;
+    }
+    
+    .metodologia-track {
+        gap: 15px;
+        padding: 15px 0;
+    }
+    
+    .metodologia-cards {
+        width: 230px;
+        min-width: 230px;
+    }
+    
+    .card-metodologia {
+        width: 280px;
+        height: 360px;
+        padding: 24px 14px;
+    }
+    
+    .card-metodologia h3 {
+        font-size: 1.3rem;
+        margin-bottom: 14px;
+    }
+    
+    .card-metodologia p {
+        font-size: 0.9rem;
+        line-height: 1.4;
+        margin-top: 10px;
+    }
+    
+    .btn-saiba-mais {
+        padding: 8px 20px;
+        font-size: 0.85rem;
+        margin-top: 8px;
+    }
+    
+    .dropdown-content p {
+        font-size: 0.85rem;
+        padding: 0 8px;
+    }
+    
+    .metodologia-carousel .carousel-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 1.3rem;
+        border-width: 2px;
+    }
+    
+    .metodologia-carousel .prev-btn {
+        left: 5px;
+    }
+    
+    .metodologia-carousel .next-btn {
+        right: 5px;
+    }
+    
+    .metodologia-indicators {
+        bottom: 15px;
+    }
+    
+    .metodologia-indicator {
+        width: 10px;
+        height: 10px;
+    }
+    
+    .news-footer .carousel-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 1.2rem;
+        border-width: 2px;
+    }
     .news-modal-title {
         font-size: 1.8rem;
         line-height: 1.1;
@@ -3073,61 +3236,7 @@ footer a:hover {
     }
 
 
-    .metodologia-carousel {
-        padding: 0 45px 20px;
-    }
-    
-    .metodologia-cards {
-        width: 230px;
-        min-width: 230px;
-    }
-    
-    .card-metodologia {
-        padding: 24px 14px;
-    }
-    
-    .card-metodologia h3 {
-        font-size: 1.3rem;
-        margin-bottom: 14px;
-    }
-    
-    .card-metodologia p {
-        font-size: 0.9rem;
-        line-height: 1.4;
-    }
-    
-    .btn-saiba-mais {
-        padding: 8px 20px;
-        font-size: 0.85rem;
-    }
-    
-    .dropdown-content p {
-        font-size: 0.85rem;
-        padding: 0 8px;
-    }
-    
-    .metodologia-carousel .carousel-btn {
-        width: 40px;
-        height: 40px;
-        font-size: 1.3rem;
-    }
-    
-    .metodologia-carousel .prev-btn {
-        left: 5px;
-    }
-    
-    .metodologia-carousel .next-btn {
-        right: 5px;
-    }
-    
-    .metodologia-indicators {
-        bottom: 15px;
-    }
-    
-    .metodologia-indicator {
-        width: 10px;
-        height: 10px;
-    }
+
 
     .map-section {
         padding: 40px 0;
