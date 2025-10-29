@@ -1,6 +1,6 @@
 // Configuração de segurança
 const CONFIG = {
-  API_BASE: 'http://localhost:8000/Backend/api/data.php',
+  API_BASE: './data/',
   FALLBACK_IMAGE: 'https://images.pexels.com/photos/29920213/pexels-photo-29920213.jpeg',
   DEBOUNCE_DELAY: 300,
   MAP_INIT_DELAY: 100
@@ -51,7 +51,7 @@ const API = {
     const cached = Cache.get(file);
     if (cached) return cached;
     
-    const response = await fetch(`${CONFIG.API_BASE}?file=${encodeURIComponent(file)}`);
+    const response = await fetch(`${CONFIG.API_BASE}${file}`);
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     
     const data = await response.json();
@@ -585,51 +585,18 @@ function initFormularioContato() {
   });
 }
 
-// Salvar dados do licenciado
+// Salvar dados do licenciado (versão estática)
 async function salvarDadosLicenciado(dados) {
-  const urls = [
-    'https://calvus-sylvester-limply.ngrok-free.dev/Backend/admin/index.php',
-    '/Backend/admin/index.php',
-    '../Backend/admin/index.php',
-    'Backend/admin/index.php'
-  ];
-  
-  for (let i = 0; i < urls.length; i++) {
-    try {
-      const response = await fetch(urls[i], {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'ngrok-skip-browser-warning': 'true'
-        },
-        body: JSON.stringify({...dados, action: 'save_proposta'})
-      });
-      
-      if (response.ok) {
-        const result = await response.json();
-        const timestamp = new Date().toISOString();
-        const dadosComTimestamp = { ...dados, timestamp, id: result.id };
-        
-        let licenciados = JSON.parse(localStorage.getItem('licenciados') || '[]');
-        licenciados.push(dadosComTimestamp);
-        localStorage.setItem('licenciados', JSON.stringify(licenciados));
-        
-        return { ok: true };
-      }
-    } catch (error) {
-      console.log(`Tentativa ${i + 1} falhou:`, error.message);
-    }
-  }
-  
-  // Fallback: salvar apenas no localStorage
+  // Para versão estática, salva apenas no localStorage
   const timestamp = new Date().toISOString();
-  const dadosComTimestamp = { ...dados, timestamp };
+  const id = Date.now(); // ID simples baseado em timestamp
+  const dadosComTimestamp = { ...dados, timestamp, id };
   
   let licenciados = JSON.parse(localStorage.getItem('licenciados') || '[]');
   licenciados.push(dadosComTimestamp);
   localStorage.setItem('licenciados', JSON.stringify(licenciados));
   
-  throw new Error('Todas as URLs falharam');
+  return { ok: true };
 }
 
 // Formulário de licenciado
@@ -712,8 +679,8 @@ function initFormularioLicenciado() {
 // Modais de mensagem
 const mostrarMensagemSucesso = () => {
   const modal = criarModal(
-    '✓ Proposta Enviada com Sucesso!',
-    'Sua solicitação de licenciamento foi recebida e está sendo analisada pela nossa equipe. Entraremos em contato em breve caso a gente tenha interesse na sua proposta.',
+    '✓ Dados Salvos com Sucesso!',
+    'Seus dados foram salvos localmente. Para enviar sua proposta de licenciamento, entre em contato conosco pelo e-mail: escolas@cruzeiro.com.br',
     '#28a745'
   );
   document.body.appendChild(modal);
@@ -722,8 +689,8 @@ const mostrarMensagemSucesso = () => {
 
 const mostrarMensagemErro = () => {
   const modal = criarModal(
-    '⚠ Erro no Envio',
-    'Houve um problema ao enviar sua proposta. Seus dados foram salvos localmente. Tente novamente em alguns minutos.',
+    '⚠ Dados Salvos Localmente',
+    'Seus dados foram salvos no seu navegador. Para enviar sua proposta, entre em contato pelo e-mail: escolas@cruzeiro.com.br',
     '#dc3545'
   );
   document.body.appendChild(modal);
