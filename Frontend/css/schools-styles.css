@@ -1,11 +1,12 @@
-/* Estilos para as escolas */
-
+/* ===== HERO SECTION ===== */
 .hero-secundary {
     text-align: center;
     max-width: 1400px;
     margin: 0 auto;
     padding: 0 24px;
     text-transform: uppercase;
+    position: relative;
+    z-index: 1;
 }
 
 .container-hero-secundary {
@@ -32,19 +33,12 @@
     pointer-events: none;
 }
 
-.hero-secundary {
-    position: relative;
-    z-index: 1;
-}
-
 .hero-secundary h1 {
     font-size: 3rem;
     font-weight: 900;
     margin-bottom: 24px;
     letter-spacing: 1px;
-    background: linear-gradient(135deg, #fff 0%, gold 100%);
     -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
     background-clip: text;
 }
 
@@ -57,6 +51,8 @@
     margin-left: auto;
     margin-right: auto;
 }
+
+/* ===== ESCOLAS SECTION ===== */
 .escolas {
     padding: 80px 0;
     background: linear-gradient(135deg, #f8f9ff 0%, #e8f0ff 100%);
@@ -86,19 +82,16 @@
     border-radius: 2px;
 }
 
+/* ===== FILTROS ===== */
 .filtros {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
     gap: 16px;
     margin: 0 auto 60px;
-    flex-wrap: wrap;
     max-width: 1200px;
     padding: 20px 24px;
     background: rgba(255,255,255,0.1);
-    -webkit-backdrop-filter: blur(10px);
-    -moz-backdrop-filter: blur(10px);
-    -ms-backdrop-filter: blur(10px);
-    -o-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     border-radius: 20px;
     box-shadow: 0 8px 32px rgba(0,51,160,0.15);
@@ -106,11 +99,43 @@
     z-index: 1000;
 }
 
-/* Checkbox Dropdown Styles */
+.filtros-dropdowns {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: nowrap !important;
+    width: 100%;
+}
+
+.filtros button {
+    padding: 12px 20px;
+    border: 2px solid transparent;
+    border-radius: 25px;
+    background: linear-gradient(135deg, #0033a0, #1e5bb8);
+    color: white;
+    min-width: 140px;
+    font-weight: 700;
+    font-family: 'Outfit', sans-serif;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 0.9rem;
+}
+
+.filtros button:hover {
+    background: linear-gradient(135deg, gold, #ffcc00);
+    color: #0033a0;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255,215,0,0.4);
+    border-color: #0033a0;
+}
+
+/* ===== FILTER DROPDOWNS ===== */
 .filter-dropdown {
     position: relative;
-    min-width: 180px;
-    z-index: 1001;
+    min-width: 100px;
+    z-index: 9999;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -118,7 +143,7 @@
 }
 
 .filter-dropdown.active {
-    z-index: 1002;
+    z-index: 999999999;
 }
 
 .filter-header {
@@ -186,7 +211,6 @@
 .filter-options {
     position: absolute !important;
     top: 100% !important;
-
     background: white !important;
     border: 2px solid #0033a0 !important;
     border-top: none !important;
@@ -200,15 +224,6 @@
     transition: all 0.3s ease;
     box-shadow: 0 8px 25px rgba(0,51,160,0.15) !important;
     width: 140px;
-    justify-content: center;
-    -webkit-border-radius: 0 0 10px 10px !important;
-    -moz-border-radius: 0 0 10px 10px !important;
-    -ms-border-radius: 0 0 10px 10px !important;
-    -o-border-radius: 0 0 10px 10px !important;
-    -webkit-transition: all 0.3s ease;
-    -moz-transition: all 0.3s ease;
-    -ms-transition: all 0.3s ease;
-    -o-transition: all 0.3s ease;
 }
 
 .filter-options.show {
@@ -256,7 +271,6 @@
     font-weight: 600;
 }
 
-/* Scrollbar customization */
 .filter-options::-webkit-scrollbar {
     width: 6px;
 }
@@ -275,56 +289,10 @@
     background: gold;
 }
 
-/* Prevent dropdown from going off-screen on mobile */
-@media (max-width: 768px) {
-    .filter-options {
-        position: fixed;
-        top: auto;
-        left: 10px;
-        right: 10px;
-        max-height: 60vh;
-        z-index: 9999;
-        border-radius: 15px;
-        margin-top: 5px;
-    }
-    
-    .filter-dropdown.active .filter-options {
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: 100%;
-        border-radius: 0 0 15px 15px;
-        margin-top: 0;
-    }
-}
-
-.filtros button {
-    padding: 12px 20px;
-    border: 2px solid transparent;
-    border-radius: 25px;
-    background: linear-gradient(135deg, #0033a0, #1e5bb8);
-    color: white;
-    min-width: 160px;
-    font-weight: 700;
-    font-family: 'Outfit', sans-serif;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    font-size: 0.9rem;
-}
-
-.filtros button:hover {
-    background: linear-gradient(135deg, gold, #ffcc00);
-    color: #0033a0;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(255,215,0,0.4);
-    border-color: #0033a0;
-}
-
+/* ===== ESCOLAS GRID ===== */
 .escolas-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 32px;
     max-width: 1400px;
     margin: 0 auto;
@@ -333,6 +301,7 @@
     z-index: 1;
 }
 
+/* ===== ESCOLA CARDS ===== */
 .escola-card {
     background: white;
     max-width: 420px;
@@ -361,14 +330,6 @@
     background: linear-gradient(135deg, #0033a0 0%, gold 100%);
     transform: scaleX(0);
     transition: transform 0.3s ease;
-}
-
-.escola-imagem {
-    width: 100%;
-    max-height: 200px;
-    object-fit: cover;
-    border-radius: 8px;
-    margin-bottom: 1rem;
 }
 
 .escola-card:hover {
@@ -400,113 +361,6 @@
     margin-bottom: 24px;
 }
 
-/* Container dos botões lado a lado na base do card */
-.btn-container {
-    display: flex;
-    gap: 12px;
-    margin-top: auto;
-    justify-content: center;
-    padding-top: 20px;
-    border-top: 1px solid rgba(0,51,160,0.1);
-}
-
-.btn-whatsapp, .btn-instagram, .btn-maps {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 0;
-    padding: 0 20px;
-    height: 44px;
-    border-radius: 50px;
-    color: white;
-    font-weight: 600;
-    text-decoration: none;
-    position: relative;
-    overflow: hidden;
-    transition: all 0.3s ease;
-    border: none;
-    cursor: pointer;
-    flex: 1;
-    text-align: center;
-    font-size: 0.9rem;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    min-height: 44px;
-}
-
-.btn-maps {
-    background: linear-gradient(135deg, #4285F4, #1a73e8);
-    white-space: nowrap;
-}
-
-.btn-maps::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: left 0.5s;
-    z-index: 1;
-}
-
-.btn-maps:hover {
-    background: linear-gradient(135deg, #1a73e8, #1557b0);
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(66,133,244,0.4);
-}
-
-.btn-maps:hover::before {
-    left: 100%;
-}
-.escola-card .btn-whatsapp {
-    background: linear-gradient(135deg, #25D366, #128C7E);
-}
-
-.escola-card .btn-whatsapp::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgb(255, 255, 255, 0.2), transparent);
-    transition: left 0.5s;
-    z-index: 1;
-}
-
-.escola-card .btn-whatsapp:hover {
-    background: linear-gradient(135deg, #1aa01e, #008004);
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(37,211,102,0.4);
-}
-
-.escola-card .btn-instagram:hover::before {
-    left: 100%;
-}
-
-.escola-card .btn-instagram {
-    background: linear-gradient(135deg, #E1306C, #AD1457);
-}
-
-.escola-card .btn-instagram::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 10, 10, 0.2), transparent);
-    transition: left 0.5s;
-    z-index: 1;
-}
-
-.escola-card .btn-instagram:hover {
-    background: linear-gradient(135deg, #fa008e, #AD1457);
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(225,48,108,0.4);
-}
-
 .escola-card img {
     width: 100%;
     height: 200px;
@@ -520,6 +374,7 @@
     transform: scale(1.05);
 }
 
+/* ===== EMBED MAP ===== */
 .embed-map-responsive {
     position: relative;
     width: 100%;
@@ -543,71 +398,155 @@
     border-radius: 12px;
 }
 
+/* ===== BUTTONS ===== */
+.btn-container {
+    display: flex;
+    gap: 12px;
+    margin-top: auto;
+    justify-content: center;
+    padding-top: 20px;
+    border-top: 1px solid rgba(0,51,160,0.1);
+}
+
+.btn-whatsapp, .btn-instagram, .btn-maps {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 20px;
+    height: 44px;
+    border-radius: 50px;
+    color: white;
+    font-weight: 600;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    flex: 1;
+    text-align: center;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    min-height: 44px;
+}
+
+.btn-maps {
+    background: linear-gradient(135deg, #4285F4, #1a73e8);
+}
+
+.btn-whatsapp {
+    background: linear-gradient(135deg, #25D366, #128C7E);
+}
+
+.btn-instagram {
+    background: linear-gradient(135deg, #E1306C, #AD1457);
+}
+
+.btn-maps::before,
+.btn-whatsapp::before,
+.btn-instagram::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+    z-index: 1;
+}
+
+.btn-maps:hover {
+    background: linear-gradient(135deg, #1a73e8, #1557b0);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(66,133,244,0.4);
+}
+
+.btn-whatsapp:hover {
+    background: linear-gradient(135deg, #1aa01e, #008004);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(37,211,102,0.4);
+}
+
+.btn-instagram:hover {
+    background: linear-gradient(135deg, #fa008e, #AD1457);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(225,48,108,0.4);
+}
+
+.btn-maps:hover::before,
+.btn-whatsapp:hover::before,
+.btn-instagram:hover::before {
+    left: 100%;
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
 @media (max-width: 900px) {
     .container-hero-secundary {
         padding: 50px 20px;
         min-height: 45vh;
     }
-    
-    .hero-secundary {
-        padding: 0;
-    }
-    
+
     .hero-secundary h1 {
         font-size: 2.4rem;
         line-height: 1.2;
     }
-    
+
     .hero-secundary p {
         font-size: 1.1rem;
         max-width: 500px;
     }
-    
+
     .escolas {
         padding: 60px 0;
     }
-    
+
     .escolas h2 {
         font-size: 2.4rem;
         margin-bottom: 50px;
         padding: 0 20px;
     }
-    
-    .filtros {
-        gap: 12px;
-        margin-bottom: 50px;
-        padding: 16px 20px;
-        max-width: 100%;
-        flex-wrap: wrap;
-    }
-    
-    .filtros select, .filtros button {
-        min-width: 140px;
-        padding: 12px 20px;
-        font-size: 0.9rem;
-        flex: 1;
-        max-width: 200px;
-    }
-    
+
     .escolas-grid {
         gap: 24px;
         grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
         padding: 0 20px;
     }
-    
+
     .escola-card {
         padding: 24px;
         max-width: 100%;
     }
-    
+
     .btn-container {
         flex-direction: column;
         gap: 8px;
     }
-    
+
     .btn-whatsapp, .btn-instagram, .btn-maps {
         flex: none;
         width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .filtros {
+        gap: 12px;
+        padding: 16px 20px;
+    }
+
+    .filtros-dropdowns {
+        gap: 8px;
+        flex-wrap: nowrap !important;
+    }
+
+    .filter-dropdown {
+        flex: 1;
+        min-width: 100px;
+    }
+
+    .filtros button {
+        min-width: 140px;
     }
 }
 
@@ -616,37 +555,31 @@
         padding: 40px 16px;
         min-height: 40vh;
     }
-    
-    .hero-secundary {
-        padding: 0;
-    }
-    
+
     .hero-secundary h1 {
         font-size: 2rem;
         margin-bottom: 16px;
         line-height: 1.1;
     }
-    
+
     .hero-secundary p {
         font-size: 1rem;
         margin-bottom: 24px;
         line-height: 1.5;
     }
-    
+
     .escolas {
         padding: 50px 0;
     }
-    
+
     .escolas h2 {
         font-size: 2rem;
         margin-bottom: 35px;
         padding: 0 16px;
     }
-    
+
     .filtros {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 10px;
+        gap: 8px;
         margin-bottom: 35px;
         padding: 16px;
         border-radius: 12px;
@@ -654,47 +587,57 @@
         margin-left: auto;
         margin-right: auto;
     }
-    
-    .filtros select, .filtros button {
+
+    .filtros-dropdowns {
+        gap: 6px;
+        flex-wrap: nowrap !important;
+    }
+
+    .filter-dropdown {
+        flex: 1;
+        min-width: 90px;
+    }
+
+    .filtros button {
         width: 100%;
         max-width: none;
         min-width: auto;
         padding: 12px 16px;
         font-size: 0.9rem;
     }
-    
+
     .escolas-grid {
         grid-template-columns: 1fr;
         gap: 20px;
         padding: 0 16px;
     }
-    
+
     .escola-card {
         padding: 20px;
         max-width: 100%;
     }
-    
+
     .escola-card h3 {
         font-size: 1.2rem;
         margin-bottom: 16px;
     }
-    
+
     .escola-card img {
         height: 180px;
         margin-bottom: 16px;
     }
-    
+
     .embed-map-responsive {
         height: 180px;
         margin-bottom: 16px;
     }
-    
+
     .btn-container {
         flex-direction: column;
         gap: 8px;
         padding-top: 16px;
     }
-    
+
     .btn-whatsapp, .btn-instagram, .btn-maps {
         flex: none;
         width: 100%;
@@ -703,96 +646,243 @@
     }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 565px) {
     .container-hero-secundary {
         padding: 30px 12px;
         min-height: 35vh;
     }
-    
-    .hero-secundary {
-        padding: 0;
-    }
-    
+
     .hero-secundary h1 {
         font-size: 1.7rem;
         margin-bottom: 12px;
         line-height: 1.1;
     }
-    
+
     .hero-secundary p {
         font-size: 0.95rem;
         margin-bottom: 20px;
         line-height: 1.4;
     }
-    
+
     .escolas {
         padding: 40px 0;
     }
-    
+
     .escolas h2 {
         font-size: 1.8rem;
         margin-bottom: 30px;
         padding: 0 12px;
     }
-    
+
     .filtros {
         margin-bottom: 30px;
         padding: 12px;
         border-radius: 10px;
         max-width: calc(100% - 24px);
-        gap: 8px;
+        gap: 6px;
     }
-    
-    .filtros select, .filtros button {
+
+    .filtros-dropdowns {
+        gap: 4px;
+        flex-wrap: nowrap !important;
+    }
+
+    .filter-dropdown {
+        flex: 1;
+        width: fit-content;
+    }
+
+    .filter-option{
+        padding: 6px 4px ;
+        height: auto;
+        width: 10px !important;
+    }
+
+    .filter-options .show{
+        width: 40px !important;
+    }
+
+    .filter-header {
+        padding: 6px 4px;
+        font-size: 0.75rem;
+    }
+
+    .filter-label {
+        font-size: 0.7rem;
+    }
+
+    .filtros button {
         padding: 10px 14px;
-        font-size: 0.85rem;
+        font-size: 0.8rem;
         border-radius: 25px;
+        min-width: 120px;
     }
-    
+
     .escolas-grid {
         padding: 0 12px;
         gap: 14px;
     }
-    
+
     .escola-card {
         padding: 16px;
         border-radius: 16px;
     }
-    
+
     .escola-card h3 {
         font-size: 1.1rem;
         margin-bottom: 12px;
         line-height: 1.2;
     }
-    
+
     .escola-card p {
         font-size: 0.9rem;
         margin-bottom: 10px;
         line-height: 1.4;
     }
-    
+
     .escola-card img {
         height: 150px;
         margin-bottom: 12px;
         border-radius: 10px;
     }
-    
+
     .embed-map-responsive {
         height: 150px;
         margin-bottom: 12px;
         border-radius: 10px;
     }
-    
+
     .btn-container {
         padding-top: 12px;
         gap: 6px;
     }
-    
+
     .btn-whatsapp, .btn-instagram, .btn-maps {
         padding: 0 12px;
         height: 36px;
         min-height: 36px;
         font-size: 0.8rem;
         border-radius: 18px;
+    }
+}
+
+@media (max-width: 400px) {
+
+
+    .hero-secundary h1 {
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+    }
+
+    .hero-secundary p {
+        font-size: 0.9rem;
+        margin-bottom: 16px;
+    }
+
+    .escolas h2 {
+        font-size: 1.6rem;
+        margin-bottom: 25px;
+        padding: 0 8px;
+    }
+
+    .filtros {
+        padding: 8px;
+        gap: 4px;
+        max-width: calc(100% - 16px);
+    }
+
+    .filtros-dropdowns {
+        gap: 2px;
+    }
+
+    .filter-dropdown {
+        min-width: 70px;
+    }
+
+    .filter-header {
+        padding: 6px 8px;
+        font-size: 0.7rem;
+    }
+
+    .filter-label {
+        font-size: 0.65rem;
+    }
+
+    .filter-options {
+        width: 100px;
+    }
+
+    .filter-arrow{
+        padding: 0;
+    }
+
+    .filtros button {
+        padding: 8px 12px;
+        font-size: 0.75rem;
+        min-width: 100px;
+    }
+
+    .escolas-grid {
+        padding: 0 8px;
+        gap: 12px;
+        grid-template-columns: 1fr;
+    }
+
+    .escola-card {
+        padding: 12px;
+    }
+
+    .escola-card h3 {
+        font-size: 1rem;
+        margin-bottom: 10px;
+    }
+
+    .escola-card p {
+        font-size: 0.85rem;
+        margin-bottom: 8px;
+    }
+
+    .escola-card img,
+    .embed-map-responsive {
+        height: 130px;
+        margin-bottom: 10px;
+    }
+
+    .btn-container {
+        gap: 4px;
+        padding-top: 10px;
+    }
+
+    .btn-whatsapp, .btn-instagram, .btn-maps {
+        height: 32px;
+        min-height: 32px;
+        font-size: 0.75rem;
+        padding: 0 8px;
+    }
+
+}
+
+@media (max-width: 375px){
+
+    .filter-arrow{
+        padding: 0;
+        margin: 0;
+    }
+
+    .filter-dropdown{
+        width: 200px ;
+    }
+
+    .filter-header{
+        width: 90px;
+        gap: 0;
+    }
+    .filter-count{
+        margin: 0;
+
+    }
+
+    .filter-option{
+        width: 80;
     }
 }
