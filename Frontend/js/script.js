@@ -1,6 +1,6 @@
 // Configuração de segurança
 const CONFIG = {
-  API_BASE: 'http://localhost:8000/Backend/api/data.php',
+  API_BASE: './data/',
   FALLBACK_IMAGE: 'https://images.pexels.com/photos/29920213/pexels-photo-29920213.jpeg',
   DEBOUNCE_DELAY: 300,
   MAP_INIT_DELAY: 100
@@ -51,7 +51,7 @@ const API = {
     const cached = Cache.get(file);
     if (cached) return cached;
     
-    const response = await fetch(`${CONFIG.API_BASE}?file=${encodeURIComponent(file)}`);
+    const response = await fetch(`${CONFIG.API_BASE}${file}`);
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     
     const data = await response.json();

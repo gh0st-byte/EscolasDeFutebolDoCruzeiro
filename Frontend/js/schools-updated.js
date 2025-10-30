@@ -9,7 +9,7 @@ let filtrosSelecionados = {
 // Carregar dados dos filtros
 async function carregarFiltros() {
     try {
-        const response = await fetch('http://localhost:8000/Backend/api/data.php?file=allRegionsFilters.json');
+        const response = await fetch('./data/allRegionsFilters.json');
         if (response.ok) {
             filtrosDisponiveis = await response.json();
         }
@@ -37,7 +37,7 @@ function escapeHtml(text) {
 // Carregar dados das escolas
 async function carregarEscolas() {
     try {
-        const escolasResponse = await fetch('http://localhost:8000/Backend/api/data.php?file=schools.json');
+        const escolasResponse = await fetch('./data/schools.json');
         
         if (!escolasResponse.ok) {
             throw new Error(`Erro ao carregar escolas: ${escolasResponse.status}`);

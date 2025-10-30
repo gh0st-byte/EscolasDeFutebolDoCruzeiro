@@ -1,0 +1,82 @@
+{
+    "Brasil": {
+        "name": "Brasil",
+        "states": {
+            "MG": {
+                "name": "Minas Gerais",
+                "cities": ["Arinos", "Belo Horizonte", "Carmo do Cajuru", "Congonhas", "Contagem", "Divinópolis", "Ipatinga", "Itabira", "João Monlevade", "Juiz de Fora", "Lagoa Santa", "Montes Claros", "Nova Lima", "Nova Serrana", "Pará de Minas", "Paracatu", "Porteirinha", "Ribeirão das Neves", "Santa Luzia", "Sarzedo", "Teófilo Otoni", "Unaí", "Betim", "Conselheiro Lafaiete", "Jardim Riacho das Pedras"]
+            },
+            "SP": {
+                "name": "São Paulo", 
+                "cities": ["Caieiras"]
+            },
+            "DF": {
+                "name": "Distrito Federal",
+                "cities": ["Brasília"]
+            },
+            "CE": {
+                "name": "Ceará",
+                "cities": ["Fortaleza"]
+            },
+            "RS": {
+                "name": "Rio Grande do Sul",
+                "cities": ["Pelotas"]
+            },
+            "ES": {
+                "name": "Espírito Santo",
+                "cities": ["Vila Velha"]
+            },
+            "MA": {
+                "name": "Maranhão",
+                "cities": ["São Luís"]
+            },
+            "RJ": {
+                "name": "Rio de Janeiro",
+                "cities": ["Japeri"]
+            }
+        }
+    },
+    
+    "Mundo": {
+        "Colômbia": {
+            "name": "Colômbia",
+            "states": {
+                "Cundinamarca": {
+                    "name": "Cundinamarca",
+                    "cities": ["Bogotá"]
+                }
+            }
+        },
+        "Peru": {
+            "name": "Peru",
+            "states": {
+                "Villa El Salvador": {
+                    "name": "Villa El Salvador",
+                    "cities": ["San Borja"]
+                }
+            }
+        },
+        "Tailândia": {
+            "name": "Tailândia",
+            "states": {
+                "Watthana": {
+                    "name": "Watthana",
+                    "cities": ["Bangkok"]
+                }
+            }
+        },
+        "Estados Unidos": {
+            "name": "Estados Unidos",
+            "states": {
+                "Massachusetts": {
+                    "name": "Massachusetts",
+                    "cities": ["Boston"]
+                },
+                "Pensilvânia": {
+                    "name": "Pensilvânia",
+                    "cities": ["New Jersey"]
+                }
+            }
+        }
+    }
+}
