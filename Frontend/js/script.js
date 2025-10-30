@@ -136,7 +136,7 @@ async function loadSchools() {
 // Criar ícone personalizado
 const createBlueCircleIcon = () => L.divIcon({
   className: 'custom-marker',
-  html: '<div style="background-color: #0033a0; width: 100%; height: 100%; border-radius: 50%; box-shadow: 0 0 10px 3px #0033a0;"></div>',
+  html: '<div style="background-color: #0033a0; width: 100%; height: 100%; border-radius: 50%; box-shadow: 0 0 25px 3px #0026ffff;"></div>',
   iconSize: [20, 20],
   iconAnchor: [10, 10]
 });
