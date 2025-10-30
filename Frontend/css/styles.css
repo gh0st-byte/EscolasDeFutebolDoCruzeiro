@@ -2035,11 +2035,16 @@ footer a:hover {
 
 /* Large Tablets & Small Desktops - 1200px */
 @media (max-width: 1200px) {
+    header{
+        height: 80px;
+    }
+
     .hero {
         grid-template-columns: 1fr;
         gap: 40px;
         text-align: center;
         padding: 0 20px;
+        padding-top: 20px;
     }
     
     .hero h1 {
@@ -2103,6 +2108,8 @@ footer a:hover {
     .nav-links {
         gap: 24px;
     }
+
+
 }
 
 /* Tablets - 769px to 1024px */

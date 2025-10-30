@@ -108,7 +108,7 @@
 .filter-dropdown {
     position: relative;
     min-width: 180px;
-    z-index: 1001;
+    z-index: 9999;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -116,7 +116,8 @@
 }
 
 .filter-dropdown.active {
-    z-index: 1002;
+    z-index: 99999;
+    position: fixed;
 }
 
 .filter-header {
@@ -134,6 +135,7 @@
     transition: all 0.3s ease;
     user-select: none;
     gap: 8px;
+    z-index: 0;
 }
 
 .filter-header:hover {
@@ -183,37 +185,27 @@
 
 .filter-options {
     position: absolute !important;
-    top: 100% !important;
-
+    top: -250px !important;
+    left: 0 !important;
+    right: 0 !important;
     background: white !important;
     border: 2px solid #0033a0 !important;
-    border-top: none !important;
-    border-radius: 0 0 10px 10px !important;
+    border-radius: 10px !important;
     max-height: 250px !important;
     overflow-y: auto !important;
-    z-index: 10000 !important;
+    z-index: 99999 !important;
     opacity: 0;
     visibility: hidden;
-    transform: translateY(-10px);
     transition: all 0.3s ease;
     box-shadow: 0 8px 25px rgba(0,51,160,0.15) !important;
-    width: 140px;
-    justify-content: center;
-    -webkit-border-radius: 0 0 10px 10px !important;
-    -moz-border-radius: 0 0 10px 10px !important;
-    -ms-border-radius: 0 0 10px 10px !important;
-    -o-border-radius: 0 0 10px 10px !important;
-    -webkit-transition: all 0.3s ease;
-    -moz-transition: all 0.3s ease;
-    -ms-transition: all 0.3s ease;
-    -o-transition: all 0.3s ease;
+    width: 200px;
+    margin-top: 5px;
 }
 
 .filter-options.show {
     opacity: 1 !important;
     visibility: visible !important;
-    transform: translateY(0) !important;
-    z-index: 10000 !important;
+    z-index: 99999 !important;
 }
 
 .filter-option {
@@ -275,24 +267,20 @@
 
 /* Prevent dropdown from going off-screen on mobile */
 @media (max-width: 768px) {
-    .filter-options {
-        position: fixed;
-        top: auto;
-        left: 10px;
-        right: 10px;
-        max-height: 60vh;
-        z-index: 9999;
-        border-radius: 15px;
-        margin-top: 5px;
+    .filtros {
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 16px;
+    }
+
+    .filter-dropdown {
+        flex: 1;
+        min-width: 140px;
     }
     
-    .filter-dropdown.active .filter-options {
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: 100%;
-        border-radius: 0 0 15px 15px;
-        margin-top: 0;
+    .filtros button {
+        flex: 1;
+        min-width: 140px;
     }
 }
 
@@ -642,9 +630,8 @@
     }
     
     .filtros {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 10px;
+        flex-wrap: wrap;
+        gap: 8px;
         margin-bottom: 35px;
         padding: 16px;
         border-radius: 12px;
@@ -738,13 +725,26 @@
         padding: 12px;
         border-radius: 10px;
         max-width: calc(100% - 24px);
-        gap: 8px;
+        gap: 6px;
+        flex-wrap: wrap;
     }
     
-    .filtros select, .filtros button {
+    .filter-dropdown {
+        flex: 1;
+        min-width: 120px;
+    }
+    
+    .filter-header {
         padding: 10px 14px;
-        font-size: 0.85rem;
+        font-size: 0.8rem;
+    }
+    
+    .filtros button {
+        padding: 10px 14px;
+        font-size: 0.8rem;
         border-radius: 25px;
+        flex: 1;
+        min-width: 120px;
     }
     
     .escolas-grid {
