@@ -15,7 +15,7 @@ if ! git commit -m "update $date"; then
     exit 1
 fi
 
-if ! git push origin main; then
+if ! git push origin beta-for-netlify; then
     echo "Erro ao fazer push"
     exit 1
 fi
